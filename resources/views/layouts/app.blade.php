@@ -17,7 +17,7 @@
 <body class="font-sans antialiased flex flex-col min-h-screen">
   @include('header')
   
-  <main class="flex-grow mx-[7rem]">
+  <main class="">
     @yield('content')
   </main>
   
