@@ -17,13 +17,11 @@
 <body class="font-sans antialiased flex flex-col min-h-screen">
   @include('header')
   
-  <main class="">
+  <main>
     @yield('content')
   </main>
   
   @include('footer')
-
-
 
   @vite([
     'resources/css/app.css',
