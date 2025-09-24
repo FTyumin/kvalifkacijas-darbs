@@ -38,6 +38,8 @@
                 description 
             </p>
 
+            <!-- Actors,Director -->
+
             {{-- Actions --}}
             <div class="flex gap-3 mt-6">
             <!-- Add to watchlist -->
