@@ -57,7 +57,7 @@
                 @foreach($director->movies as $movie)
                     <a href="{{ route('movies.show', $movie->id) }}"
                        class="group bg-white rounded-xl shadow hover:shadow-md transition overflow-hidden">
-                        <img src="{{ $movie->poster_url ?? asset('images/placeholder.jpg') }}"
+                        <img src="{{ asset('images/movie-placeholder.jpg') }}"
                              alt="{{ $movie->title }}"
                              class="w-full h-64 object-cover group-hover:opacity-90">
                         <div class="p-4">

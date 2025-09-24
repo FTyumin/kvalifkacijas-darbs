@@ -16,7 +16,6 @@
       <!-- Desktop Navigation -->
       <div class="hidden lg:flex items-center gap-8">
         <a href="/" class="text-gray-300 hover:text-white transition-colors font-medium">Movies</a>
-        <a href="/tv-shows" class="text-gray-300 hover:text-white transition-colors font-medium">TV Shows</a>
         <a href="/trending" class="text-gray-300 hover:text-white transition-colors font-medium">Trending</a>
       </div>
     </div>
