@@ -26,11 +26,11 @@
 
             {{-- Genres --}}
             <div class="flex flex-wrap gap-2">
-                @for($i=0; $i<3; $i++)
+                @foreach($movie->genres as $genre)
                     <span class="px-3 py-1 bg-gray-100 text-sm rounded-full">
-                         genre_name 
+                        {{ $genre->name }} 
                     </span>
-                @endfor
+                @endforeach
             </div>
 
             {{-- Description --}}
