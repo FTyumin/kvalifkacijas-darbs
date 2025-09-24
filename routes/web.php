@@ -14,9 +14,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/movies', [MovieController::class, 'show'])->name('movie.show');
-
-Route::get('/director', [DirectorController::class, 'show'])->name('director.show');
+Route::resource('movies', MovieController::class)->only(['index','show']);
+Route::resource('directors', DirectorController::class)->only(['index','show']);
 
 Route::get('/actors', [ActorController::class, 'show'])->name('actor.show');
 

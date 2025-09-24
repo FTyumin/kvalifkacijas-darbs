@@ -14,12 +14,12 @@
 
         {{-- Details --}}
         <div class="md:col-span-2 space-y-6">
-            <h1 class="text-3xl font-bold">Movie Title</h1>
+            <h1 class="text-3xl font-bold">{{ $movie->name }}</h1>
             
             <div class="flex items-center gap-4 text-gray-600">
-                <span class="text-sm">Released: </span>
-                <span class="text-sm">Rating: ⭐ 3,4</span>
-                <span class="text-sm">Country: </span>
+                <span class="text-sm">Released: {{ $movie->year }}</span>
+                <span class="text-sm">Rating: ⭐ {{ $movie->rating }}</span>
+                <span class="text-sm">Country: {{ $movie->title }}</span>
                 <span class="text-sm">Language: </span>
 
             </div>

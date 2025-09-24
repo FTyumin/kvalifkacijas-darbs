@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $actor->name)
+@section('title', $director->name)
 
 @section('content')
 
@@ -20,8 +20,8 @@
             <h1 class="text-3xl font-bold">{{ $director->name }}</h1>
 
             <div class="flex items-center gap-6 text-gray-600">
-                @if($director->birth_date)
-                    <span>Born: {{ $director->birth_date->format('M d, Y') }}</span>
+                @if($director->birth_year)
+                    <span>Born: {{ $director->birth_year }}</span>
                 @endif
                 @if($director->death_date)
                     <span>Died: {{ $director->death_date->format('M d, Y') }}</span>
@@ -29,6 +29,7 @@
                 @if($director->birth_place)
                     <span>From: {{ $director->birth_place }}</span>
                 @endif
+                <span>Nationality: {{ $director->nationality }}</span>
             </div>
 
             @if($director->bio)
