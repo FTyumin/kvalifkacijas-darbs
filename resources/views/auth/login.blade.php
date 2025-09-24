@@ -1,35 +1,7 @@
-<!DOCTYPE html>
-<html lang="en" class="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MovieHub - Sign In</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .glass {
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
-        .floating-element {
-            animation: float 6s ease-in-out infinite;
-        }
-        .floating-element:nth-child(2) {
-            animation-delay: 2s;
-        }
-        .floating-element:nth-child(3) {
-            animation-delay: 4s;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-20px) rotate(1deg); }
-            66% { transform: translateY(-10px) rotate(-1deg); }
-        }
-    </style>
-</head>
-<body class="min-h-screen bg-black text-white overflow-x-hidden">
+@extends('layouts.app')
+
+@section('content')
+<div class="min-h-screen bg-black text-white overflow-x-hidden">
     <!-- Background Elements -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none">
         <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 floating-element"></div>
@@ -257,5 +229,5 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+@endsection
