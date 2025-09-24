@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<section class="relative min-h-[55vh] md:min-h-[45vh] lg:min-h-[40vh] isolate">
-  <!-- Image -->
+<section class="relative min-h-[55vh] md:min-h-[45vh] lg:min-h-[40vh] isolate bg-gray-700">
   <img
     src="{{ asset('images/cinema.webp') }}"
     alt="movie theater"
@@ -33,7 +32,6 @@
 
 <!-- Trending Movies -->
 <div class="my-20 mx-6 sm:mx-8 lg:mx-28 bg-gray-700">
-  <!-- Enhanced Header -->
   <div class="mb-12">
     <h1 class="mb-3 text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
       Biggest movies <span class="text-blue-600 dark:text-blue-400">Right Now</span>
@@ -48,7 +46,6 @@
     @for ($i = 0; $i < 4; $i++)
     <div class="group bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600 overflow-hidden">
       
-      <!-- Movie Poster with Overlay -->
       <div class="relative overflow-hidden">
         <a href="#" class="block">
           <img class="aspect-[2/3] w-full object-cover transition-transform duration-300 group-hover:scale-105" 
@@ -56,7 +53,6 @@
                alt="Movie poster" />
         </a>
         
-        <!-- Rating Badge -->
         <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-sm text-white px-2 py-1 rounded-md text-sm font-medium flex items-center gap-1">
           <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
@@ -64,7 +60,6 @@
           8.5
         </div>
 
-        <!-- Genre Tags -->
         <div class="absolute bottom-3 left-3 flex gap-1">
           <span class="bg-blue-600/90 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">Action</span>
           <span class="bg-red-600/90 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">Drama</span>
@@ -73,14 +68,12 @@
 
       <!-- Content Section -->
       <div class="p-5">
-        <!-- Movie Title -->
         <a href="#" class="group/title">
           <h3 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white group-hover/title:text-blue-600 dark:group-hover/title:text-blue-400 transition-colors line-clamp-2">
             The Amazing Movie Title
           </h3>
         </a>
 
-        <!-- Movie Info -->
         <div class="mb-3 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
           <span>2024</span>
           <span>•</span>
@@ -89,12 +82,10 @@
           <span class="text-green-600 dark:text-green-400 font-medium">89% Fresh</span>
         </div>
 
-        <!-- Description -->
         <p class="mb-4 text-sm text-gray-600 dark:text-gray-300 line-clamp-3 leading-relaxed">
           An epic adventure that takes viewers on a thrilling journey through spectacular landscapes and unforgettable characters.
         </p>
 
-        <!-- Action Buttons -->
         <div class="flex gap-2">
           <a href="#" class="flex-1 inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition-colors">
             View Details

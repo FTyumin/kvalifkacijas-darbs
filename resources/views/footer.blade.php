@@ -2,7 +2,7 @@
     <div class="px-5 sm:px-8 lg:px-28">
     <div class="grid lg:grid-cols-4 gap-8 mb-12 ">
         <div class="space-y-4">
-        <div class="text-2xl text-white font-light tracking-wide">cinereview.</div>
+        <div class="text-2xl text-white font-light tracking-wide">PROJECT NAME</div>
         <p class="text-muted-foreground text-white text-sm leading-relaxed">
             Your trusted source for thoughtful film and television criticism.
         </p>
@@ -64,7 +64,7 @@
     </div>
 
     <div class="border-t border-border pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground text-white">
-        <p>&copy; 2025 CineReview. All rights reserved.</p>
+        <p>&copy; 2025  All rights reserved.</p>
         <div class="flex gap-6">
         <a href="#" class="hover:text-foreground transition-colors text-white">
             Privacy Policy
