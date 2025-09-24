@@ -9,8 +9,6 @@ class KnownMovieSeeder extends Seeder
 {
     public function run()
     {
-        // NOTE: this seeder assumes a fresh DB or that duplicates are acceptable.
-        // If you want idempotency, implement checks (eg. firstOrCreate with models).
 
         // Insert directors and keep IDs
         $directors = [

@@ -20,5 +20,7 @@ class Actor extends Model
         'birth_date' => 'date',
     ];
 
-    
+    public function movies() {
+        return $this->BelongsToMany(Movie::class);
+    }
 }
