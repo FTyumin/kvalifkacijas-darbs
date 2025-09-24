@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ActorController;
+use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\MovieController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +15,10 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/movies', [MovieController::class, 'show'])->name('movie.show');
+
+Route::get('/director', [DirectorController::class, 'show'])->name('director.show');
+
+Route::get('/actors', [ActorController::class, 'show'])->name('actor.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
