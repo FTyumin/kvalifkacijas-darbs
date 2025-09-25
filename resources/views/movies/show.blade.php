@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', $movie->name)
+
 @section('content')
 
 <div class="max-w-6xl mx-auto mt-8 px-4 py-8">
