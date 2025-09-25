@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use Maize\Markable\Models\Favorite;
 use Illuminate\Http\Request;
+use Redirect;
 
 class WatchlistController extends Controller
 {
+
     public function watchlist() {
         $movies = Movie::whereHasFavorite(auth()->user())->get();
+        
         return view('watchlist', compact('movies'));
     }
 
@@ -28,6 +31,6 @@ class WatchlistController extends Controller
         Favorite::remove($movie, $user);
         session()->flash('success', 'Movie removed from watchlist');
 
-        return redirect()->route('watchlist');
+        return Redirect::back()->with('message','Operation Successful !');
     }
 }

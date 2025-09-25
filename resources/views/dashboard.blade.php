@@ -6,7 +6,7 @@
 
 <section>
    
-<body class="min-h-screen bg-black text-white">
+<div class="min-h-screen bg-black text-white">
 
     <!-- Background Elements -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none">
@@ -110,7 +110,7 @@
                         </div>
 
                         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                            @for ($i = 0; $i < 8; $i++)
+                            @foreach($movies as $movie)
                             <div class="group relative">
                                 <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden">
                                     <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
@@ -121,21 +121,27 @@
                                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
                                     <div class="text-center">
                                         <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm mb-2 transition-colors">
-                                            View
+                                            <a href="{{ route('movies.show', $movie->id) }}">View</a>
                                         </button>
                                         <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm block w-full transition-colors">
-                                            Remove
+                                            <form action="{{ route('favorite.remove',$movie->id) }}" method="POST"
+                                                    onsubmit="return confirm('{{ trans('Are you sure ? ') }}');"
+                                                    style="">
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                    <input type="submit" value="Delete">
+                                                </form>
                                         </button>
                                     </div>
                                 </div>
                                 
                                 <!-- Movie Title -->
                                 <h3 class="mt-2 text-sm font-medium text-white line-clamp-2">
-                                    {{ $i % 3 == 0 ? 'The Incredible Movie Adventure' : ($i % 3 == 1 ? 'Action Hero Returns' : 'Mystery of the Night') }}
+                                    {{ $movie->name }}
                                 </h3>
-                                <p class="text-xs text-gray-400">{{ 2023 - ($i % 5) }}</p>
+                                <p class="text-xs text-gray-400">{{ $movie->director->name }}</p>
                             </div>
-                            @endfor
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -275,7 +281,7 @@
             </div>
         </div>
     </main>
-
+</div>
 </section>
 
 @endsection

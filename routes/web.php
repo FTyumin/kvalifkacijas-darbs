@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActorController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\HomeController;
@@ -14,9 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('movies', MovieController::class)->only(['index','show']);
 Route::resource('directors', DirectorController::class)->only(['index','show']);

@@ -86,7 +86,7 @@
                                                     class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap"
                                                 >
                                                 <form action="{{ route('favorite.remove',$movie->id) }}" method="POST"
-                                                    onsubmit="return confirm('{{ trans('are You Sure ? ') }}');"
+                                                    onsubmit="return confirm('{{ trans('Are you sure? ') }}');"
                                                     style="display: inline-block; background-color:#E6E6FA">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
