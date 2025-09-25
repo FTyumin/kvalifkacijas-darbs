@@ -43,11 +43,11 @@
 
   <!-- Responsive Grid -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ">
-    @for ($i = 0; $i < 4; $i++)
+    @foreach($movies as $movie)
     <div class="group bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600 overflow-hidden">
       
       <div class="relative overflow-hidden">
-        <a href="#" class="block">
+        <a href="{{ route('movies.show', $movie->id ) }}" class="block">
           <img class="aspect-[2/3] w-full object-cover transition-transform duration-300 group-hover:scale-105" 
                src="{{ asset('images/cinema.webp') }}" 
                alt="Movie poster" />
@@ -57,37 +57,38 @@
           <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
           </svg>
-          8.5
+          {{ $movie->rating }}
         </div>
 
         <div class="absolute bottom-3 left-3 flex gap-1">
-          <span class="bg-blue-600/90 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">Action</span>
-          <span class="bg-red-600/90 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">Drama</span>
+          @foreach($movie->genres as $genre)
+            <span class="bg-blue-600/90 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">{{ $genre->name }}</span>
+          @endforeach
         </div>
       </div>
 
       <!-- Content Section -->
       <div class="p-5">
-        <a href="#" class="group/title">
+        <a href="{{ route('movies.show', $movie->id ) }}" class="group/title">
           <h3 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white group-hover/title:text-blue-600 dark:group-hover/title:text-blue-400 transition-colors line-clamp-2">
-            The Amazing Movie Title
+            {{ $movie->name }}
           </h3>
         </a>
 
         <div class="mb-3 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
-          <span>2024</span>
+          <span>{{ $movie->year }}</span>
           <span>•</span>
-          <span>2h 30m</span>
+          <span>{{ $movie->duration }} min</span>
           <span>•</span>
           <span class="text-green-600 dark:text-green-400 font-medium">89% Fresh</span>
         </div>
 
         <p class="mb-4 text-sm text-gray-600 dark:text-gray-300 line-clamp-3 leading-relaxed">
-          An epic adventure that takes viewers on a thrilling journey through spectacular landscapes and unforgettable characters.
+          {{ $movie->description }}
         </p>
 
         <div class="flex gap-2">
-          <a href="#" class="flex-1 inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition-colors">
+          <a href="{{ route('movies.show', $movie->id ) }}" class="flex-1 inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition-colors">
             View Details
           </a>
           <button class="p-2 text-gray-500 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400 dark:hover:text-red-400 rounded-lg transition-colors">
@@ -98,7 +99,7 @@
         </div>
       </div>
     </div>
-    @endfor
+    @endforeach
   </div>
 
   <!-- View All Button -->
@@ -117,12 +118,12 @@
     <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">Genres</h1>
 
     <div class="grid grid-cols-4 gap-x-16 gap-y-10">
-        @for ($i = 0; $i < 4; $i++)
+        @foreach($genres as $genre)
             <div class="w-[24rem] bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
                 <div class="p-5">
                     <a href="#">
                         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                        Genre Name
+                        {{ $genre->name }}
                         </h5>
                     </a>
                     <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus-visible:ring-blue-800">
@@ -133,7 +134,7 @@
                     </a>
                 </div>
             </div>   
-        @endfor
+        @endforeach
     </div>
 </div>
 

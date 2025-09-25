@@ -23,7 +23,6 @@
     <!-- Center: Search Bar -->
     <div class="flex-1 max-w-2xl mx-6">
       <form class="relative">
-        @csrf
         <label for="search" class="sr-only">Search movies, TV shows, and actors</label>
         <div class="relative">
           <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
