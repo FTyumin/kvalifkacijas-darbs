@@ -6,12 +6,11 @@ use App\Http\Controllers\GenreController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WatchlistController;
 
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('home');
-// });
+
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
@@ -24,6 +23,11 @@ Route::resource('directors', DirectorController::class)->only(['index','show']);
 Route::resource('genres', GenreController::class)->only(['index', 'show']);
 
 Route::get('/actors', [ActorController::class, 'show'])->name('actor.show');
+
+Route::post('favorite-add/{id}', [WatchlistController::class, 'favoriteAdd'])->name('favorite.add');
+Route::delete('favorite-remove/{id}', [WatchlistController::class, 'favoriteRemove'])->name('favorite.remove');
+
+Route::get('watchlist', [WatchlistController::class, 'watchlist'])->name('watchlist');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

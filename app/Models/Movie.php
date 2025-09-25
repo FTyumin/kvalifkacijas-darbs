@@ -3,11 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Actor;
+use Maize\Markable\Markable;
+use Maize\Markable\Models\Favorite;
 
 class Movie extends Model
 {
+    use HasFactory, Markable;
+
      protected $fillable = [
         'name',
         'year',
@@ -22,6 +27,10 @@ class Movie extends Model
         'year' => 'integer',
         'duration' => 'integer',
         'rating' => 'decimal:1',
+    ];
+
+    protected static $marks = [
+        Favorite::class,
     ];
 
     public function director()
