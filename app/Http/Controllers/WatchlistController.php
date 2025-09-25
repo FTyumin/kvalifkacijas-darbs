@@ -10,7 +10,6 @@ class WatchlistController extends Controller
 {
     public function watchlist() {
         $movies = Movie::whereHasFavorite(auth()->user())->get();
-        // dd($movies);
         return view('watchlist', compact('movies'));
     }
 
