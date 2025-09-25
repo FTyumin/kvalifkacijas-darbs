@@ -60,6 +60,12 @@
         <span class="hidden md:inline">Watchlist</span>
       </a>
 
+      @auth
+      <a href="/dashboard" class="hidden sm:flex items-center gap-2 text-gray-300 hover:text-white transition-colors font-medium">
+        <span class="hidden  md:inline">Dashboard</span>
+      </a>
+      @endauth
+      
       <!-- User Menu / Sign In -->
       <div class="flex items-center gap-3">
         
