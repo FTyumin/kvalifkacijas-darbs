@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movie;
+use App\Models\Review;
+
 use Illuminate\Http\Request;
 use Maize\Markable\Models\Favorite;
 
@@ -11,7 +13,9 @@ class DashboardController extends Controller
     public function dashboard() {
         $movies = Movie::whereHasFavorite(auth()->user())->get();
 
+        $userId = \Auth::user()->id;
+        $reviews = Review::where('user_id', $userId)->get();
 
-        return view('dashboard', compact('movies'));
+        return view('dashboard', compact('movies', 'reviews'));
     }
 }

@@ -174,6 +174,9 @@
       <p class="mt-2 text-gray-500">
         {{ $review->description }}
       </p>
+      <p>
+        {{ $review->rating }}
+      </p>
     </div>
     <div class="bg-gray-100 border-t border-gray-200 rounded-b-xl py-3 px-4 md:py-4 md:px-5">
       <p class="mt-1 text-sm text-gray-500">

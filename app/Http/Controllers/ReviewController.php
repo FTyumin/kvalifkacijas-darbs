@@ -17,6 +17,7 @@ class ReviewController extends Controller
         Review::create([
             'user_id' => $userId,
             'movie_id' => $request->movie_id, 
+            'rating' => $request->rating,
             'title' => 'review',
             'description' => $request->comment
         ]);
