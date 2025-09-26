@@ -15,6 +15,6 @@ class MovieController extends Controller
         $search = $request->input('search');
         $results = Movie::SearchByNameOrDirector($search)->get();
 
-        return view('movies.index', compact('results'));
+        return view('movies.index', compact('results', 'search'));
     }
 }
