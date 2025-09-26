@@ -23,7 +23,7 @@
 
     <!-- Center: Search Bar -->
     <div class="flex-1 max-w-2xl mx-6">
-      <form class="relative">
+      <form class="relative" method="GET" action="{{ route('movies.search') }}">
         @csrf
         <label for="search" class="sr-only">Search movies, TV shows, and actors</label>
         <div class="relative">
