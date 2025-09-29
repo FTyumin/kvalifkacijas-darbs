@@ -32,7 +32,6 @@ class Movie extends Model
     public function actors()
     {
         return $this->belongsToMany(Actor::class)
-                    ->withPivot('role')
                     ->withTimestamps();
     }
 

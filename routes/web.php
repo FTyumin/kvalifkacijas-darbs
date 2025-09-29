@@ -26,4 +26,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/search', [MovieController::class, 'search'])->name('movies.search');
+
 require __DIR__.'/auth.php';
