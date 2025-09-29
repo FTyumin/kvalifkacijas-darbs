@@ -29,9 +29,11 @@
             {{-- Genres --}}
             <div class="flex flex-wrap gap-2">
                 @foreach($movie->genres as $genre)
+                 <a href="{{ route('genres.show', $genre->id ) }}" class="hover:text-gray-400">
                     <span class="px-3 py-1 bg-gray-100 text-sm rounded-full">
                         {{ $genre->name }} 
                     </span>
+                 </a>
                 @endforeach
             </div>
 
@@ -181,9 +183,12 @@
       @if($review->spoilers)
         <div class="flex flex-col bg-white block w-full px-4 py-2 border border-gray-300 rounded-lg">
             <div class="p-4 md:p-5">
-                <h3 class="text-lg font-bold text-gray-800">
-                    {{ $review->user->name }}
-                </h3>
+                <a href="{{ route('profile.show', $review->user) }}">
+                    <h3 class="text-lg font-bold text-gray-800">
+                        {{ $review->user->name }}
+                    </h3>      
+                </a>
+
                 
                 <!-- Spoiler Warning and Button -->
                 <div class="spoiler-warning-{{ $review->id }} mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">

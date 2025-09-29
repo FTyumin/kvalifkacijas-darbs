@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+
 Route::post('/reviews', [ReviewController::class, 'create'])->name('reviews.store');
 
 Route::get('/search', [MovieController::class, 'search'])->name('movies.search');
