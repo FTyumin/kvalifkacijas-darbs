@@ -12,6 +12,7 @@ class Review extends Model
         'title',
         'rating',
         'description',
+        'spoilers'
     ];
 
     public function user() {
