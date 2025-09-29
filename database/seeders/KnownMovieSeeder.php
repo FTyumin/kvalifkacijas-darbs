@@ -175,7 +175,7 @@ class KnownMovieSeeder extends Seeder
         if (!empty($pivotRows)) {
             // chunk insert to be safe
             foreach (array_chunk($pivotRows, 200) as $chunk) {
-                DB::table('actor_movies')->insert($chunk);
+                DB::table('actor_movie')->insert($chunk);
             }
         }
     }
