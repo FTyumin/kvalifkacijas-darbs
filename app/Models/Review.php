@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Observers\ReviewObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy([ReviewObserver::class])]
 class Review extends Model
 {
     protected $fillable = [

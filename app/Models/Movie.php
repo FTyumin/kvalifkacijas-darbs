@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Actor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\Actor;
 use Maize\Markable\Markable;
 use Maize\Markable\Models\Favorite;
 use Maize\Markable\Models\Bookmark;
@@ -66,5 +66,14 @@ class Movie extends Model
     public function scopeByRating($query, $minRating)
     {
         return $query->where('rating', '>=', $minRating);
+    }
+
+    public function updateRating() {
+        $id = $this->id;
+        $reviews = $this->reviews->pluck('rating')->toArray();
+
+        $rating = array_sum($reviews) / count($reviews);
+
+        $this->update(['rating' => $rating]);
     }
 }
