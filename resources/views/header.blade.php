@@ -16,8 +16,7 @@
       <!-- Desktop Navigation -->
       <div class="hidden lg:flex items-center gap-8">
         <a href="/" class="text-gray-300 hover:text-white transition-colors font-medium">Movies</a>
-        <a href="/tv-shows" class="text-gray-300 hover:text-white transition-colors font-medium">TV Shows</a>
-        <a href="/trending" class="text-gray-300 hover:text-white transition-colors font-medium">Trending</a>
+        <a href="/" class="text-gray-300 hover:text-white transition-colors font-medium">Trending</a>
       </div>
     </div>
 
@@ -77,12 +76,6 @@
         </a>
         @endguest
         @auth
-        <!-- Notifications (when logged in) -->
-        <!-- <button class="hidden sm:block p-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM5 12H3l5-5v5z"/>
-          </svg>
-        </button> -->
           <form method="POST" action="{{ route('logout') }}">
             @csrf
             
@@ -110,7 +103,6 @@
   <div class="lg:hidden mt-4 pt-4 border-t border-gray-800 hidden">
     <div class="flex flex-col gap-4 px-4">
       <a href="/" class="text-gray-300 hover:text-white transition-colors font-medium py-2">Movies</a>
-      <a href="/tv-shows" class="text-gray-300 hover:text-white transition-colors font-medium py-2">TV Shows</a>
       <a href="/trending" class="text-gray-300 hover:text-white transition-colors font-medium py-2">Trending</a>
       <a href="/watchlist" class="flex items-center gap-2 text-gray-300 hover:text-white transition-colors font-medium py-2">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
