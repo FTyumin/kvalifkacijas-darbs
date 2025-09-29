@@ -36,4 +36,7 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/reviews', [ReviewController::class, 'create'])->name('reviews.store');
 
+Route::get('/search', [MovieController::class, 'search'])->name('movies.search');
+
+
 require __DIR__.'/auth.php';
