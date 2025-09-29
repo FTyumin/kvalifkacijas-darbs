@@ -32,7 +32,6 @@ class Movie extends Model
     public function actors()
     {
         return $this->belongsToMany(Actor::class)
-                    ->withPivot('role')
                     ->withTimestamps();
     }
 
@@ -50,14 +49,5 @@ class Movie extends Model
     public function scopeByRating($query, $minRating)
     {
         return $query->where('rating', '>=', $minRating);
-    }
-
-    public function scopeSearchByNameOrDirector($query, $search)
-    {
-        return $query->leftJoin('directors', 'movies.director_id', '=', 'directors.id')
-            ->whereRaw('LOWER(movies.name) LIKE ? OR LOWER(directors.name) LIKE ?', [
-            '%' . strtolower($search) . '%',
-            '%' . strtolower($search) . '%'
-            ])->select('movies.*'); // Only select movie columns to avoid conflicts
     }
 }
