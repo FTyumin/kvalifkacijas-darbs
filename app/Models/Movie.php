@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Actor;
 use Maize\Markable\Markable;
 use Maize\Markable\Models\Favorite;
-use Maize\Markable\Models\BookMark;
+use Maize\Markable\Models\Bookmark;
 
 
 class Movie extends Model

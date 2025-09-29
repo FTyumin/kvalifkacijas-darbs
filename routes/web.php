@@ -27,6 +27,10 @@ Route::get('/actors', [ActorController::class, 'show'])->name('actor.show');
 Route::post('favorite-add/{id}', [WatchlistController::class, 'favoriteAdd'])->name('favorite.add');
 Route::delete('favorite-remove/{id}', [WatchlistController::class, 'favoriteRemove'])->name('favorite.remove');
 
+Route::post('bookmark-add/{id}', [BookmarkController::class, 'bookmarkAdd'])->name('bookmark.add');
+Route::delete('bookmark-remove/{id}', [BookmarkController::class, 'bookmarkRemove'])->name('bookmark.remove');
+
+
 Route::get('watchlist', [WatchlistController::class, 'watchlist'])->name('watchlist');
 Route::get('bookmark', [BookmarkController::class, 'bookmarkList'])->name('bookmark');
 
