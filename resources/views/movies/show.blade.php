@@ -56,7 +56,12 @@
                             </svg>
 
                         </button>
-                    </form>
+                 </form>
+
+                 <button class="hover:bg-green-400">
+                    <img src="{{ asset('images/eye.svg') }}" alt="" class="size-9">
+                    Already seen
+                 </button>
 
             </div>
         </div>

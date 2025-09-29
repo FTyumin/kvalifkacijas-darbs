@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Actor;
 use Maize\Markable\Markable;
 use Maize\Markable\Models\Favorite;
+use Maize\Markable\Models\BookMark;
+
 
 class Movie extends Model
 {
@@ -31,6 +33,7 @@ class Movie extends Model
 
     protected static $marks = [
         Favorite::class,
+        Bookmark::class,
     ];
 
     public function director()

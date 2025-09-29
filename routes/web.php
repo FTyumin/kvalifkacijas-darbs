@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActorController;
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\GenreController;
@@ -27,6 +28,7 @@ Route::post('favorite-add/{id}', [WatchlistController::class, 'favoriteAdd'])->n
 Route::delete('favorite-remove/{id}', [WatchlistController::class, 'favoriteRemove'])->name('favorite.remove');
 
 Route::get('watchlist', [WatchlistController::class, 'watchlist'])->name('watchlist');
+Route::get('bookmark', [BookmarkController::class, 'bookmarkList'])->name('bookmark');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
