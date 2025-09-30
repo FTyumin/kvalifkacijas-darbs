@@ -26,6 +26,43 @@
                 </p>
             </div>
 
+            <div class="my-10">
+                <h1 class="text-3xl">Edit profile</h1>
+                <form action="{{ route('profile.update') }}" enctype="multipart/form-data" method="post">
+                    @csrf
+                    @method('PATCH')
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" value="{{ $user->name }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" id="email" value="{{ $user->email }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Image</label>
+                        <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" id="image">
+                        <img src="{{ asset('storage/' . $user->image ) }}" width="100" alt="image">
+                    </div>
+
+                    @error('image')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+
+                    <!-- @if($user->image)
+                        <img src="{{ asset('storage/' . $user->image) }}" width="100" alt="image">
+                    @endif -->
+
+                    <div class="form-group"></div>
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i>Update</button>
+                    </div>
+
+                </form>
+            </div>
+
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                 <!-- Watchlist Count -->

@@ -19,7 +19,7 @@
         <div class="py-12 px-6 lg:px-28">
             <div class="mb-8">
                 <h1 class="text-4xl font-bold mb-4">
-                     <span class="text-blue-400">{{ Auth::user()->name ?? 'Johns' }} Profile</span>
+                     <span class="text-blue-400">{{ $user->name }} Profile</span>
                 </h1>
                 <p class="text-xl text-gray-400">
                     Check out his/her favorite movies!
