@@ -26,43 +26,6 @@
                 </p>
             </div>
 
-            <div class="my-10">
-                <h1 class="text-3xl">Edit profile</h1>
-                <form action="{{ route('profile.update') }}" enctype="multipart/form-data" method="post">
-                    @csrf
-                    @method('PATCH')
-
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" value="{{ $user->name }}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" id="email" value="{{ $user->email }}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="image">Image</label>
-                        <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" id="image">
-                        <img src="{{ asset('storage/' . $user->image ) }}" width="100" alt="image">
-                    </div>
-
-                    @error('image')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-
-                    <!-- @if($user->image)
-                        <img src="{{ asset('storage/' . $user->image) }}" width="100" alt="image">
-                    @endif -->
-
-                    <div class="form-group"></div>
-                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i>Update</button>
-                    </div>
-
-                </form>
-            </div>
-
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                 <!-- Watchlist Count -->
@@ -244,13 +207,13 @@
                                 <span class="text-sm font-medium">Discover New Movies</span>
                             </a>
                             
-                            <a href="/write-review" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
+                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
                                 <div class="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
                                     <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                     </svg>
                                 </div>
-                                <span class="text-sm font-medium">Write a Review</span>
+                                <span class="text-sm font-medium">Edit profile</span>
                             </a>
                             
                             <a href="/recommendations" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">

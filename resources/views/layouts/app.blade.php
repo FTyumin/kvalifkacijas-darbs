@@ -17,7 +17,7 @@
 <body class="font-sans antialiased flex flex-col min-h-screen">
   @include('header')
   
-  <main>
+  <main class="bg-black">
     @yield('content')
   </main>
   
