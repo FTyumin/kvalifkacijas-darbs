@@ -49,4 +49,20 @@ class User extends Authenticatable
     public function reviews() {
         return $this->hasMany(Review::class);
     }
+
+    public function ratedMovies()
+    {
+        return $this->belongsToMany(Movie::class, 'reviews')
+            ->withPivot('rating', 'created_at');
+    }
+
+    /**
+     * Get user's favorite movies (rating >= 4)
+     */
+    public function favoriteMovies()
+    {
+        return $this->belongsToMany(Movie::class, 'reviews')
+            ->withPivot('rating', 'created_at')
+            ->wherePivot('rating', '>=', 4);
+    }
 }
