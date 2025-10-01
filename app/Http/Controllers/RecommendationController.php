@@ -124,9 +124,9 @@ class RecommendationController extends Controller
             ->getTrendingMovies($limit)->values();
 
         // Popular movies as fallback
-        $popularMovies = Movie::select('movies.id')
+        $popularMovies = Movie::select('movies.id', 'movies.name', 'movies.rating')
             ->leftJoin('reviews', 'movies.id', '=', 'reviews.movie_id')
-            ->groupBy('movies.id')
+            ->groupBy('movies.id', 'movies.name', 'movies.rating')
             ->orderByRaw('AVG(reviews.rating) DESC')
             ->orderByRaw('COUNT(reviews.id) DESC')
             ->limit($limit)

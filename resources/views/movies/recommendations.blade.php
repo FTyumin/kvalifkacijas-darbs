@@ -125,14 +125,18 @@ document.addEventListener('DOMContentLoaded', function() {
     function loadHomepageRecommendations() {
         fetch('/recommendations/homepage')
             .then(response => response.json())
+            
             .then(data => {
+                console.log(data);
                 if (data.personal_recommendations) {
+                    
                     renderMovies(data.personal_recommendations, 'personal-recommendations');
                 }
                 if (data.trending) {
                     renderMovies(data.trending, 'trending-movies');
                 }
                 if (data.popular) {
+                    console.log(data.popular);
                     renderMovies(data.popular, 'popular-movies');
                 }
             })
@@ -147,16 +151,17 @@ document.addEventListener('DOMContentLoaded', function() {
         
         container.innerHTML = '';
 
+        console.log(movies);
         movies.forEach(item => {
+            console.log(item.movie.rating);
             const movie = item.movie || item; // Handle different response structures
             const clone = template.content.cloneNode(true);
-            
             const poster = clone.querySelector('.movie-poster');
-            poster.src = movie.poster_url || '/images/default-movie-poster.jpg';
+            poster.src = movie.poster_url || '/images/movie-placeholder.jpg';
             poster.alt = movie.title;
             
-            clone.querySelector('.movie-title').textContent = movie.title;
-            clone.querySelector('.movie-year').textContent = movie.year;
+            clone.querySelector('.movie-title').textContent = item.movie.name;
+            clone.querySelector('.movie-year').textContent = item.movie.year;
             
             // Handle genres
             if (movie.genres && movie.genres.length > 0) {
@@ -167,8 +172,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Handle rating
-            const rating = item.predicted_rating || item.similarity_score || movie.average_rating || movie.imdb_rating || 0;
-            clone.querySelector('.movie-rating span:last-child').textContent = rating.toFixed(1);
+            const rating = item.movie.rating;
+            clone.querySelector('.movie-rating span:last-child').textContent = rating;
             
             // Add click handlers
             const movieCard = clone.querySelector('.movie-card');
@@ -192,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function openRatingModal(movie) {
         currentMovieId = movie.id;
-        document.getElementById('modal-movie-title').textContent = movie.title;
+        document.getElementById('modal-movie-title').textContent = movie.name;
         document.getElementById('modal-movie-year').textContent = movie.year;
         selectedRating = 0;
         updateStarDisplay();

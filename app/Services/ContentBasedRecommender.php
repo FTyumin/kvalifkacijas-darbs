@@ -251,9 +251,9 @@ class ContentBasedRecommender
      */
     private function getPopularMovies(int $limit): Collection
     {
-        $popularMovies = Movie::select('movies.id')
+        $popularMovies = Movie::select('movies.id', 'movies.name', 'movies.rating')
             ->leftJoin('reviews', 'movies.id', '=', 'reviews.movie_id')
-            ->groupBy('movies.id')
+            ->groupBy('movies.id', 'movies.name', 'movies.rating')
             ->orderByRaw('AVG(reviews.rating) DESC')
             ->orderByRaw('COUNT(reviews.id) DESC')
             ->limit($limit)

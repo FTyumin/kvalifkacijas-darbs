@@ -38,7 +38,7 @@ class MovieController extends Controller
 
         $recommendations['popular'] = Movie::select('movies.*')
             ->leftJoin('ratings', 'movies.id', '=', 'ratings.movie_id')
-            ->groupBy('movies.id')
+            ->groupBy('movies.id', 'movies.name')
             ->orderByRaw('AVG(ratings.rating) DESC')
             ->orderByRaw('COUNT(ratings.id) DESC')
             ->limit(6)
