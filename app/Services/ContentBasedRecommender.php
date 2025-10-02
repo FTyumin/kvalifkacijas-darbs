@@ -26,8 +26,9 @@ class ContentBasedRecommender
     
             if($similarity > 0.1) {
                 $similarities[] = [
-                    'movie' =>$movie->id,
-                    'value' => $similarity
+                    'id' => $movie->id,
+                    'value' => $similarity,
+                    'name'  => $movie->name,
                 ];
             }
         }
