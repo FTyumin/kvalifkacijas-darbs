@@ -127,7 +127,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             
             .then(data => {
-                console.log(data);
                 if (data.personal_recommendations) {
                     
                     renderMovies(data.personal_recommendations, 'personal-recommendations');
@@ -136,7 +135,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     renderMovies(data.trending, 'trending-movies');
                 }
                 if (data.popular) {
-                    console.log(data.popular);
                     renderMovies(data.popular, 'popular-movies');
                 }
             })
@@ -151,9 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         container.innerHTML = '';
 
-        console.log(movies);
         movies.forEach(item => {
-            console.log(item.movie.rating);
             const movie = item.movie || item; // Handle different response structures
             const clone = template.content.cloneNode(true);
             const poster = clone.querySelector('.movie-poster');

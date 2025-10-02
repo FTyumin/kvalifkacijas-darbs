@@ -28,7 +28,7 @@ class ActorSeeder extends Seeder
                 'name' => $faker->name,
                 'nationality' => $faker->optional(0.8)->country,
                 'birth_year' => $birthYear,
-                'gender' => $faker->randomElement(['male', 'female', 'other']),
+                'gender' => $faker->randomElement(['male', 'female',]),
                 'birth_date' => $birthDate,
                 'created_at' => now(),
                 'updated_at' => now(),

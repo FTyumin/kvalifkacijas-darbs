@@ -40,7 +40,7 @@ class ActorMovieSeeder extends Seeder
         // To avoid duplicate unique constraint issues, we can chunk insert
         $chunks = array_chunk($pivotRows, 500);
         foreach ($chunks as $chunk) {
-            DB::table('actor_movies')->insert($chunk);
+            DB::table('actor_movie')->insert($chunk);
         }
     }
 }

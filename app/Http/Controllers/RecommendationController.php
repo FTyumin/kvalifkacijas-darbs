@@ -66,16 +66,15 @@ class RecommendationController extends Controller
 
         // Get content-based similar movies
         $contentSimilar = $this->contentRecommender
-            ->getRecommendationsForMovie($movie->id, $limit);
+            ->findSimilarMovies($movie->id, $limit);
 
         // Get movies liked by fans (collaborative approach)
-        $fanFavorites = $this->collaborativeRecommender
-            ->getMoviesLikedByFans($movie->id, $limit);
+        // $fanFavorites = $this->collaborativeRecommender
+        //     ->getMoviesLikedByFans($movie->id, $limit);
 
         return response()->json([
             'movie' => $movie->load(['genres', 'director', 'actors']),
-            'content_similar' => $contentSimilar->values(),
-            'fan_favorites' => $fanFavorites->values()
+            'content_similar' => $contentSimilar,
         ]);
     }
 
