@@ -6,22 +6,25 @@ use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Services\ContentBasedRecommender;
 use App\Services\CollaborativeFilteringRecommender;
+use App\Services\TmdbApiClient;
 
 class MovieController extends Controller
 {
     protected $contentRecommender;
     protected $collaborativeRecommender;
+    protected $apiClient;
 
     public function __construct(
         ContentBasedRecommender $contentRecommender,
-        CollaborativeFilteringRecommender $collaborativeRecommender
+        CollaborativeFilteringRecommender $collaborativeRecommender,
+        TmdbApiClient $apiClient
     ) {
         $this->contentRecommender = $contentRecommender;
         $this->collaborativeRecommender = $collaborativeRecommender;
+        $this->apiClient = $apiClient;
     }
 
-      public function index(Request $request)
-    {
+    public function index(Request $request) {
         $user = $request->user();
         $recommendations = [];
 
@@ -123,5 +126,34 @@ class MovieController extends Controller
         }
 
         return view('movies.recommendations', compact('recommendations', 'method', 'userRatingsCount'));
+    }
+
+    public function showFromApi() {
+        // $movie = Movie::with(['genres', 'director', 'actors', 'reviews.user'])->findOrFail($id);
+
+        $tmdb->getMovieWithExtras($recId, ['credits','images']);
+    }
+
+    public function top() {
+        $n = 100;
+        $data =  $this->apiClient->getTopMovies($n, [
+            'method' => 'discover',
+            'sort_by' => 'popularity.desc',
+            'vote_count.gte' => 500, // tweak to taste
+        ]);
+
+        $clean = array_map(function($r) use ($tmdb) {
+            return [
+                'tmdb_id' => $r['id'],
+                'title' => $r['title'] ?? null,
+                'overview' => $r['overview'] ?? null,
+                'release_year' => !empty($r['release_date']) ? substr($r['release_date'],0,4) : null,
+                'poster_url' => isset($r['poster_path']) ? $tmdb->posterUrl($r['poster_path'],'w500') : asset('images/cinema.webp'),
+                'popularity' => $r['popularity'] ?? null,
+                'vote_count' => $r['vote_count'] ?? null,
+            ];
+        }, $data);
+
+        return response()->json($clean);
     }
 }

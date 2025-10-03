@@ -11,7 +11,7 @@ use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RecommendationController;
 use Illuminate\Support\Facades\Route;
-
+use App\Services\TmdbApiClient;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
@@ -58,6 +58,10 @@ Route::prefix('recommendations')->group(function () {
 });
 
 Route::get('/recommendations', [MovieController::class, 'recommendations'])->name('movies.recommendations');
+Route::get('/api-test', function (TmdbApiClient $tmdb) {
+    $top = $tmdb->getTopMovies(20, ['method' => 'popular']);
+    return response()->json($top);
+});
 
 Route::post('/reviews', [ReviewController::class, 'create'])->name('reviews.store');
 
