@@ -128,32 +128,19 @@ class MovieController extends Controller
         return view('movies.recommendations', compact('recommendations', 'method', 'userRatingsCount'));
     }
 
-    public function showFromApi() {
-        // $movie = Movie::with(['genres', 'director', 'actors', 'reviews.user'])->findOrFail($id);
-
-        $tmdb->getMovieWithExtras($recId, ['credits','images']);
-    }
-
-    public function top() {
+    public function topPage(TmdbApiClient $tmdb)
+    {
         $n = 100;
-        $data =  $this->apiClient->getTopMovies($n, [
-            'method' => 'discover',
-            'sort_by' => 'popularity.desc',
-            'vote_count.gte' => 500, // tweak to taste
-        ]);
-
-        $clean = array_map(function($r) use ($tmdb) {
+        $data = $tmdb->getTopMovies($n, ['method' => 'top-rated']);
+        $movies = collect($data ?? [])->map(function ($r) use ($tmdb) {
             return [
-                'tmdb_id' => $r['id'],
+                'id' => $r['id'] ?? null,
                 'title' => $r['title'] ?? null,
-                'overview' => $r['overview'] ?? null,
-                'release_year' => !empty($r['release_date']) ? substr($r['release_date'],0,4) : null,
-                'poster_url' => isset($r['poster_path']) ? $tmdb->posterUrl($r['poster_path'],'w500') : asset('images/cinema.webp'),
-                'popularity' => $r['popularity'] ?? null,
-                'vote_count' => $r['vote_count'] ?? null,
+                'poster' => isset($r['poster_path']) ? $tmdb->posterUrl($r['poster_path'],'w500') : asset('images/cinema.webp'),
+                'year' => !empty($r['release_date']) ? substr($r['release_date'],0,4) : null,
             ];
-        }, $data);
+        })->all();
 
-        return response()->json($clean);
+        return view('movies.top', compact('movies'));
     }
 }

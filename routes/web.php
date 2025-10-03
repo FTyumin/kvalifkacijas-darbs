@@ -58,10 +58,8 @@ Route::prefix('recommendations')->group(function () {
 });
 
 Route::get('/recommendations', [MovieController::class, 'recommendations'])->name('movies.recommendations');
-Route::get('/api-test', function (TmdbApiClient $tmdb) {
-    $top = $tmdb->getTopMovies(20, ['method' => 'popular']);
-    return response()->json($top);
-});
+Route::get('/top-movies', [MovieController::class, 'topPage'])->name('movies.top');
+
 
 Route::post('/reviews', [ReviewController::class, 'create'])->name('reviews.store');
 

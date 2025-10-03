@@ -76,10 +76,10 @@ class TmdbApiClient {
         $maxPages = 1000;
         
         $discoverDefaults = [
-            'sort_by' => $opts['sort_by'] ?? 'popularity.desc',
+            'sort_by' =>  'release_date',
             'vote_count.gte' => $opts['vote_count.gte'] ?? 50,
-            'language' => $opts['language'] ?? 'en-US',
-            'include_adult' => $opts['include_adult'] ?? false,
+            'language' => 'en-US',
+            'include_adult' => true,
             'region' => $opts['region'] ?? null,
         ];
         
@@ -88,6 +88,8 @@ class TmdbApiClient {
             
             if($method === 'popular') {
                 $endpoint = 'movie/popular';
+            } else if($method === 'top-rated') {
+                $endpoint = 'movie/top_rated';
             } else {
                 $endpoint = 'discover/movie';
                 $query = array_merge($query, array_filter($discoverDefaults, fn($v) => $v !== null));
@@ -98,11 +100,11 @@ class TmdbApiClient {
                     }
                 }
             }
+
             if ($this->apiKey && empty($this->bearer)) {
                 $query['api_key'] = $this->apiKey;
             }
-            \Log::error('debugging');
-            
+            // \Log::error("bruh");
             $options = ['query' => $query];
             if($this->bearer) {
                 $options['headers'] = [
@@ -111,12 +113,11 @@ class TmdbApiClient {
                 ];
             }
             
-            
             try {
                 $res = $this->http->get($endpoint, $options);
                 $data = json_decode((string) $res->getBody(), true);
             } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-                \Log::warning("TMDb getTopMovies failed on page {$page}: " . $e->getMessage());
+                \Log::error("TMDb getTopMovies failed on page {$page}: " . $e->getMessage());
                 break;
             }
             $results = $data['results'] ?? [];
@@ -129,7 +130,7 @@ class TmdbApiClient {
             
             $page++;
             // If we've reached the last page on TMDb, break
-            if (isset($data['total_pages']) && $page > $data['total_pages']) break;
+            // if (isset($data['total_pages']) && $page > $data['total_pages']) break;
             // small delay could be added to respect rate limits (optional)
         }
         
