@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\TmdbApiClient;
 use App\Models\Genre;
 use App\Models\Movie;
+use Database\Seeders\GenreSeeder;
 
 class InsertData extends Command
 {
@@ -29,12 +30,15 @@ class InsertData extends Command
      */
     public function handle()
     {
-        $api = new TmdbApiClient;
-        $genres = Genre::all();
+        $seeder = new GenreSeeder();
+        $seeder->run();
 
-        $n = 10;
+        $api = new TmdbApiClient;
+        $genres = Genre::all()->keyBy('name');
+
+        $n = 100;
         $data = $api->getTopMovies($n, ['method' => 'top-rated']);
-        $movies = collect($data ?? [])->map(function ($r) use ($api) {
+        $movies = collect($data ?? [])->map(function ($r) {
             return [
                 'id' => $r['id'],
                 'name' => $r['title'] ?? null,
@@ -42,12 +46,13 @@ class InsertData extends Command
                 'description' => $r['overview'],
                 'poster_url' => $r['poster_path'],
             ];
-        })->all();
-        
-        DB::table('movies')->insert($movies);
+        });
+
+        DB::table('movies')->upsert($movies->all(), ['id'], ['name', 'year', 'description', 'poster_url']);
 
         $movieGenres = [];
         $movieGenreData = [];
+        // \Log::info($movies);
 
         foreach ($movies as $movie) {
             $movie_info = $api->getMovieWithExtras($movie['id']);
@@ -74,6 +79,6 @@ class InsertData extends Command
                 ];
             }
         }
-        DB::table('genre_movie')->insert($movieGenreData);
+        DB::table('genre_movie')->upsert($movieGenreData, ['movie_id', 'genre_id']);
     }
 }
