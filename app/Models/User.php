@@ -49,4 +49,12 @@ class User extends Authenticatable
     public function reviews() {
         return $this->hasMany(Review::class);
     }
+
+    public function getRedirectRoute()
+    {
+        if (! $this->quiz_completed) {
+            return route('quiz.show'); // URL string like "/quiz"
+        }
+        return view('quiz.show');
+    }
 }

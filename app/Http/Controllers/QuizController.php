@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Genre;
 
 class QuizController extends Controller
 {
     public function show() {
-        return view('quiz');
+        $genres = Genre::all();
+
+        return view('quiz.show', compact('genres'));
     }
 
     public function store(Request $request) {

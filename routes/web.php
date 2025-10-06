@@ -9,7 +9,7 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\ReviewController;
-
+use App\Http\Controllers\QuizController;
 use Illuminate\Support\Facades\Route;
 
 
