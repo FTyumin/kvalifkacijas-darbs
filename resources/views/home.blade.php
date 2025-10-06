@@ -31,7 +31,7 @@
 </section>
 
 <!-- Trending Movies -->
-<div class="my-20 mx-6 sm:mx-8 lg:mx-28 bg-gray-700">
+<div class="my-20 mx-6 sm:mx-8 lg:mx-28 bg-gray-700 p-8">
   <div class="mb-12">
     <h1 class="mb-3 text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
       Biggest movies <span class="text-blue-600 dark:text-blue-400">Right Now</span>

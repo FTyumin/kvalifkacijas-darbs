@@ -43,10 +43,12 @@ class InsertData extends Command
                 'poster_url' => $r['poster_path'],
             ];
         })->all();
+        
         DB::table('movies')->insert($movies);
 
         $movieGenres = [];
         $movieGenreData = [];
+
         foreach ($movies as $movie) {
             $movie_info = $api->getMovieWithExtras($movie['id']);
 
@@ -55,6 +57,7 @@ class InsertData extends Command
 
             $genreIds = [];
 
+            $movieModel = Movie::find($movie['id']);
             foreach ($movieGenres as $genreData) {
                 // Atrast zanru pec nosaukuma no datubazes
                 $genre = $genres->firstWhere('name', $genreData['name']);
@@ -65,33 +68,12 @@ class InsertData extends Command
                     $genres->push($genre);
                 }
 
-                $genreIds[] = $genre->id;
-            }
-
-            // Pievienot zanrus filmam(many-to-many)
-            $movieModel = Movie::find($movie['id']);
-            \Log::info($genreIds);
-            foreach ($genreIds as $genreId) { 
                 $movieGenreData[] = [
                     'movie_id' => $movieModel->id,
-                    'genre_id' => $genreId
+                    'genre_id' => $genre->id
                 ];
             }
         }
-        \Log::info($movieGenreData);
-
         DB::table('genre_movie')->insert($movieGenreData);
-
-        // foreach($movies as $movie) {
-        //     $movie_info = $api->getMovieWithExtras($movie['id']);
-
-        //     $actors = $movie_info['credits']['cast'];
-        //     foreach ($actors as $actor) {
-        //         echo $actor['name'] . ' as ' . $actor['character'];
-        //     }
-        //     // DB::table
-        // }
-
-
     }
 }
