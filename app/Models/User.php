@@ -50,6 +50,10 @@ class User extends Authenticatable
         return $this->hasMany(Review::class);
     }
 
+    public function favoriteGenres() {
+        return $this->hasMany(Genre::class);
+    }
+
     public function getRedirectRoute()
     {
         if (! $this->quiz_completed) {
