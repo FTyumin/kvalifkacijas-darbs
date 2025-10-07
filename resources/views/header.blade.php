@@ -97,7 +97,7 @@
         @endauth
         <div class="w-10 h-10 rounded-full overflow-hidden">
           <a href="/dashboard">
-            <img src="{{ asset('storage/' . auth()->user()->image) }}"
+            <img src="{{ asset('images/person-placeholder.png' . auth()->user()->image) }}"
                 alt="{{ auth()->user()->name}}"
                 class="w-full h-full object-cover">
 
