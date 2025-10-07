@@ -40,6 +40,19 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Review::class);
     }
 
+
+    public function favoriteGenres() {
+        return $this->belongsToMany(Genre::class);
+    }
+
+    public function getRedirectRoute()
+    {
+        if (! $this->quiz_completed) {
+            return route('quiz.show'); 
+        }
+        return view('quiz.show');
+    }
+  
     public function sendEmailVerificationNotification()
     {
         $this->notify(new CustomVerifyEmail);
