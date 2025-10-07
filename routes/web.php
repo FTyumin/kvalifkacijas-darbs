@@ -10,6 +10,7 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ListController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,7 @@ Route::delete('favorite-remove/{id}', [WatchlistController::class, 'favoriteRemo
 Route::post('bookmark-add/{id}', [BookmarkController::class, 'bookmarkAdd'])->name('bookmark.add');
 Route::delete('bookmark-remove/{id}', [BookmarkController::class, 'bookmarkRemove'])->name('bookmark.remove');
 
+Route::resource('lists', ListController::class)->only(['index', 'show', 'create', 'store']);
 
 Route::get('watchlist', [WatchlistController::class, 'watchlist'])->name('watchlist');
 Route::get('bookmark', [BookmarkController::class, 'bookmarkList'])->name('bookmark');
