@@ -58,6 +58,11 @@ class Movie extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function lists() 
+    {
+        return $this->belongsToMany(MovieList::class)->withTimestamps();
+    }
+
     public function scopeByYear($query, $year)
     {
         return $query->where('year', $year);
