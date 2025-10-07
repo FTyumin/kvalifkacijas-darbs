@@ -19,7 +19,10 @@ class QuizController extends Controller
 
         $user->quiz_completed = true;
         $user->save();
+        $input = $request->all();
 
+        $user->favoriteGenres()->attach($input["genres"]);
+        
         return redirect()->route('home')->with('success', 'Quiz completed!');
     }
 }

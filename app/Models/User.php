@@ -51,7 +51,7 @@ class User extends Authenticatable
     }
 
     public function favoriteGenres() {
-        return $this->hasMany(Genre::class);
+        return $this->belongsToMany(Genre::class);
     }
 
     public function getRedirectRoute()
