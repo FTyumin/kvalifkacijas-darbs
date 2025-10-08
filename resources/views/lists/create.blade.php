@@ -51,7 +51,7 @@
                     Public
                 </label>
                 
-                <input type="checkbox" id="scales" name="scales" checked />
+                <input type="checkbox" id="is_public" name="is_public" checked />
            
             </div>
 
