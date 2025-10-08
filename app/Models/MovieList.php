@@ -20,8 +20,31 @@ class MovieList extends Model
     }
 
     public function movies() {
-        return $this->hasMany(Movie::class)
-                    ->withPivot('position');
+        return $this->belongsToMany(
+        \App\Models\Movie::class, 
+        'movie_lists',           
+        'list_id',                
+        'movie_id'                
+        )
+        ->withTimestamps()
+        ->withPivot('position');
+    }
+    
+    public function addMovie(int $movieId, ?int $position = null) {
+        // Avoid duplicates
+        if ($this->movies()->where('movie_id', $movieId)->exists()) {
+            return; 
+        }
+
+        if (is_null($position)) {
+            $position = $this->movies()->count() + 1;
+        }
+
+        $this->movies()->attach($movieId, ['position' => $position]);
+    }
+
+    public function removeMovie(int $movieId) {
+        $this->movies()->detach($movieId);
     }
 
 

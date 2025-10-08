@@ -14,16 +14,15 @@ class ListController extends Controller
         $data = $request->all();
         $userId = \Auth::id();
         // dd($data['is_public']);
-        MovieList::create([
-            'user_id' => $userId,
-            'name' => $data['name'],
-            'description' => $data['description'],
-            'is_public' => $request->has('is_public'),
-        ]);
-
         // MovieList::create([
-        //     'name'=>
+        //     'user_id' => $userId,
+        //     'name' => $data['name'],
+        //     'description' => $data['description'],
+        //     'is_public' => $request->has('is_public'),
         // ]);
+
+
+
         return redirect()->route('dashboard');
     }
 
@@ -41,5 +40,12 @@ class ListController extends Controller
 
     public function create() {
         return view('lists.create');
+    }
+
+    public function add(Request $request, $movieId) {
+        $list = MovieList::find($request->listId);
+        $list->addMovie($movieId);
+
+        return back()->with('success', 'Movie added to list');
     }
 }
