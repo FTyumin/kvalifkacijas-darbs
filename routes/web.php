@@ -31,7 +31,6 @@ Route::delete('favorite-remove/{id}', [WatchlistController::class, 'favoriteRemo
 Route::post('bookmark-add/{id}', [BookmarkController::class, 'bookmarkAdd'])->name('bookmark.add');
 Route::delete('bookmark-remove/{id}', [BookmarkController::class, 'bookmarkRemove'])->name('bookmark.remove');
 
-Route::resource('lists', ListController::class)->only(['index', 'show', 'create', 'store']);
 
 Route::get('watchlist', [WatchlistController::class, 'watchlist'])->name('watchlist');
 Route::get('bookmark', [BookmarkController::class, 'bookmarkList'])->name('bookmark');
@@ -40,6 +39,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    Route::resource('lists', ListController::class)->only(['index', 'show', 'create', 'store']);
 });
 
 Route::get('profile/{user}', [ProfileController::class, 'show'])->name('profile.show');

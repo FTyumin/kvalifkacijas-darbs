@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class MovieList extends Model
 {
     protected $fillable = [
+        'user_id',
         'name',
         'description',
         'is_public',
     ];
+
+    protected $table = 'lists';
 
     public function user() {
         return $this->belongsTo(User::class);

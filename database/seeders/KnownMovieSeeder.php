@@ -27,18 +27,18 @@ class KnownMovieSeeder extends Seeder
 
         // Insert actors and keep IDs
         $actors = [
-            ['name' => 'Leonardo DiCaprio', 'nationality' => 'American', 'birth_year' => '1974', 'gender' => 'male', 'birth_date' => '1974-11-11', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Joseph Gordon-Levitt', 'nationality' => 'American', 'birth_year' => '1981', 'gender' => 'male', 'birth_date' => '1981-02-17', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Ellen Page', 'nationality' => 'Canadian', 'birth_year' => '1987', 'gender' => 'female', 'birth_date' => '1987-02-21', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Marlon Brando', 'nationality' => 'American', 'birth_year' => '1924', 'gender' => 'male', 'birth_date' => '1924-04-03', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Al Pacino', 'nationality' => 'American', 'birth_year' => '1940', 'gender' => 'male', 'birth_date' => '1940-04-25', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Keanu Reeves', 'nationality' => 'Canadian', 'birth_year' => '1964', 'gender' => 'male', 'birth_date' => '1964-09-02', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Carrie-Anne Moss', 'nationality' => 'Canadian', 'birth_year' => '1967', 'gender' => 'female', 'birth_date' => '1967-08-21', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Song Kang-ho', 'nationality' => 'South Korean', 'birth_year' => '1967', 'gender' => 'male', 'birth_date' => '1967-01-17', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Choi Woo-shik', 'nationality' => 'South Korean', 'birth_year' => '1990', 'gender' => 'male', 'birth_date' => '1990-03-26', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Uma Thurman', 'nationality' => 'American', 'birth_year' => '1970', 'gender' => 'female', 'birth_date' => '1970-04-29', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Samuel L. Jackson', 'nationality' => 'American', 'birth_year' => '1948', 'gender' => 'male', 'birth_date' => '1948-12-21', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Tom Hanks', 'nationality' => 'American', 'birth_year' => '1956', 'gender' => 'male', 'birth_date' => '1956-07-09', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Leonardo DiCaprio', 'nationality' => 'American', 'birth_year' => '1974', 'gender' => 'male', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Joseph Gordon-Levitt', 'nationality' => 'American', 'birth_year' => '1981', 'gender' => 'male',  'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Ellen Page', 'nationality' => 'Canadian', 'birth_year' => '1987', 'gender' => 'female',  'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Marlon Brando', 'nationality' => 'American', 'birth_year' => '1924', 'gender' => 'male',  'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Al Pacino', 'nationality' => 'American', 'birth_year' => '1940', 'gender' => 'male', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Keanu Reeves', 'nationality' => 'Canadian', 'birth_year' => '1964', 'gender' => 'male',  'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Carrie-Anne Moss', 'nationality' => 'Canadian', 'birth_year' => '1967', 'gender' => 'female',  'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Song Kang-ho', 'nationality' => 'South Korean', 'birth_year' => '1967', 'gender' => 'male',  'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Choi Woo-shik', 'nationality' => 'South Korean', 'birth_year' => '1990', 'gender' => 'male',  'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Uma Thurman', 'nationality' => 'American', 'birth_year' => '1970', 'gender' => 'female',  'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Samuel L. Jackson', 'nationality' => 'American', 'birth_year' => '1948', 'gender' => 'male',  'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Tom Hanks', 'nationality' => 'American', 'birth_year' => '1956', 'gender' => 'male',  'created_at' => now(), 'updated_at' => now()],
         ];
 
         $actorIds = [];

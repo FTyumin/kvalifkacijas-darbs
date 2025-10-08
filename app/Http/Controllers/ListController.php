@@ -6,15 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\User;
 use App\Models\MovieList;
-use App\Models\List;
 
 
 class ListController extends Controller
 {
     public function store(Request $request) {
         $data = $request->all();
+        $userId = \Auth::id();
         // dd($data['is_public']);
-        List::create([
+        MovieList::create([
+            'user_id' => $userId,
             'name' => $data['name'],
             'description' => $data['description'],
             'is_public' => $request->has('is_public'),
