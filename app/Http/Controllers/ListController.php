@@ -24,14 +24,14 @@ class ListController extends Controller
         return redirect()->route('dashboard');
     }
 
-    public function show($listId) {
-        $list = MovieList::find($listId);
-
+    public function show(MovieList $list) {
         return view('lists.show', compact('list'));
     }
 
     public function index() {
-        return view('lists.index');
+        $lists = MovieList::all();
+
+        return view('lists.index', compact('lists'));
     }
 
     public function share() {
