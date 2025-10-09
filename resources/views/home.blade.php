@@ -47,7 +47,7 @@
     <div class="group bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600 overflow-hidden">
       
       <div class="relative overflow-hidden">
-        <a href="{{ route('movies.show', $movie->id ) }}" class="block">
+        <a href="{{ route('movies.show', $movie ) }}" class="block">
           <img class="aspect-[2/3] w-full object-cover transition-transform duration-300 group-hover:scale-105" 
                src="{{ asset('images/cinema.webp') }}" 
                alt="Movie poster" />

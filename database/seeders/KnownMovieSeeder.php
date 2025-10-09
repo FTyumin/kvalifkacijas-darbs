@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\Movie;
 
 class KnownMovieSeeder extends Seeder
 {
@@ -125,7 +126,10 @@ class KnownMovieSeeder extends Seeder
 
         $movieIds = [];
         foreach ($movies as $m) {
-            $movieIds[] = DB::table('movies')->insertGetId($m);
+            // $movieIds[] = DB::table('movies')->insertGetId($m);
+            Movie::create($m);
+            $movie = Movie::where('name', $m['name'])->first();
+            $movieIds[] = $movie->id;
         }
 
         // Map movies by name to their IDs
@@ -172,11 +176,11 @@ class KnownMovieSeeder extends Seeder
             }
         }
 
-        if (!empty($pivotRows)) {
-            // chunk insert to be safe
-            foreach (array_chunk($pivotRows, 200) as $chunk) {
-                DB::table('actor_movie')->insert($chunk);
-            }
-        }
+        // if (!empty($pivotRows)) {
+        //     // chunk insert to be safe
+        //     foreach (array_chunk($pivotRows, 200) as $chunk) {
+        //         DB::table('actor_movie')->insert($chunk);
+        //     }
+        // }
     }
 }
