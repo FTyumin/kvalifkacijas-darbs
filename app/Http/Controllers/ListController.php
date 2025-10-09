@@ -13,21 +13,21 @@ class ListController extends Controller
     public function store(Request $request) {
         $data = $request->all();
         $userId = \Auth::id();
-        // dd($data['is_public']);
-        // MovieList::create([
-        //     'user_id' => $userId,
-        //     'name' => $data['name'],
-        //     'description' => $data['description'],
-        //     'is_public' => $request->has('is_public'),
-        // ]);
 
-
+        MovieList::create([
+            'user_id' => $userId,
+            'name' => $data['name'],
+            'description' => $data['description'],
+            'is_public' => $request->has('is_public'),
+        ]);
 
         return redirect()->route('dashboard');
     }
 
-    public function show() {
+    public function show($listId) {
+        $list = MovieList::find($listId);
 
+        return view('lists.show', compact('list'));
     }
 
     public function index() {

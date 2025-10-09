@@ -9,11 +9,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Maize\Markable\Markable;
 use Maize\Markable\Models\Favorite;
 use Maize\Markable\Models\Bookmark;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 
 class Movie extends Model
 {
-    use HasFactory, Markable;
+    use HasFactory, Markable, HasSlug;
 
      protected $fillable = [
         'name',
@@ -35,6 +37,18 @@ class Movie extends Model
         Favorite::class,
         Bookmark::class,
     ];
+
+    public function getSlugOptions() : SlugOptions 
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     public function director()
     {
