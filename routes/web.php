@@ -10,6 +10,7 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\QuizController;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,7 @@ Route::delete('bookmark-remove/{id}', [BookmarkController::class, 'bookmarkRemov
 Route::get('watchlist', [WatchlistController::class, 'watchlist'])->name('watchlist');
 Route::get('bookmark', [BookmarkController::class, 'bookmarkList'])->name('bookmark');
 
+// profila fjas
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -50,6 +52,49 @@ Route::delete('lists/{movie}/remove', [ListController::class, 'remove'])->name('
 Route::resource('lists', ListController::class)->only(['index', 'show', 'create', 'store']);
 
 Route::get('profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+
+// rekomendacijas
+// API Routes for recommendations
+// Route::middleware('auth:sanctum')->group(function () {
+    
+    // Personal recommendations
+    Route::get('/recommendations/personal', [RecommendationController::class, 'personalRecommendations'])
+        ->name('recommendations.personal');
+    
+    // Hybrid recommendations
+    Route::get('/recommendations/hybrid', [RecommendationController::class, 'hybridRecommendations'])
+        ->name('recommendations.hybrid');
+    
+    // Rate a movie and get recommendations
+    Route::post('/movies/{movie}/rate', [RecommendationController::class, 'rateAndRecommend'])
+        ->name('movies.rate');
+    
+    // Search with recommendations
+    Route::get('/search/recommendations', [RecommendationController::class, 'searchWithRecommendations'])
+        ->name('search.recommendations');
+// });
+
+// Public routes
+Route::prefix('recommendations')->group(function () {
+    
+    // Homepage recommendations
+    Route::get('/homepage', [RecommendationController::class, 'homepage'])
+        ->name('recommendations.homepage');
+    
+    // Movies similar to a specific movie
+    Route::get('/movies/{movie}/similar', [RecommendationController::class, 'similarMovies'])
+        ->name('recommendations.similar');
+    
+    // Trending movies
+    Route::get('/trending', [RecommendationController::class, 'trending'])
+        ->name('recommendations.trending');
+    
+    // Recommendations by genre
+    Route::get('/genre', [RecommendationController::class, 'byGenre'])
+        ->name('recommendations.genre');
+});
+
+Route::get('/recommendations', [MovieController::class, 'recommendations'])->name('movies.recommendations');
 
 Route::post('/reviews', [ReviewController::class, 'create'])->name('reviews.store');
 

@@ -1,15 +1,16 @@
 <?php
+// App/Http/Controllers/Web/MovieController.php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Movie;
 use App\Services\ContentBasedRecommender;
 use App\Services\CollaborativeFilteringRecommender;
+use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
-
     protected $contentRecommender;
     protected $collaborativeRecommender;
 
@@ -21,7 +22,10 @@ class MovieController extends Controller
         $this->collaborativeRecommender = $collaborativeRecommender;
     }
 
-      public function index(Request $request)
+    /**
+     * Homepage with recommendations
+     */
+    public function index(Request $request)
     {
         $user = $request->user();
         $recommendations = [];
@@ -39,7 +43,7 @@ class MovieController extends Controller
 
         $recommendations['popular'] = Movie::select('movies.*')
             ->leftJoin('ratings', 'movies.id', '=', 'ratings.movie_id')
-            ->groupBy('movies.id', 'movies.name')
+            ->groupBy('movies.id')
             ->orderByRaw('AVG(ratings.rating) DESC')
             ->orderByRaw('COUNT(ratings.id) DESC')
             ->limit(6)
@@ -49,37 +53,50 @@ class MovieController extends Controller
         return view('movies.index', compact('recommendations'));
     }
 
-    public function show($movieID) {
-        $movie = Movie::findOrFail($movieID);
-        $movie->load('genres');
-
+    /**
+     * Show movie details with recommendations
+     */
     public function show(Movie $movie)
     {
+        $movie->load(['genres', 'directors', 'actors', 'ratings']);
 
-        return view('movies.show', compact('movie'));
+        // Get similar movies
+        $similarMovies = $this->contentRecommender
+            ->getRecommendationsForMovie($movie->id, 6);
+
+        $fanFavorites = $this->collaborativeRecommender
+            ->getMoviesLikedByFans($movie->id, 6);
+
+        return view('movies.show', compact('movie', 'similarMovies', 'fanFavorites'));
     }
 
-    public function display() {
-        return view('movies.display');
+    /**
+     * Rate a movie (for web interface)
+     */
+    public function rate(Request $request, Movie $movie)
+    {
+        $request->validate([
+            'rating' => 'required|numeric|min:1|max:5'
+        ]);
+
+        $user = $request->user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $user->ratings()->updateOrCreate(
+            ['movie_id' => $movie->id],
+            ['rating' => $request->rating]
+        );
+
+        return redirect()
+            ->route('movies.show', $movie)
+            ->with('success', 'Rating saved successfully!');
     }
 
-    public function search(Request $request) {
-        $search = $request->input('search');
-
-        $results = Movie::with(['director', 'actors'])
-            ->where('name', 'like', "%{$search}%")
-            ->orWhereHas('director', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            })
-            ->orWhereHas('actors', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            })
-            ->get();
-
-
-        return view('movies.index', compact('results', 'search'));
-    }
-
+    /**
+     * User's personal recommendations page
+     */
     public function recommendations(Request $request)
     {
         $user = $request->user();
@@ -88,7 +105,7 @@ class MovieController extends Controller
             return redirect()->route('login');
         }
 
-        $userRatingsCount = $user->reviews()->count();
+        $userRatingsCount = $user->ratings()->count();
         
         if ($userRatingsCount >= 5) {
             $recommendations = $this->collaborativeRecommender
