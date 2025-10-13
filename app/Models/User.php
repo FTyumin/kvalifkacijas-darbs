@@ -56,13 +56,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Movie::class, 'reviews')
             ->withPivot('rating', 'created_at')
             ->wherePivot('rating', '>=', 4);
-
+    }
 
     public function lists()
     {
         return $this->hasMany(MovieList::class);
 
-
+    }
     public function favoriteGenres() {
         return $this->belongsToMany(Genre::class);
     }

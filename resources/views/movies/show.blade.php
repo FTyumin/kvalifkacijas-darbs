@@ -16,13 +16,13 @@
 
         {{-- Details --}}
         <div class="md:col-span-2 space-y-6">
-            <h1 class="text-3xl font-bold">{{ $movie->name }}</h1>
+            <h1 class="text-3xl text-white font-bold">{{ $movie->name }}</h1>
             
             <div class="flex items-center gap-4 text-gray-600">
-                <span class="text-sm">Released: {{ $movie->year }}</span>
-                <span class="text-sm">Rating: ⭐ {{ $movie->rating }}</span>
-                <span class="text-sm">Country: {{ $movie->title }}</span>
-                <span class="text-sm">Language: </span>
+                <span class="text-sm text-white">Released: {{ $movie->year }}</span>
+                <span class="text-sm text-white">Rating: ⭐ {{ $movie->rating }}</span>
+                <span class="text-sm text-white">Country: {{ $movie->title }}</span>
+                <span class="text-sm text-white">Language: </span>
 
             </div>
 
@@ -89,11 +89,11 @@
             </div>
         </div>
         <!-- Review section -->
-         <div>
-            <form action="{{ route('reviews.store') }}" method="POST" class="mt-16 mx-auto space-y-6 mb-12">
+         <div class="md:col-span-2">
+            <form action="{{ route('reviews.store') }}" method="POST" class="mt-16 mx-auto space-y-3 mb-12">
               @csrf
 
-              <h3 class="text-3xl font-semibold">Write a Review for <span class="text-green-600">{{ $movie->name }}</span></h3>
+              <h3 class="text-3xl text-white font-semibold">Write a Review for <span class="text-green-600">{{ $movie->name }}</span></h3>
               <input type="hidden" name="movie_id" value="{{ $movie->id }}">
               {{-- Star Rating --}}
               <fieldset class="flex items-center space-x-1">
@@ -177,7 +177,7 @@
                   @enderror
               </div>
                 <div class="flex flex-row gap-3 items-center">
-                  <input type="checkbox" name="spoiler"> <p>Contains spoilers</p>
+                  <input type="checkbox" name="spoiler"> <p class="text-white">Contains spoilers</p>
                 </div>
 
               {{-- Submit --}}

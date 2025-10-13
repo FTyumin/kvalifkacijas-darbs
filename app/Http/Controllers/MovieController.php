@@ -49,10 +49,10 @@ class MovieController extends Controller
         return view('movies.index', compact('recommendations'));
     }
 
-    public function show($movieID) {
-        $movie = Movie::findOrFail($movieID);
-        $movie->load('genres');
-
+    // public function show($movieID) {
+    //     $movie = Movie::findOrFail($movieID);
+    //     $movie->load('genres');
+    // }
     public function show(Movie $movie)
     {
 
