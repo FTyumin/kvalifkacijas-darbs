@@ -9,6 +9,7 @@ use App\Services\CollaborativeFilteringRecommender;
 
 class MovieController extends Controller
 {
+
     protected $contentRecommender;
     protected $collaborativeRecommender;
 
@@ -51,6 +52,10 @@ class MovieController extends Controller
     public function show($movieID) {
         $movie = Movie::findOrFail($movieID);
         $movie->load('genres');
+
+    public function show(Movie $movie)
+    {
+
         return view('movies.show', compact('movie'));
     }
 

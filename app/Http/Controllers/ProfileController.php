@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,17 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+        \Log::info('started profile update');
         $request->user()->fill($request->validated());
+
+        // Augšupielādēt failu
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('profiles', 'public'); 
+            $request->user()->image = $path;
+            $data['image'] = $path;
+        }
+        \Log::info('uploaded image');
+        // $user->fill($data);
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
@@ -34,7 +45,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('dashboard')->with('status', 'profile-updated');
     }
 
     /**
@@ -56,5 +67,12 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function show(User $user) {
+        $movies = $user->movies;
+        $reviews = $user->reviews;
+        
+        return view('profile.show', compact('user', 'movies', 'reviews'));
     }
 }

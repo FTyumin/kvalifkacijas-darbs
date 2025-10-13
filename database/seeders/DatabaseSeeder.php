@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,6 +23,12 @@ class DatabaseSeeder extends Seeder
             KnownMovieSeeder::class,
             GenreSeeder::class,
             GenreMovieSeeder::class
+        ]);
+
+        DB::table('users')->insert([
+            'name' => 'test',
+            'email' => 'test@example.com',
+            'password' => Hash::make('password'),
         ]);
 
     }

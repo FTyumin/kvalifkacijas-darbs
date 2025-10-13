@@ -13,13 +13,17 @@ class Genre extends Model
     // Relationship with Movies (Many-to-Many)
     public function movies()
     {
-        return $this->belongsToMany(Movie::class)
-                    ->withTimestamps();
+        return $this->belongsToMany(Movie::class)->withTimestamps();
     }
 
     // Accessor for movies count
     public function getMoviesCountAttribute()
     {
         return $this->movies()->count();
+    }
+
+    public function users() 
+    {
+        return $this->hasMany(User::class);
     }
 }
