@@ -42,6 +42,8 @@ Route::middleware('auth')->group(function () {
 
 });
 Route::post('lists/{movie}/add', [ListController::class, 'add'])->name('lists.add');
+Route::delete('lists/{movie}/remove', [ListController::class, 'remove'])->name('lists.remove');
+
 Route::resource('lists', ListController::class)->only(['index', 'show', 'create', 'store']);
 
 Route::get('profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
