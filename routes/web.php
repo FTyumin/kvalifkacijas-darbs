@@ -11,7 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ListController;
-
+use App\Http\Controllers\QuizController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -40,6 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/quiz', [QuizController::class, 'show'])->name('quiz.show');
+    Route::post('/quiz', [QuizController::class, 'store'])->name('quiz.store');
+  
 });
 Route::post('lists/{movie}/add', [ListController::class, 'add'])->name('lists.add');
 Route::delete('lists/{movie}/remove', [ListController::class, 'remove'])->name('lists.remove');

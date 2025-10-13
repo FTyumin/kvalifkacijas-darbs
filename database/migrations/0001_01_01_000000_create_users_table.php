@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('is_admin')->default('0');
             $table->string('image')->nullable();
+            $table->boolean('quiz_completed')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
