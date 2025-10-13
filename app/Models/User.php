@@ -16,6 +16,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'image'
     ];
 
     protected $hidden = [
@@ -39,6 +40,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function reviews() {
         return $this->hasMany(Review::class);
     }
+
+
+    public function lists()
+    {
+        return $this->hasMany(MovieList::class);
 
 
     public function favoriteGenres() {

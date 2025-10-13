@@ -14,8 +14,9 @@ class DashboardController extends Controller
         $movies = Movie::whereHasFavorite(auth()->user())->get();
 
         $userId = \Auth::user()->id;
+        $user = \Auth::user();
         $reviews = Review::where('user_id', $userId)->get();
 
-        return view('dashboard', compact('movies', 'reviews'));
+        return view('dashboard', compact('movies', 'reviews', 'user'));
     }
 }

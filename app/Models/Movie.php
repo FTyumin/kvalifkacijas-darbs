@@ -2,16 +2,20 @@
 
 namespace App\Models;
 
+use App\Models\Actor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\Actor;
 use Maize\Markable\Markable;
 use Maize\Markable\Models\Favorite;
+use Maize\Markable\Models\Bookmark;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
+
 
 class Movie extends Model
 {
-    use HasFactory, Markable;
+    use HasFactory, Markable, HasSlug;
 
      protected $fillable = [
         'name',
@@ -31,7 +35,20 @@ class Movie extends Model
 
     protected static $marks = [
         Favorite::class,
+        Bookmark::class,
     ];
+
+    public function getSlugOptions() : SlugOptions 
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     public function director()
     {
@@ -55,6 +72,13 @@ class Movie extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function lists()
+    {
+        return $this->belongsToMany(MovieList::class, 'movie_lists')
+                    ->withTimestamps()
+                    ->withPivot('position');
+    }
+
     public function scopeByYear($query, $year)
     {
         return $query->where('year', $year);
@@ -63,5 +87,14 @@ class Movie extends Model
     public function scopeByRating($query, $minRating)
     {
         return $query->where('rating', '>=', $minRating);
+    }
+
+    public function updateRating() {
+        $id = $this->id;
+        $reviews = $this->reviews->pluck('rating')->toArray();
+
+        $rating = array_sum($reviews) / count($reviews);
+
+        $this->update(['rating' => $rating]);
     }
 }
