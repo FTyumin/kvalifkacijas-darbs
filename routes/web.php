@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
-Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('auth')->name('dashboard');
 
 Route::resource('movies', MovieController::class)->only(['index', 'show']);
 Route::resource('directors', DirectorController::class)->only(['index','show']);
@@ -32,7 +32,6 @@ Route::delete('favorite-remove/{id}', [WatchlistController::class, 'favoriteRemo
 Route::post('bookmark-add/{id}', [BookmarkController::class, 'bookmarkAdd'])->name('bookmark.add');
 Route::delete('bookmark-remove/{id}', [BookmarkController::class, 'bookmarkRemove'])->name('bookmark.remove');
 
-
 Route::get('watchlist', [WatchlistController::class, 'watchlist'])->name('watchlist');
 Route::get('bookmark', [BookmarkController::class, 'bookmarkList'])->name('bookmark');
 
@@ -44,8 +43,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/quiz', [QuizController::class, 'show'])->name('quiz.show');
     Route::post('/quiz', [QuizController::class, 'store'])->name('quiz.store');
-  
 });
+
 Route::post('lists/{movie}/add', [ListController::class, 'add'])->name('lists.add');
 Route::delete('lists/{movie}/remove', [ListController::class, 'remove'])->name('lists.remove');
 

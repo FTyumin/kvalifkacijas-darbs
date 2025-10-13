@@ -15,6 +15,16 @@
       <div class="hidden lg:flex items-center gap-8">
         <a href="/" class="text-gray-300 hover:text-white transition-colors font-medium">Movies</a>
       </div>
+
+      <div class="hidden lg:flex items-center gap-8">
+        <a href="/" class="text-gray-300 hover:text-white transition-colors font-medium">Reviews</a>
+      </div>
+
+      <div class="hidden lg:flex items-center gap-8">
+        <a href="/lists" class="text-gray-300 hover:text-white transition-colors font-medium">Lists</a>
+      </div>
+
+      </div>
     </div>
 
     <!-- Center: Search Bar -->
@@ -97,9 +107,19 @@
         @endauth
         <div class="w-10 h-10 rounded-full overflow-hidden">
           <a href="/dashboard">
-            <img src="{{ asset('images/person-placeholder.png' . auth()->user()->image) }}"
-                alt="{{ auth()->user()->name}}"
-                class="w-full h-full object-cover">
+            @auth
+              @if(auth()->user()->image)
+                <img src="{{ asset('images/' . auth()->user()->image) }}"
+                    alt="{{ auth()->user()->name}}"
+                    class="w-full h-full object-cover">
+                    
+              @else 
+                <img src="{{ asset('images/person-placeholder.png') }}" 
+                    alt="placeholder img"
+                    class="w-full h-full object-cover">
+                    
+              @endif
+            @endauth
 
           </a>
         </div>

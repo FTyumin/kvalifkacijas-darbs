@@ -50,9 +50,7 @@ class ListController extends Controller
     }
 
     public function remove(Request $request, $movieId) {
-        // dd($request->all());
         $list = MovieList::find($request->list_id);
-        // dd($list);
         $list->removeMovie($movieId);
 
         return back()->with('message','Movie removed!');

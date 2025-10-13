@@ -115,7 +115,7 @@
 
 <!-- Genres -->
 <div class="my-16 mx-10 sm:px-8 lg:px-28">
-    <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">Genres</h1>
+    <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-white md:text-5xl lg:text-6xl">Genres</h1>
 
     <div class="grid grid-cols-4 gap-x-16 gap-y-10">
         @foreach($genres as $genre)

@@ -46,13 +46,12 @@
                 @enderror
             </div>
 
-            <div class="flex gap-10 items-center ">
-                <label for="description" class="block text-sm font-medium text-gray-300 mb-2">
+            <div class="flex items-center gap-2">
+                <label for="description" class="inline-block text-sm font-medium text-gray-300 mb-2">
                     Public
                 </label>
                 
                 <input type="checkbox" id="is_public" name="is_public" checked />
-           
             </div>
 
             <button type="submit">

@@ -41,7 +41,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Review::class);
     }
 
-
     public function ratedMovies()
     {
         return $this->belongsToMany(Movie::class, 'reviews')
@@ -63,6 +62,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(MovieList::class);
 
     }
+
     public function favoriteGenres() {
         return $this->belongsToMany(Genre::class);
     }
@@ -78,6 +78,5 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new CustomVerifyEmail);
-
     }
 }
