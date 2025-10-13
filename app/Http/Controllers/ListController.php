@@ -21,7 +21,7 @@ class ListController extends Controller
             'is_public' => $request->has('is_public'),
         ]);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('lists.index');
     }
 
     public function show(MovieList $list) {
