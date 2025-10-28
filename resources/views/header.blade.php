@@ -8,7 +8,7 @@
         <!-- <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
          
         </div> -->
-        <span class="text-xl font-bold text-white tracking-tight">MovieHub</span>
+        <span class="text-xl font-bold text-white tracking-tight">Movie Platform</span>
       </a>
 
       <!-- Desktop Navigation -->

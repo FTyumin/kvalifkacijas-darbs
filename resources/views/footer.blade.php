@@ -2,7 +2,7 @@
     <div class="px-5 sm:px-8 lg:px-28">
     <div class="grid lg:grid-cols-4 gap-8 mb-12 ">
         <div class="space-y-4">
-        <div class="text-2xl text-white font-light tracking-wide">PROJECT NAME</div>
+        <div class="text-2xl text-white font-light tracking-wide">MOVIE PLATFORM</div>
         <p class="text-muted-foreground text-white text-sm leading-relaxed">
             Your trusted source for thoughtful film and television criticism.
         </p>

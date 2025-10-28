@@ -13,7 +13,7 @@
   <!-- Content -->
   <div class="relative mx-auto max-w-5xl px-6 py-20 sm:py-28 md:py-36">
     <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-white">
-      Honest Reviews. Zero Spoilers.
+      Honest Reviews
     </h1>
     <p class="mt-4 max-w-2xl text-white/80 md:text-lg">
       Movies & shows reviewed with care, context, and clarity.

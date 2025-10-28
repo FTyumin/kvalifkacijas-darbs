@@ -78,7 +78,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-400">Avg Rating</p>
-                            <p class="text-3xl font-bold text-yellow-400">7.8</p>
+                            <p class="text-3xl font-bold text-yellow-400">4.5</p>
                         </div>
                         <div class="w-12 h-12 bg-yellow-600/20 rounded-xl flex items-center justify-center">
                             <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -240,9 +240,9 @@
                         </svg>
                         Recently Watched
                     </h2>
-                    <a href="/watched" class="text-green-400 hover:text-green-300 text-sm font-medium transition-colors">
+                    <!-- <a href="/watched" class="text-green-400 hover:text-green-300 text-sm font-medium transition-colors">
                         View All →
-                    </a>
+                    </a> -->
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -262,7 +262,7 @@
                         </div>
                         
                         <h3 class="mt-2 text-sm font-medium text-white line-clamp-2">
-                            {{ $i % 4 == 0 ? 'The Matrix Resurrections' : ($i % 4 == 1 ? 'Spider-Man: No Way Home' : ($i % 4 == 2 ? 'Top Gun: Maverick' : 'Everything Everywhere All at Once')) }}
+                            MOVIE TITLE
                         </h3>
                         <p class="text-xs text-gray-400">Watched {{ $i + 1 }} {{ $i == 0 ? 'day' : 'days' }} ago</p>
                         
