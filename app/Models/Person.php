@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Actor extends Model
+class Person extends Model
 {
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
+        'type',
         'nationality',
         'birth_year',
-        'gender',
         'birth_date'
     ];
 
