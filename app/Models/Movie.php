@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Actor;
+// use App\Models\Actor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
