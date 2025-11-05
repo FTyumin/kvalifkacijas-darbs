@@ -90,8 +90,9 @@
           Sign In
         </a>
         @endguest
-        @auth
-          <!-- <form method="POST" action="{{ route('logout') }}">
+
+        <!-- @auth
+          <form method="POST" action="{{ route('logout') }}">
             @csrf
             
             <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-4 py-2 transition-colors focus:outline-none
@@ -101,15 +102,14 @@
               </svg>
               {{ __('Log Out') }}
             </button>
-          </form> -->
+          </form>
+        @endauth -->
 
-
-        @endauth
         <div class="w-10 h-10 rounded-full overflow-hidden">
           <a href="/dashboard">
             @auth
               @if(auth()->user()->image)
-                <img src="{{ asset('images/' . auth()->user()->image) }}"
+                <img src="{{ asset('storage/' . auth()->user()->image) }}"
                     alt="{{ auth()->user()->name}}"
                     class="w-full h-full object-cover">
                     

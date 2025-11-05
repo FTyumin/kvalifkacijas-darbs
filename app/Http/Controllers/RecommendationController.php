@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use App\Models\User;
 use App\Services\ContentBasedRecommender;
-use App\Services\CollaborativeFilteringRecommender;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -13,14 +13,12 @@ use Illuminate\View\View;
 class RecommendationController extends Controller
 {
     protected ContentBasedRecommender $contentRecommender;
-    protected CollaborativeFilteringRecommender $collaborativeRecommender;
+
 
     public function __construct(
         ContentBasedRecommender $contentRecommender,
-        CollaborativeFilteringRecommender $collaborativeRecommender
     ) {
         $this->contentRecommender = $contentRecommender;
-        $this->collaborativeRecommender = $collaborativeRecommender;
     }
 
     /**
@@ -35,20 +33,17 @@ class RecommendationController extends Controller
             return response()->json(['error' => 'User not authenticated'], 401);
         }
 
-        // Check if user has enough ratings for collaborative filtering
-        $userRatingsCount = $user->reviews()->count();
-
-        if ($userRatingsCount >= 5) {
-            // Use collaborative filtering for users with enough data
-            $recommendations = $this->collaborativeRecommender
-                ->getRecommendationsForUser($user, $limit);
-            $method = 'collaborative';
-        } else {
+        // if ($userRatingsCount >= 5) {
+        //     // Use collaborative filtering for users with enough data
+        //     $recommendations = $this->collaborativeRecommender
+        //         ->getRecommendationsForUser($user, $limit);
+        //     $method = 'collaborative';
+        // } else {
             // Use content-based for new users
             $recommendations = $this->contentRecommender
                 ->getRecommendationsForUser($user, $limit);
             $method = 'content-based';
-        }
+        // }
 
         return response()->json([
             'recommendations' => $recommendations->values(),
@@ -68,9 +63,6 @@ class RecommendationController extends Controller
         $contentSimilar = $this->contentRecommender
             ->getRecommendationsForMovie($movie->id, $limit);
 
-        // Get movies liked by fans (collaborative approach)
-        $fanFavorites = $this->collaborativeRecommender
-            ->getMoviesLikedByFans($movie->id, $limit);
 
         return response()->json([
             'movie' => $movie->load(['genres', 'director', 'actors']),
@@ -86,8 +78,7 @@ class RecommendationController extends Controller
     {
         $limit = $request->get('limit', 10);
 
-        $trendingMovies = $this->collaborativeRecommender
-            ->getTrendingMovies($limit);
+
 
         return response()->json([
             'trending' => $trendingMovies->values()
@@ -108,20 +99,14 @@ class RecommendationController extends Controller
             // Personalized recommendations for logged-in users
             $userRatingsCount = $user->ratings()->count();
             
-            if ($userRatingsCount >= 5) {
-                $personalRecs = $this->collaborativeRecommender
-                    ->getRecommendationsForUser($user, $limit);
-            } else {
+            
                 $personalRecs = $this->contentRecommender
                     ->getRecommendationsForUser($user, $limit);
-            }
+    
 
             $response['personal_recommendations'] = $personalRecs->values();
         }
 
-        // Trending movies for everyone
-        $response['trending'] = $this->collaborativeRecommender
-            ->getTrendingMovies($limit)->values();
 
         // Popular movies as fallback
         $popularMovies = Movie::select('movies.id', 'movies.name', 'movies.rating')
@@ -169,7 +154,7 @@ class RecommendationController extends Controller
     }
 
     /**
-     * Get hybrid recommendations (combine content and collaborative)
+     * Get recommendations based on content
      */
     public function hybridRecommendations(Request $request): JsonResponse
     {
@@ -183,8 +168,6 @@ class RecommendationController extends Controller
         $contentRecs = $this->contentRecommender
             ->getRecommendationsForUser($user, $limit * 2);
 
-        $collabRecs = $this->collaborativeRecommender
-            ->getRecommendationsForUser($user, $limit * 2);
 
         // Combine and score recommendations
         $hybridScores = [];
@@ -197,51 +180,32 @@ class RecommendationController extends Controller
                 $hybridScores[$movieId] = [
                     'movie' => $rec['movie'],
                     'content_score' => $rec['similarity_score'] ?? 0,
-                    'collab_score' => 0,
+                    // 'collab_score' => 0,
                     'hybrid_score' => 0
                 ];
                 $moviesSeen[$movieId] = true;
             }
         }
 
-        // Process collaborative filtering recommendations
-        foreach ($collabRecs as $rec) {
-            $movieId = $rec['movie']->id;
-            if (isset($hybridScores[$movieId])) {
-                $hybridScores[$movieId]['collab_score'] = ($rec['predicted_rating'] ?? 0) / 5.0;
-            } else {
-                $hybridScores[$movieId] = [
-                    'movie' => $rec['movie'],
-                    'content_score' => 0,
-                    'collab_score' => ($rec['predicted_rating'] ?? 0) / 5.0,
-                    'hybrid_score' => 0
-                ];
-            }
-            $moviesSeen[$movieId] = true;
-        }
 
         // Calculate hybrid scores (weighted combination)
         $contentWeight = 0.4;
-        $collabWeight = 0.6;
 
         foreach ($hybridScores as $movieId => &$scores) {
-            $scores['hybrid_score'] = 
-                ($contentWeight * $scores['content_score']) + 
-                ($collabWeight * $scores['collab_score']);
+            $scores['hybrid_score'] = ($contentWeight * $scores['content_score']);
         }
 
         // Sort by hybrid score and take top results
-        $finalRecs = collect($hybridScores)
-            ->sortByDesc('hybrid_score')
-            ->take($limit)
-            ->values();
+        // $finalRecs = collect($hybridScores)
+        //     ->sortByDesc('hybrid_score')
+        //     ->take($limit)
+        //     ->values();
 
         return response()->json([
             'recommendations' => $finalRecs,
             'method' => 'hybrid',
             'weights' => [
                 'content' => $contentWeight,
-                'collaborative' => $collabWeight
             ]
         ]);
     }

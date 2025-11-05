@@ -224,6 +224,18 @@
                                 </div>
                                 <span class="text-sm font-medium">Get Recommendations</span>
                             </a>
+
+                            <form method="POST" action="{{ route('logout') }}" class="w-full"> 
+                                @csrf                               
+                                <button type="submit" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors w-full">
+                                    <div class="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-white" ...>...</svg>
+                                    </div>   
+                                    <span class="text-sm font-medium">{{ __('Log Out') }}</span>     
+                                </button>     
+                                  
+                            </form>
+
                         </div>
                     </div>
                 </div>
