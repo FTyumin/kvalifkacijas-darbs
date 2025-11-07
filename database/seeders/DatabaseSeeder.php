@@ -16,13 +16,19 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            // DirectorSeeder::class,
-            // ActorSeeder::class,
-            // MovieSeeder::class,
-            // ActorMovieSeeder::class,
-            KnownMovieSeeder::class,
+            DirectorSeeder::class,
+            ActorSeeder::class,
+            MovieSeeder::class,
+            ActorMovieSeeder::class,
             GenreSeeder::class,
             GenreMovieSeeder::class
+        ]);
+        // KnownMovieSeeder::class,
+
+        DB::table('users')->insert([
+            'name' => 'test',
+            'email' => 'test@example.com',
+            'password' => Hash::make('password'),
         ]);
 
         DB::table('users')->insert([

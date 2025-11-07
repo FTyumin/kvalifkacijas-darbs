@@ -5,37 +5,34 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Services\ContentBasedRecommender;
-use App\Services\CollaborativeFilteringRecommender;
+use App\Services\TmdbApiClient;
 
 class MovieController extends Controller
 {
 
     protected $contentRecommender;
-    protected $collaborativeRecommender;
+    protected $apiClient;
 
     public function __construct(
         ContentBasedRecommender $contentRecommender,
-        CollaborativeFilteringRecommender $collaborativeRecommender
+        TmdbApiClient $apiClient
     ) {
         $this->contentRecommender = $contentRecommender;
-        $this->collaborativeRecommender = $collaborativeRecommender;
+        $this->apiClient = $apiClient;
     }
 
-      public function index(Request $request)
-    {
+    public function index(Request $request) {
         $user = $request->user();
         $recommendations = [];
 
         if ($user && $user->ratings()->count() >= 5) {
-            $recommendations['personal'] = $this->collaborativeRecommender
+            $recommendations['personal'] = $this->contentRecommender
                 ->getRecommendationsForUser($user, 6);
         } elseif ($user && $user->ratings()->count() >= 1) {
             $recommendations['personal'] = $this->contentRecommender
                 ->getRecommendationsForUser($user, 6);
         }
 
-        $recommendations['trending'] = $this->collaborativeRecommender
-            ->getTrendingMovies(6);
 
         $recommendations['popular'] = Movie::select('movies.*')
             ->leftJoin('ratings', 'movies.id', '=', 'ratings.movie_id')
@@ -76,7 +73,6 @@ class MovieController extends Controller
             })
             ->get();
 
-
         return view('movies.index', compact('results', 'search'));
     }
 
@@ -88,18 +84,28 @@ class MovieController extends Controller
             return redirect()->route('login');
         }
 
-        $userRatingsCount = $user->reviews()->count();
+        // $userRatingsCount = $user->reviews()->count();
         
-        if ($userRatingsCount >= 5) {
-            $recommendations = $this->collaborativeRecommender
-                ->getRecommendationsForUser($user, 20);
-            $method = 'Collaborative Filtering';
-        } else {
-            $recommendations = $this->contentRecommender
-                ->getRecommendationsForUser($user, 20);
-            $method = 'Content-Based';
-        }
+        $recommendations = $this->contentRecommender
+            ->getRecommendationsForUser($user, 20);
+        $method = 'Content-Based';
 
         return view('movies.recommendations', compact('recommendations', 'method', 'userRatingsCount'));
+    }
+
+    public function topPage(TmdbApiClient $tmdb)
+    {
+        $n = 100;
+        $data = $tmdb->getTopMovies($n, ['method' => 'top-rated']);
+        $movies = collect($data ?? [])->map(function ($r) use ($tmdb) {
+            return [
+                'id' => $r['id'] ?? null,
+                'title' => $r['title'] ?? null,
+                'poster' => isset($r['poster_path']) ? $tmdb->posterUrl($r['poster_path'],'w500') : asset('images/cinema.webp'),
+                'year' => !empty($r['release_date']) ? substr($r['release_date'],0,4) : null,
+            ];
+        })->all();
+
+        return view('movies.top', compact('movies'));
     }
 }

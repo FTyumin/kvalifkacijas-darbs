@@ -39,33 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/quiz', [QuizController::class, 'store'])->name('quiz.store');
 });
 
-Route::post('lists/{movie}/add', [ListController::class, 'add'])->name('lists.add');
-Route::delete('lists/{movie}/remove', [ListController::class, 'remove'])->name('lists.remove');
 
-Route::resource('lists', ListController::class)->only(['index', 'show', 'create', 'store']);
-
-Route::get('profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
-
-// rekomendacijas
-// API Routes for recommendations
-// Route::middleware('auth:sanctum')->group(function () {
-    
-    // Personal recommendations
-    Route::get('/recommendations/personal', [RecommendationController::class, 'personalRecommendations'])
-        ->name('recommendations.personal');
-    
-    // Hybrid recommendations
-    Route::get('/recommendations/hybrid', [RecommendationController::class, 'hybridRecommendations'])
-        ->name('recommendations.hybrid');
-    
-    // Rate a movie and get recommendations
-    Route::post('/movies/{movie}/rate', [RecommendationController::class, 'rateAndRecommend'])
-        ->name('movies.rate');
-    
-    // Search with recommendations
-    Route::get('/search/recommendations', [RecommendationController::class, 'searchWithRecommendations'])
-        ->name('search.recommendations');
-// });
 
 // Public routes
 Route::prefix('recommendations')->group(function () {
@@ -75,7 +49,7 @@ Route::prefix('recommendations')->group(function () {
         ->name('recommendations.homepage');
     
     // Movies similar to a specific movie
-    Route::get('/movies/{movie}/similar', [RecommendationController::class, 'similarMovies'])
+    Route::get('/movies/{movie}/similar', [RecommendationController::class, 'SimilarMovies'])
         ->name('recommendations.similar');
     
     // Trending movies
@@ -88,6 +62,8 @@ Route::prefix('recommendations')->group(function () {
 });
 
 Route::get('/recommendations', [MovieController::class, 'recommendations'])->name('movies.recommendations');
+Route::get('/top-movies', [MovieController::class, 'topPage'])->name('movies.top');
+
 
 Route::post('/reviews', [ReviewController::class, 'create'])->name('reviews.store');
 
