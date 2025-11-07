@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use App\Models\User;
 use App\Services\ContentBasedRecommender;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -12,6 +13,7 @@ use Illuminate\View\View;
 class RecommendationController extends Controller
 {
     protected ContentBasedRecommender $contentRecommender;
+
 
     public function __construct(
         ContentBasedRecommender $contentRecommender,
@@ -31,13 +33,17 @@ class RecommendationController extends Controller
             return response()->json(['error' => 'User not authenticated'], 401);
         }
 
-        $userRatingsCount = $user->reviews()->count();
-
-   
+        // if ($userRatingsCount >= 5) {
+        //     // Use collaborative filtering for users with enough data
+        //     $recommendations = $this->collaborativeRecommender
+        //         ->getRecommendationsForUser($user, $limit);
+        //     $method = 'collaborative';
+        // } else {
             // Use content-based for new users
             $recommendations = $this->contentRecommender
                 ->getRecommendationsForUser($user, $limit);
             $method = 'content-based';
+        // }
 
         return response()->json([
             'recommendations' => $recommendations->values(),
@@ -72,6 +78,7 @@ class RecommendationController extends Controller
         $limit = $request->get('limit', 10);
 
 
+
         return response()->json([
             'trending' => $trendingMovies->values()
         ]);
@@ -91,13 +98,10 @@ class RecommendationController extends Controller
             // Personalized recommendations for logged-in users
             $userRatingsCount = $user->ratings()->count();
             
-            // if ($userRatingsCount >= 5) {
-            //     $personalRecs = $this->collaborativeRecommender
-            //         ->getRecommendationsForUser($user, $limit);
-            // } else {
-            //     $personalRecs = $this->contentRecommender
-            //         ->getRecommendationsForUser($user, $limit);
-            // }
+            
+                $personalRecs = $this->contentRecommender
+                    ->getRecommendationsForUser($user, $limit);
+    
 
             $response['personal_recommendations'] = $personalRecs->values();
         }
@@ -145,6 +149,63 @@ class RecommendationController extends Controller
         return response()->json([
             'movies' => $movies,
             'genre_id' => $genreId
+        ]);
+    }
+
+    /**
+     * Get recommendations based on content
+     */
+    public function hybridRecommendations(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $limit = $request->get('limit', 10);
+
+        if (!$user) {
+            return response()->json(['error' => 'User not authenticated'], 401);
+        }
+
+        $contentRecs = $this->contentRecommender
+            ->getRecommendationsForUser($user, $limit * 2);
+
+
+        // Combine and score recommendations
+        $hybridScores = [];
+        $moviesSeen = [];
+
+        // Process content-based recommendations
+        foreach ($contentRecs as $rec) {
+            $movieId = $rec['movie']->id;
+            if (!isset($moviesSeen[$movieId])) {
+                $hybridScores[$movieId] = [
+                    'movie' => $rec['movie'],
+                    'content_score' => $rec['similarity_score'] ?? 0,
+                    // 'collab_score' => 0,
+                    'hybrid_score' => 0
+                ];
+                $moviesSeen[$movieId] = true;
+            }
+        }
+
+
+        // Calculate hybrid scores (weighted combination)
+        $contentWeight = 0.4;
+
+        foreach ($hybridScores as $movieId => &$scores) {
+            $scores['hybrid_score'] = ($contentWeight * $scores['content_score']);
+        }
+
+        // Sort by hybrid score and take top results
+        // $finalRecs = collect($hybridScores)
+        //     ->sortByDesc('hybrid_score')
+        //     ->take($limit)
+        //     ->values();
+
+        return response()->json([
+            'recommendations' => $finalRecs,
+            'method' => 'hybrid',
+            'weights' => [
+                'content' => $contentWeight,
+            ]
         ]);
     }
 

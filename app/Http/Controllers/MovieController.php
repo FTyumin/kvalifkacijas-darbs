@@ -9,6 +9,7 @@ use App\Services\TmdbApiClient;
 
 class MovieController extends Controller
 {
+
     protected $contentRecommender;
     protected $apiClient;
 
@@ -45,38 +46,14 @@ class MovieController extends Controller
         return view('movies.index', compact('recommendations'));
     }
 
-    public function show($movieID) {
-        $movie = Movie::findOrFail($movieID);
-        $movie->load('genres');
+    // public function show($movieID) {
+    //     $movie = Movie::findOrFail($movieID);
+    //     $movie->load('genres');
+    // }
+    public function show(Movie $movie)
+    {
 
-        $recommendations = $this->contentRecommender->findSimilarMovies($movie->id, 3);
-
-        $ids = array_map(fn($r) => $r['id'] ?? ($r['movie_id'] ?? null), $recommendations);
-
-        if (!empty($ids)) {
-            $movies = Movie::whereIn('id', $ids)
-                ->with(['genres', 'director', 'actors']) 
-                ->get()
-                ->keyBy('id'); 
-
-            foreach ($recommendations as $i => $item) {
-                $id = $item['id'] ?? ($item['movie_id'] ?? null);
-                if ($id && isset($movies[$id])) {
-                    $m = $movies[$id];
-
-                    // Atrastam filmam pielikt vajadzigos laukus
-                    $recommendations[$i]['title']       = $m->name;
-                    $recommendations[$i]['description'] = $m->description;
-                    $recommendations[$i]['year']        = $m->year;
-                    $recommendations[$i]['rating']      = $m->rating;
-                    $recommendations[$i]['img_url']     = $m->poster_url; 
-
-                    $recommendations[$i]['genres'] = $m->genres->pluck('name')->all();
-                    $recommendations[$i]['director'] = $m->director ? $m->director->name : null;
-                } 
-            }
-        }
-        return view('movies.show', compact('movie', 'recommendations'));
+        return view('movies.show', compact('movie'));
     }
 
     public function display() {

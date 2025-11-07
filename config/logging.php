@@ -52,9 +52,15 @@ return [
 
     'channels' => [
 
+        'errorlog' => [
+            'driver' => 'single',                     
+            'path' => storage_path('logs/error.log'),
+            'level' => 'error',                       // only error and above go here
+        ],
+
         'stack' => [
             'driver' => 'stack',
-            'channels' => explode(',', (string) env('LOG_STACK', 'single')),
+            'channels' => ['daily', 'errorlog'],
             'ignore_exceptions' => false,
         ],
 
@@ -112,11 +118,11 @@ return [
             'replace_placeholders' => true,
         ],
 
-        'errorlog' => [
-            'driver' => 'errorlog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'replace_placeholders' => true,
-        ],
+        // 'errorlog' => [
+        //     'driver' => 'errorlog',
+        //     'level' => env('LOG_LEVEL', 'debug'),
+        //     'replace_placeholders' => true,
+        // ],
 
         'null' => [
             'driver' => 'monolog',

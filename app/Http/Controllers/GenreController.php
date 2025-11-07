@@ -9,7 +9,9 @@ class GenreController extends Controller
 {
     public function show($genreID) {
         $genre = Genre::findOrFail($genreID);
+        $movies = $genre->movies;
 
-        return view('genres.show', compact('genre'));
+        return view('genres.show', compact('genre', 'movies'));
     }
+    
 }

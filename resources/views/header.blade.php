@@ -1,19 +1,29 @@
 <header class="sticky top-0 w-full py-4 px-6 z-50 bg-black/95 backdrop-blur-md border-b border-gray-800">
-  <nav class="relative w-full flex justify-between items-center px-0 sm:px-4 lg:px-28 gap-6">
+  <nav class="relative w-full flex justify-between items-center px-0 sm:px-4 lg:px-28 gap-6 h-12">
     
     <!-- Left Section: Logo + Mobile Menu -->
-    <div class="flex items-center gap-6">
+    <div class="flex items-center gap-6 h-full">
       <!-- Logo -->
       <a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
         <!-- <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
          
         </div> -->
-        <span class="text-xl font-bold text-white tracking-tight">MovieHub</span>
+        <span class="text-xl font-bold text-white tracking-tight">Movie Platform</span>
       </a>
 
       <!-- Desktop Navigation -->
       <div class="hidden lg:flex items-center gap-8">
         <a href="/" class="text-gray-300 hover:text-white transition-colors font-medium">Movies</a>
+      </div>
+
+      <div class="hidden lg:flex items-center gap-8">
+        <a href="/" class="text-gray-300 hover:text-white transition-colors font-medium">Reviews</a>
+      </div>
+
+      <div class="hidden lg:flex items-center gap-8">
+        <a href="/lists" class="text-gray-300 hover:text-white transition-colors font-medium">Lists</a>
+      </div>
+
       </div>
     </div>
 
@@ -52,9 +62,9 @@
     </div>
 
     <!-- Right Section: Actions -->
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-4 h-full">
       <!-- Watchlist -->
-      <a href="/watchlist" class="hidden sm:flex items-center gap-2 text-gray-300 hover:text-white transition-colors font-medium">
+      <a href="/bookmark" class="hidden sm:flex items-center gap-2 text-gray-300 hover:text-white transition-colors font-medium">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
         </svg>
@@ -62,13 +72,14 @@
       </a>
 
       @auth
-      <a href="/dashboard" class="hidden sm:flex items-center gap-2 text-gray-300 hover:text-white transition-colors font-medium">
+      <!-- <a href="/dashboard" class="hidden sm:flex items-center gap-2 text-gray-300 hover:text-white transition-colors font-medium">
         <span class="hidden  md:inline">Dashboard</span>
-      </a>
+      </a> -->
+
       @endauth
       
       <!-- User Menu / Sign In -->
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 h-full">
         
         <!-- Sign In Button -->
         @guest
@@ -79,7 +90,8 @@
           Sign In
         </a>
         @endguest
-        @auth
+
+        <!-- @auth
           <form method="POST" action="{{ route('logout') }}">
             @csrf
             
@@ -91,7 +103,26 @@
               {{ __('Log Out') }}
             </button>
           </form>
-        @endauth
+        @endauth -->
+
+        <div class="w-10 h-10 rounded-full overflow-hidden">
+          <a href="/dashboard">
+            @auth
+              @if(auth()->user()->image)
+                <img src="{{ asset('storage/' . auth()->user()->image) }}"
+                    alt="{{ auth()->user()->name}}"
+                    class="w-full h-full object-cover">
+                    
+              @else 
+                <img src="{{ asset('images/person-placeholder.png') }}" 
+                    alt="placeholder img"
+                    class="w-full h-full object-cover">
+                    
+              @endif
+            @endauth
+
+          </a>
+        </div>
       </div>
 
       <!-- Mobile Menu Button -->

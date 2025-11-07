@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->integer('rating');
+            $table->boolean('spoilers');
             $table->timestamps();
         });
     }

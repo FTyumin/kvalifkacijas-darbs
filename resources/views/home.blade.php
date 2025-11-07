@@ -13,7 +13,7 @@
   <!-- Content -->
   <div class="relative mx-auto max-w-5xl px-6 py-20 sm:py-28 md:py-36">
     <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-white">
-      Honest Reviews. Zero Spoilers.
+      Honest Reviews
     </h1>
     <p class="mt-4 max-w-2xl text-white/80 md:text-lg">
       Movies & shows reviewed with care, context, and clarity.
@@ -47,7 +47,7 @@
     <div class="group bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600 overflow-hidden">
       
       <div class="relative overflow-hidden">
-        <a href="{{ route('movies.show', $movie->id ) }}" class="block">
+        <a href="{{ route('movies.show', $movie ) }}" class="block">
           <img class="aspect-[2/3] w-full object-cover transition-transform duration-300 group-hover:scale-105" 
                src="{{ asset('images/cinema.webp') }}" 
                alt="Movie poster" />
@@ -115,7 +115,7 @@
 
 <!-- Genres -->
 <div class="my-16 mx-10 sm:px-8 lg:px-28">
-    <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">Genres</h1>
+    <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-white md:text-5xl lg:text-6xl">Genres</h1>
 
     <div class="grid grid-cols-4 gap-x-16 gap-y-10">
         @foreach($genres as $genre)

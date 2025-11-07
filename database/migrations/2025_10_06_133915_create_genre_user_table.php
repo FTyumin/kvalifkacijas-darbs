@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('actors', function (Blueprint $table) {
+        Schema::create('genre_user', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('nationality')->nullable();
-            $table->year('birth_year'); 
-            $table->enum('gender', ['male', 'female']); 
-            $table->date('birth_date')->nullable(); 
+            $table->foreignId('genre_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('actors');
+        Schema::dropIfExists('genre_user');
     }
 };

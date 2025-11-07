@@ -13,13 +13,13 @@ class ReviewController extends Controller
         } else {
             return back()->with('warning', 'You must be logged in to write a review.');
         }
-        // dd($request->product_id);
         Review::create([
             'user_id' => $userId,
             'movie_id' => $request->movie_id, 
             'rating' => $request->rating,
             'title' => 'review',
-            'description' => $request->comment
+            'description' => $request->comment,
+            'spoilers' => $request->has('spoiler')
         ]);
 
         return back()->with('success', 'Thank for your review');

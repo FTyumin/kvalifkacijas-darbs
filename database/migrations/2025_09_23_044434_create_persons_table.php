@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('directors', function (Blueprint $table) {
+        Schema::create('persons', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->enum('type', ['actor', 'director']);
             $table->string('nationality')->nullable();
             $table->string('birth_year')->nullable();
             $table->timestamps();
