@@ -9,7 +9,6 @@ use App\Services\TmdbApiClient;
 
 class MovieController extends Controller
 {
-
     protected $contentRecommender;
     protected $apiClient;
 
@@ -33,7 +32,6 @@ class MovieController extends Controller
                 ->getRecommendationsForUser($user, 6);
         }
 
-
         $recommendations['popular'] = Movie::select('movies.*')
             ->leftJoin('ratings', 'movies.id', '=', 'ratings.movie_id')
             ->groupBy('movies.id', 'movies.name')
@@ -46,13 +44,8 @@ class MovieController extends Controller
         return view('movies.index', compact('recommendations'));
     }
 
-    // public function show($movieID) {
-    //     $movie = Movie::findOrFail($movieID);
-    //     $movie->load('genres');
-    // }
     public function show(Movie $movie)
     {
-
         return view('movies.show', compact('movie'));
     }
 

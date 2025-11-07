@@ -64,10 +64,8 @@ Route::prefix('recommendations')->group(function () {
 Route::get('/recommendations', [MovieController::class, 'recommendations'])->name('movies.recommendations');
 Route::get('/top-movies', [MovieController::class, 'topPage'])->name('movies.top');
 
-
 Route::post('/reviews', [ReviewController::class, 'create'])->name('reviews.store');
 
 Route::get('/search', [MovieController::class, 'search'])->name('movies.search');
-
 
 require __DIR__.'/auth.php';

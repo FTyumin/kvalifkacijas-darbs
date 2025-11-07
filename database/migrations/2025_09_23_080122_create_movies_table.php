@@ -20,7 +20,9 @@ return new class extends Migration
             $table->integer('duration')->nullable(); // Runtime in minutes
             $table->decimal('rating', 3, 1)->nullable(); 
             $table->string('poster_url')->nullable();
-            $table->foreignId('director_id')->nullable()->constrained();
+            $table->foreignId('director_id')->nullable()->constrained(
+                table: 'persons'
+            );
             $table->timestamps();
         });
     }

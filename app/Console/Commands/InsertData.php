@@ -48,7 +48,19 @@ class InsertData extends Command
             ];
         });
 
-        DB::table('movies')->upsert($movies->all(), ['id'], ['name', 'year', 'description', 'poster_url']);
+        // DB::table('movies')->upsert($movies->all(), ['id'], ['name', 'year', 'description', 'poster_url']);
+        foreach ($movies as $movieData) {
+            Movie::updateOrCreate(
+                ['id' => $movieData['id']],
+                [
+                    'name' => $movieData['name'],
+                    'year' => $movieData['year'],
+                    'description' => $movieData['description'],
+                    'poster_url' => $movieData['poster_url'],
+                ]
+            );
+        }
+
 
         $movieGenres = [];
         $movieGenreData = [];
