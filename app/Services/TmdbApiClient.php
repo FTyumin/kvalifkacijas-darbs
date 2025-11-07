@@ -131,7 +131,6 @@ class TmdbApiClient {
             $page++;
             // If we've reached the last page on TMDb, break
             // if (isset($data['total_pages']) && $page > $data['total_pages']) break;
-            // small delay could be added to respect rate limits (optional)
         }
         
         return array_slice($collected, 0, $limit);

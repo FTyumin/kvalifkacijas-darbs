@@ -5,22 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Services\ContentBasedRecommender;
-use App\Services\CollaborativeFilteringRecommender;
 use App\Services\TmdbApiClient;
 
 class MovieController extends Controller
 {
     protected $contentRecommender;
-    protected $collaborativeRecommender;
     protected $apiClient;
 
     public function __construct(
         ContentBasedRecommender $contentRecommender,
-        CollaborativeFilteringRecommender $collaborativeRecommender,
         TmdbApiClient $apiClient
     ) {
         $this->contentRecommender = $contentRecommender;
-        $this->collaborativeRecommender = $collaborativeRecommender;
         $this->apiClient = $apiClient;
     }
 
@@ -29,15 +25,13 @@ class MovieController extends Controller
         $recommendations = [];
 
         if ($user && $user->ratings()->count() >= 5) {
-            $recommendations['personal'] = $this->collaborativeRecommender
+            $recommendations['personal'] = $this->contentRecommender
                 ->getRecommendationsForUser($user, 6);
         } elseif ($user && $user->ratings()->count() >= 1) {
             $recommendations['personal'] = $this->contentRecommender
                 ->getRecommendationsForUser($user, 6);
         }
 
-        $recommendations['trending'] = $this->collaborativeRecommender
-            ->getTrendingMovies(6);
 
         $recommendations['popular'] = Movie::select('movies.*')
             ->leftJoin('ratings', 'movies.id', '=', 'ratings.movie_id')
@@ -113,17 +107,11 @@ class MovieController extends Controller
             return redirect()->route('login');
         }
 
-        $userRatingsCount = $user->reviews()->count();
+        // $userRatingsCount = $user->reviews()->count();
         
-        if ($userRatingsCount >= 5) {
-            $recommendations = $this->collaborativeRecommender
-                ->getRecommendationsForUser($user, 20);
-            $method = 'Collaborative Filtering';
-        } else {
-            $recommendations = $this->contentRecommender
-                ->getRecommendationsForUser($user, 20);
-            $method = 'Content-Based';
-        }
+        $recommendations = $this->contentRecommender
+            ->getRecommendationsForUser($user, 20);
+        $method = 'Content-Based';
 
         return view('movies.recommendations', compact('recommendations', 'method', 'userRatingsCount'));
     }
