@@ -30,8 +30,8 @@ class InsertData extends Command
      */
     public function handle()
     {
-        $seeder = new GenreSeeder();
-        $seeder->run();
+        $genreSeeder = new GenreSeeder();
+        $genreSeeder->run();
 
         $api = new TmdbApiClient;
         $genres = Genre::all()->keyBy('name');
@@ -50,9 +50,11 @@ class InsertData extends Command
 
         // DB::table('movies')->upsert($movies->all(), ['id'], ['name', 'year', 'description', 'poster_url']);
         foreach ($movies as $movieData) {
+            \Log::info($movieData['id']);
             Movie::updateOrCreate(
                 ['id' => $movieData['id']],
                 [
+                    'id' => $movieData['id'],
                     'name' => $movieData['name'],
                     'year' => $movieData['year'],
                     'description' => $movieData['description'],
@@ -61,20 +63,20 @@ class InsertData extends Command
             );
         }
 
-
         $movieGenres = [];
-        $movieGenreData = [];
         // \Log::info($movies);
-
+        
         foreach ($movies as $movie) {
+            $movieGenreData = [];
             $movie_info = $api->getMovieWithExtras($movie['id']);
+            \Log::info($movie_info['genres']);
 
             // Dati: [ ['id'=>28,'name'=>'Action'], ['id'=>12,'name'=>'Adventure'] ]
             $movieGenres = $movie_info['genres'] ?? [];
 
             $genreIds = [];
 
-            $movieModel = Movie::find($movie['id']);
+            // $movieModel = Movie::find($movie->id);
             foreach ($movieGenres as $genreData) {
                 // Atrast zanru pec nosaukuma no datubazes
                 $genre = $genres->firstWhere('name', $genreData['name']);
@@ -86,11 +88,12 @@ class InsertData extends Command
                 }
 
                 $movieGenreData[] = [
-                    'movie_id' => $movieModel->id,
+                    'movie_id' => $movie['id'],
                     'genre_id' => $genre->id
                 ];
             }
+
+            DB::table('genre_movie')->upsert($movieGenreData, ['movie_id', 'genre_id']);
         }
-        DB::table('genre_movie')->upsert($movieGenreData, ['movie_id', 'genre_id']);
     }
 }

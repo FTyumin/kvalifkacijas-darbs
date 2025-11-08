@@ -17,7 +17,11 @@ class Movie extends Model
 {
     use HasFactory, Markable, HasSlug;
 
-     protected $fillable = [
+    public $incrementing = false;
+    protected $keyType = 'int';
+
+    protected $fillable = [
+        'id',
         'name',
         'year',
         'description',
