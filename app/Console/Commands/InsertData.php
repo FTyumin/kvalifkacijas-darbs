@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\TmdbApiClient;
 use App\Models\Genre;
 use App\Models\Movie;
+use App\Models\Person;
 use Database\Seeders\GenreSeeder;
 
 class InsertData extends Command
@@ -23,7 +24,7 @@ class InsertData extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Load movie, actor data from TMDB API to local DB';
     protected $apiClient;
     /**
      * Execute the console command.
@@ -36,7 +37,7 @@ class InsertData extends Command
         $api = new TmdbApiClient;
         $genres = Genre::all()->keyBy('name');
 
-        $n = 100;
+        $n = 3;
         $data = $api->getTopMovies($n, ['method' => 'top-rated']);
         $movies = collect($data ?? [])->map(function ($r) {
             return [
@@ -48,7 +49,6 @@ class InsertData extends Command
             ];
         });
 
-        // DB::table('movies')->upsert($movies->all(), ['id'], ['name', 'year', 'description', 'poster_url']);
         foreach ($movies as $movieData) {
             \Log::info($movieData['id']);
             Movie::updateOrCreate(
@@ -59,6 +59,7 @@ class InsertData extends Command
                     'year' => $movieData['year'],
                     'description' => $movieData['description'],
                     'poster_url' => $movieData['poster_url'],
+                    
                 ]
             );
         }
@@ -69,12 +70,49 @@ class InsertData extends Command
         foreach ($movies as $movie) {
             $movieGenreData = [];
             $movie_info = $api->getMovieWithExtras($movie['id']);
-            \Log::info($movie_info['genres']);
+
+            $actor_info = array_slice($movie_info['credits']['cast'], 0, 5);
+
+            $crew = $movie_info['credits']['crew'];
+            $director = array_filter($crew, function($person) {
+                return $person['job'] === 'Director';
+            });
+
+            $director = reset($director);
+            
+            \Log::info($director);
+            $nameParts = explode(" ", $director['name']);
+            $director = Person::updateOrCreate(
+                [
+                    'first_name' => array_shift($nameParts),
+                    'last_name' => implode(' ', $nameParts),
+                    'type' => 'director'
+                ],
+                []
+            );
+            $movie = Movie::find($movie['id']);
+            $movie->director_id = $director->id;
+
 
             // Dati: [ ['id'=>28,'name'=>'Action'], ['id'=>12,'name'=>'Adventure'] ]
             $movieGenres = $movie_info['genres'] ?? [];
 
             $genreIds = [];
+            
+            foreach($actor_info as $actor) {
+                $nameParts = explode(" ", $actor['name']);
+                Person::updateOrCreate(
+                    ['id' => $actor['id']],
+                    [
+                        'id' => $actor['id'],
+                        'first_name' => array_shift($nameParts),
+                        'last_name' => implode(' ', $nameParts),
+                        'type' => 'actor',
+                    ]
+                );
+
+                DB::table('actor_movie')->insert(['actor_id' => $actor['id'], 'movie_id' => $movie['id']]);
+            }
 
             // $movieModel = Movie::find($movie->id);
             foreach ($movieGenres as $genreData) {

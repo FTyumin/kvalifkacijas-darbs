@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('genre_user', function (Blueprint $table) {
+        Schema::create('user_favorite_genres', function (Blueprint $table) {
             $table->id();
             $table->foreignId('genre_id')->constrained();
             $table->foreignId('user_id')->constrained();

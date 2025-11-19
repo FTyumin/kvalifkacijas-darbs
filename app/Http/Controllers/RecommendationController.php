@@ -14,7 +14,6 @@ class RecommendationController extends Controller
 {
     protected ContentBasedRecommender $contentRecommender;
 
-
     public function __construct(
         ContentBasedRecommender $contentRecommender,
     ) {
@@ -33,22 +32,14 @@ class RecommendationController extends Controller
             return response()->json(['error' => 'User not authenticated'], 401);
         }
 
-        // if ($userRatingsCount >= 5) {
-        //     // Use collaborative filtering for users with enough data
-        //     $recommendations = $this->collaborativeRecommender
-        //         ->getRecommendationsForUser($user, $limit);
-        //     $method = 'collaborative';
-        // } else {
-            // Use content-based for new users
             $recommendations = $this->contentRecommender
                 ->getRecommendationsForUser($user, $limit);
-            $method = 'content-based';
-        // }
+  
 
         return response()->json([
             'recommendations' => $recommendations->values(),
-            'method' => $method,
-            'user_ratings_count' => $userRatingsCount
+            // 'user_ratings_count' => $userRatingsCount,
+            'user_ratings_count' => 10,
         ]);
     }
 
@@ -76,8 +67,6 @@ class RecommendationController extends Controller
     public function trending(Request $request): JsonResponse
     {
         $limit = $request->get('limit', 10);
-
-
 
         return response()->json([
             'trending' => $trendingMovies->values()
@@ -169,7 +158,7 @@ class RecommendationController extends Controller
 
 
         // Combine and score recommendations
-        $hybridScores = [];
+
         $moviesSeen = [];
 
         // Process content-based recommendations
@@ -228,8 +217,8 @@ class RecommendationController extends Controller
         );
 
         // Get fresh recommendations based on the new rating
-        $recommendations = $this->contentRecommender
-            ->getRecommendationsForUser($user, 5);
+        // $recommendations = $this->contentRecommender
+        //     ->getRecommendationsForUser($user, 5);
 
         return response()->json([
             'message' => 'Rating saved successfully',

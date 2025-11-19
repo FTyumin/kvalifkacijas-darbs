@@ -64,7 +64,13 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function favoriteGenres() {
-        return $this->belongsToMany(Genre::class);
+        return $this->belongsToMany(Genre::class, 'user_favorite_genres')
+            ->withTimestamps();
+    }
+
+    public function favoriteActors() {
+        return $this->belongsToMany(Person::class, 'user_favorite_actors')
+            ->withTimestamps();
     }
 
     public function getRedirectRoute()

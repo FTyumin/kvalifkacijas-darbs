@@ -8,6 +8,7 @@ use App\Models\Movie;
 class Person extends Model
 {
     protected $fillable = [
+        'id',
         'first_name',
         'last_name',
         'type',
@@ -20,6 +21,8 @@ class Person extends Model
         'birth_year' => 'integer',
         'birth_date' => 'date',
     ];
+
+    protected $table = 'persons';
 
     public function movies() {
         return $this->BelongsToMany(Movie::class);

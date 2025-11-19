@@ -2,8 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Actor;
-use App\Models\Director;
+use App\Models\Person;
 use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\User;
@@ -50,15 +49,15 @@ class ContentBasedRecommender
             $features[$key] = $movie->genres->contains($genre->id) ? 1 : 0;
         }
 
-        $allDirectors = Director::all();
+        $allDirectors = Person::where('type', 'director')->get(30);
         foreach ($allDirectors as $director) {
             $key = 'director_' . $director->id;
             // dd($movie->director->id);
             $features[$key] = (int) ($movie->director?->id === $director->id);
         }
 
-        $topActors = Actor::whereIn('id', function($query) {
-            $query->select('actor_id')
+        $topActors = Person::whereIn('id', function($query) {
+            $query->select('person_id')
                 ->from('actor_movie')
                 ->groupBy('actor_id')
                 ->orderByRaw('COUNT(*) DESC');
@@ -98,6 +97,56 @@ class ContentBasedRecommender
 
         return $dotProduct / ($magnitude1 * $magnitude2);
         // Formula = (A · B) / (|A| × |B|)
+    }
+
+
+
+
+    function getRecommendationsForUser($userId, $limit) {
+        $user = User::find($userId);
+    
+        // retrieve user's favorite genres
+        $favoriteGenreIds = $user->favoriteGenres->pluck('id')->toArray();
+        $favoriteActorIds = $user->favoriteActors->pluck('id')->toArray();
+        $favoriteDirectorIds = $user->favoriteDirectors->pluck('id')->toArray();
+
+        //movies that user shouldn't get as recommendations
+        $watchedIds = $user->watchedMovies()->pluck('film_id')->toArray();
+        $watchlistIds = $user->watchlist()->pluck('film_id')->toArray();
+        $excludeIds = array_merge($watchedIds, $watchlistIds);
+        
+        // If no favorites, fall back to popular movies
+        if (empty($favoriteGenres) && empty($favoriteDirectors)) {
+            return $this->getPopularMovies($limit);
+        }
+    
+        // Find movies matching user's taste
+        $recommendations = Movie::query()
+            ->whereHas('genres', function($q) use ($favoriteGenres) {
+                $q->whereIn('genres.id', $favoriteGenres);
+            })
+            ->orWhereHas('directors', function($q) use ($favoriteDirectors) {
+                $q->whereIn('directors.id', $favoriteDirectors);
+            })
+            ->withAvg('ratings', 'rating')
+            ->orderByDesc('ratings_avg_rating')
+            ->limit($limit)
+            ->get();
+            
+        return $recommendations;
+    }
+
+    function getPopularMovies($limit) {
+        $popularMovies = Movie::select('movies.id', 'movies.name', 'movies.rating')
+            ->leftJoin('reviews', 'movies.id', '=', 'reviews.movie_id')
+            ->groupBy('movies.id', 'movies.name', 'movies.rating')
+            ->orderByRaw('AVG(reviews.rating) DESC')
+            ->orderByRaw('COUNT(reviews.id) DESC')
+            ->limit($limit)
+            ->with(['genres'])
+            ->get();
+        
+        return $popularMovies;
     }
 
 

@@ -104,7 +104,7 @@ class TmdbApiClient {
             if ($this->apiKey && empty($this->bearer)) {
                 $query['api_key'] = $this->apiKey;
             }
-            // \Log::error("bruh");
+            
             $options = ['query' => $query];
             if($this->bearer) {
                 $options['headers'] = [
