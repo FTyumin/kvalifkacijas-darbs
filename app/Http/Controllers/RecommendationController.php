@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use App\Models\User;
 use App\Services\ContentBasedRecommender;
-
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -67,6 +66,14 @@ class RecommendationController extends Controller
     public function trending(Request $request): JsonResponse
     {
         $limit = $request->get('limit', 10);
+        $trendingMovies = Movie::select('movies.id', 'movies.name', 'movies.rating')
+            ->leftJoin('reviews', 'movies.id', '=', 'reviews.movie_id')
+            ->groupBy('movies.id', 'movies.name', 'movies.rating')
+            ->orderByRaw('AVG(reviews.rating) DESC')
+            ->orderByRaw('COUNT(reviews.id) DESC')
+            ->limit($limit)
+            ->with(['genres'])
+            ->get();
 
         return response()->json([
             'trending' => $trendingMovies->values()
@@ -176,25 +183,9 @@ class RecommendationController extends Controller
         }
 
 
-        // Calculate hybrid scores (weighted combination)
-        $contentWeight = 0.4;
-
-        foreach ($hybridScores as $movieId => &$scores) {
-            $scores['hybrid_score'] = ($contentWeight * $scores['content_score']);
-        }
-
-        // Sort by hybrid score and take top results
-        // $finalRecs = collect($hybridScores)
-        //     ->sortByDesc('hybrid_score')
-        //     ->take($limit)
-        //     ->values();
-
         return response()->json([
-            'recommendations' => $finalRecs,
+            'recommendations' => $contentRecs,
             'method' => 'hybrid',
-            'weights' => [
-                'content' => $contentWeight,
-            ]
         ]);
     }
 
@@ -217,8 +208,8 @@ class RecommendationController extends Controller
         );
 
         // Get fresh recommendations based on the new rating
-        // $recommendations = $this->contentRecommender
-        //     ->getRecommendationsForUser($user, 5);
+        $recommendations = $this->contentRecommender
+            ->getRecommendationsForUser($user, 5);
 
         return response()->json([
             'message' => 'Rating saved successfully',

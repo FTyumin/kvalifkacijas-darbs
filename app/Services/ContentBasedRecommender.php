@@ -121,19 +121,20 @@ class ContentBasedRecommender
         }
     
         // Find movies matching user's taste
-        $recommendations = Movie::query()
-            ->whereHas('genres', function($q) use ($favoriteGenres) {
-                $q->whereIn('genres.id', $favoriteGenres);
-            })
-            ->orWhereHas('directors', function($q) use ($favoriteDirectors) {
-                $q->whereIn('directors.id', $favoriteDirectors);
-            })
-            ->withAvg('ratings', 'rating')
-            ->orderByDesc('ratings_avg_rating')
-            ->limit($limit)
-            ->get();
+        // $recommendations = Movie::query()
+        //     ->whereHas('genres', function($q) use ($favoriteGenres) {
+        //         $q->whereIn('genres.id', $favoriteGenres);
+        //     })
+        //     ->orWhereHas('directors', function($q) use ($favoriteDirectors) {
+        //         $q->whereIn('directors.id', $favoriteDirectors);
+        //     })
+        //     ->withAvg('ratings', 'rating')
+        //     ->orderByDesc('ratings_avg_rating')
+        //     ->limit($limit)
+        //     ->get();
+
             
-        return $recommendations;
+        // return $recommendations;
     }
 
     function getPopularMovies($limit) {
