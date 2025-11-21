@@ -31,9 +31,6 @@ class InsertData extends Command
      */
     public function handle()
     {
-        $genreSeeder = new GenreSeeder();
-        $genreSeeder->run();
-
         $api = new TmdbApiClient;
         $genres = Genre::all()->keyBy('name');
 
@@ -50,7 +47,6 @@ class InsertData extends Command
         });
 
         foreach ($movies as $movieData) {
-            \Log::info($movieData['id']);
             Movie::updateOrCreate(
                 ['id' => $movieData['id']],
                 [
@@ -59,13 +55,11 @@ class InsertData extends Command
                     'year' => $movieData['year'],
                     'description' => $movieData['description'],
                     'poster_url' => $movieData['poster_url'],
-                    
                 ]
             );
         }
 
         $movieGenres = [];
-        // \Log::info($movies);
         
         foreach ($movies as $movie) {
             $movieGenreData = [];
@@ -80,10 +74,10 @@ class InsertData extends Command
 
             $director = reset($director);
             
-            \Log::info($director);
             $nameParts = explode(" ", $director['name']);
             $director = Person::updateOrCreate(
                 [
+                    'id' => $director['id'],
                     'first_name' => array_shift($nameParts),
                     'last_name' => implode(' ', $nameParts),
                     'type' => 'director'
@@ -93,12 +87,9 @@ class InsertData extends Command
             $movie = Movie::find($movie['id']);
             $movie->director_id = $director->id;
 
-
-            // Dati: [ ['id'=>28,'name'=>'Action'], ['id'=>12,'name'=>'Adventure'] ]
+            // Data: [ ['id'=>28,'name'=>'Action'], ['id'=>12,'name'=>'Adventure'] ]
             $movieGenres = $movie_info['genres'] ?? [];
 
-            $genreIds = [];
-            
             foreach($actor_info as $actor) {
                 $nameParts = explode(" ", $actor['name']);
                 Person::updateOrCreate(
@@ -130,7 +121,6 @@ class InsertData extends Command
                     'genre_id' => $genre->id
                 ];
             }
-
             DB::table('genre_movie')->upsert($movieGenreData, ['movie_id', 'genre_id']);
         }
     }

@@ -56,12 +56,12 @@ class Movie extends Model
 
     public function director()
     {
-        return $this->belongsTo(Director::class);
+        return $this->belongsTo(Person::class);
     }
 
     public function actors()
     {
-        return $this->belongsToMany(Actor::class)
+        return $this->belongsToMany(Person::class)
                     ->withTimestamps();
     }
 

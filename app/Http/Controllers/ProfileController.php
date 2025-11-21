@@ -27,7 +27,6 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        \Log::info('started profile update');
         $request->user()->fill($request->validated());
 
         // Augšupielādēt failu
@@ -36,8 +35,7 @@ class ProfileController extends Controller
             $request->user()->image = $path;
             $data['image'] = $path;
         }
-        \Log::info('uploaded image');
-        // $user->fill($data);
+
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
