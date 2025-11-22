@@ -17,7 +17,7 @@
       </div>
 
       <div class="hidden lg:flex items-center gap-8">
-        <a href="/" class="text-gray-300 hover:text-white transition-colors font-medium">Reviews</a>
+        <a href="{{ route('reviews') }}" class="text-gray-300 hover:text-white transition-colors font-medium">Reviews</a>
       </div>
 
       <div class="hidden lg:flex items-center gap-8">
@@ -32,7 +32,7 @@
 
       <form class="relative" method="GET" action="{{ route('movies.search') }}">
         @csrf
-        <label for="search" class="sr-only">Search movies, TV shows, and actors</label>
+        <label for="search" class="sr-only">Search movies, directors and actors</label>
         <div class="relative">
           <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

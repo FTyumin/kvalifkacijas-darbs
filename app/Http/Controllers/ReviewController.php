@@ -23,6 +23,11 @@ class ReviewController extends Controller
         ]);
 
         return back()->with('success', 'Thank for your review');
-        
+    }
+
+    public function index(Request $request) {
+        $reviews = Review::with('user')->get();
+
+        return view('reviews.index', compact('reviews'));
     }
 }

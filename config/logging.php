@@ -60,7 +60,7 @@ return [
 
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily', 'errorlog'],
+            'channels' => ['single', 'errorlog'],
             'ignore_exceptions' => false,
         ],
 

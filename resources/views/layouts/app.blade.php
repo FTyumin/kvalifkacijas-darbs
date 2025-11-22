@@ -14,7 +14,7 @@
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
 
 </head>
-<body class="font-sans antialiased flex flex-col min-h-screen pt-20">
+<body class="font-sans antialiased flex flex-col min-h-screen">
   @include('header')
   
   <main class="bg-black px-6 sm:px-4 lg:px-28 py-8">

@@ -62,13 +62,12 @@
                  <form action="{{ route('bookmark.add', $movie->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
-                        <button class="hover:bg-green-400">
+                        <button class="p-2 bg-green-100 rounded hover:bg-green-600">
                           <img src="{{ asset('images/eye.svg') }}" alt="" class="size-9">
                           Already seen
                         </button>
                  </form>
                 @if(empty(Auth::user()->lists))
-                @else
                 <form action="{{ route('lists.add', $movie->id) }}" method="POST" class="flex flex-col gap-8 border border-green-300">
                     <h2 class="text-white">Add movie to list</h2>
                     @csrf
@@ -83,9 +82,9 @@
                     </button>
 
                 </form>
+                @else
 
                 @endif
-
             </div>
         </div>
         <!-- Review section -->
@@ -93,7 +92,7 @@
             <form action="{{ route('reviews.store') }}" method="POST" class="mt-16 mx-auto space-y-6 mb-12">
               @csrf
 
-              <h3 class="text-3xl font-semibold">Write a Review for <span class="text-green-600">{{ $movie->name }}</span></h3>
+              <h3 class="text-3xl text-white font-semibold">Write a Review for <span class="text-green-600">{{ $movie->name }}</span></h3>
               <input type="hidden" name="movie_id" value="{{ $movie->id }}">
               {{-- Star Rating --}}
               <fieldset class="flex items-center space-x-1">

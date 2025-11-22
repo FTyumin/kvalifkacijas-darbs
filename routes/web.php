@@ -31,6 +31,7 @@ Route::get('bookmark', [BookmarkController::class, 'bookmarkList'])->name('bookm
 
 // profila fjas
 Route::middleware('auth')->group(function () {
+    Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -39,7 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/quiz', [QuizController::class, 'store'])->name('quiz.store');
 });
 
-
+Route::post('lists/{movie}/add', [ListController::class, 'add'])->name('lists.add');
 
 // Public routes
 Route::prefix('recommendations')->group(function () {
@@ -65,6 +66,7 @@ Route::get('/recommendations', [MovieController::class, 'recommendations'])->nam
 Route::get('/top-movies', [MovieController::class, 'topPage'])->name('movies.top');
 
 Route::post('/reviews', [ReviewController::class, 'create'])->name('reviews.store');
+Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');
 
 Route::get('/search', [MovieController::class, 'search'])->name('movies.search');
 
