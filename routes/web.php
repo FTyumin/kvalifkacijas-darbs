@@ -29,9 +29,10 @@ Route::delete('bookmark-remove/{id}', [BookmarkController::class, 'bookmarkRemov
 Route::get('watchlist', [WatchlistController::class, 'watchlist'])->name('watchlist');
 Route::get('bookmark', [BookmarkController::class, 'bookmarkList'])->name('bookmark');
 
-// profila fjas
+// profile functions
+Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+
 Route::middleware('auth')->group(function () {
-    Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

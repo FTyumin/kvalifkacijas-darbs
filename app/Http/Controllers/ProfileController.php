@@ -70,7 +70,7 @@ class ProfileController extends Controller
     public function show(User $user) {
         $movies = $user->movies;
         $reviews = $user->reviews;
-        
+  
         return view('profile.show', compact('user', 'movies', 'reviews'));
     }
 }

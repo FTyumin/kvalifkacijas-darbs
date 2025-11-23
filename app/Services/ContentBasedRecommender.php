@@ -15,7 +15,6 @@ class ContentBasedRecommender
     private $documentFrequency = []; // IDF values
     private $allMoviesKeywords = [];
 
-
     function findSimilarMovies($movieId, $limit = 5) {
         $targetFeatures = $this->getMovieFeatures($movieId);
     
@@ -237,7 +236,6 @@ class ContentBasedRecommender
         ];
     }
 
-
     function getRecommendationsForUser($userId, $limit) {
         $user = User::find($userId);
     
@@ -292,7 +290,5 @@ class ContentBasedRecommender
         
         return $popularMovies;
     }
-
-
 
 }

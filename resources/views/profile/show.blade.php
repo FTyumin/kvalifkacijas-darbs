@@ -198,38 +198,8 @@
                         </div>
                     </div>
 
-                    <!-- Quick Actions -->
-                    <div class="bg-gray-800/50 glass border border-gray-700 rounded-2xl p-6">
-                        <h3 class="text-lg font-bold text-white mb-4">Quick Actions</h3>
-                        <div class="space-y-3">
-                            <a href="/movies/random" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
-                                <div class="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                                    </svg>
-                                </div>
-                                <span class="text-sm font-medium">Discover New Movies</span>
-                            </a>
-                            
-                            <a href="/write-review" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
-                                <div class="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                    </svg>
-                                </div>
-                                <span class="text-sm font-medium">Write a Review</span>
-                            </a>
-                            
-                            <a href="/recommendations" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
-                                <div class="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                                    </svg>
-                                </div>
-                                <span class="text-sm font-medium">Get Recommendations</span>
-                            </a>
-                        </div>
-                    </div>
+                   
+
                 </div>
             </div>
         </div>
