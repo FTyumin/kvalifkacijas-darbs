@@ -17,6 +17,9 @@ class DashboardController extends Controller
         $user = \Auth::user();
         $reviews = Review::where('user_id', $userId)->get();
 
+        $review_count = count($reviews);
+    
+
         return view('dashboard', compact('movies', 'reviews', 'user'));
     }
 }

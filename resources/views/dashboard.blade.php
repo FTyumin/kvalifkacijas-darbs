@@ -19,7 +19,7 @@
         <div class="py-12 px-6 lg:px-28">
             <div class="mb-8">
                 <h1 class="text-4xl font-bold mb-4">
-                    Welcome back, <span class="text-blue-400">{{ Auth::user()->name ?? 'John' }}</span>!
+                    Welcome back, <span class="text-blue-400">{{ $user->name }}</span>!
                 </h1>
                 <p class="text-xl text-gray-400">
                     Here's what's happening with your movie collection
@@ -33,7 +33,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-400">Watchlist</p>
-                            <p class="text-3xl font-bold text-blue-400">24</p>
+                            <p class="text-3xl font-bold text-blue-400">{{ count($movies) }}</p>
                         </div>
                         <div class="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center">
                             <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -48,7 +48,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-400">Watched</p>
-                            <p class="text-3xl font-bold text-green-400">156</p>
+                            <p class="text-3xl font-bold text-green-400">{{ count($user->seenMovies) }}</p>
                         </div>
                         <div class="w-12 h-12 bg-green-600/20 rounded-xl flex items-center justify-center">
                             <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,7 +63,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-400">Reviews</p>
-                            <p class="text-3xl font-bold text-purple-400">42</p>
+                            <p class="text-3xl font-bold text-purple-400">{{count($reviews)}}</p>
                         </div>
                         <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center">
                             <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,7 +77,7 @@
                 <div class="bg-gray-800/50 glass border border-gray-700 rounded-xl p-6 hover:border-gray-600 transition-colors">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-400">Avg Rating</p>
+                            <p class="text-sm font-medium text-gray-400">Average Rating</p>
                             <p class="text-3xl font-bold text-yellow-400">4.5</p>
                         </div>
                         <div class="w-12 h-12 bg-yellow-600/20 rounded-xl flex items-center justify-center">
@@ -114,16 +114,16 @@
                             <div class="group relative">
                                 <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden">
                                     <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                                         src="{{ asset('images/cinema.webp') }}" 
+                                         src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"
                                          alt="Movie poster" />
                                 </div>
                                 
                                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
                                     <div class="text-center">
-                                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm mb-2 transition-colors">
-                                            <a href="{{ route('movies.show', $movie->id) }}">View</a>
+                                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 w-16 rounded-lg text-sm mb-2 transition-colors">
+                                            <a href="{{ route('movies.show', $movie->slug) }}">View</a>
                                         </button>
-                                        <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm block w-full transition-colors">
+                                        <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 w-16 rounded-lg text-sm block w-full transition-colors">
                                             <form action="{{ route('favorite.remove',$movie->id) }}" method="POST"
                                                     onsubmit="return confirm('{{ trans('Are you sure ? ') }}');"
                                                     style="">
@@ -139,7 +139,7 @@
                                 <h3 class="mt-2 text-sm font-medium text-white line-clamp-2">
                                     {{ $movie->name }}
                                 </h3>
-                                <p class="text-xs text-gray-400">{{ $movie->director->name }}</p>
+                                <p class="text-xs text-gray-400"></p>
                             </div>
                             @endforeach
                         </div>

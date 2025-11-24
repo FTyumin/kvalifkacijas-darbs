@@ -47,6 +47,10 @@ class User extends Authenticatable implements MustVerifyEmail
             ->withPivot('rating', 'created_at');
     }
 
+    public function seenMovies() {
+        return $this->hasMany(Seen::class);
+    }
+
     /**
      * Get user's favorite movies (rating >= 4)
      */
