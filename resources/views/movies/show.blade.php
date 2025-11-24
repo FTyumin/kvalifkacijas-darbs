@@ -45,6 +45,7 @@
             <!-- Actors,Director -->
 
             {{-- Actions --}}
+            @if(Auth::check())
             <div class="flex gap-3 mt-6">
             <!-- Add to watchlist -->
                 <form action="{{ route('seen.add', $movie->id) }}" method="POST">
@@ -114,8 +115,10 @@
 
                     @endif
             </div>
+            @endif
         </div>
         <!-- Review section -->
+         @if(Auth::check())
          <div>
             <form action="{{ route('reviews.store') }}" method="POST" class="mt-16 mx-auto space-y-6 mb-12">
               @csrf
@@ -217,7 +220,10 @@
               </form>
 
          </div>
+         
     </div>
+    @endif
+    
     @if($movie->reviews->isEmpty())
         <h3 class="my-6 text-xl font-semibold">No Reviews for this movie, be the first one</h3>
     @else

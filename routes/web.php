@@ -29,9 +29,6 @@ Route::delete('watchlist-remove/{id}', [MarkController::class, 'watchlistRemove'
 Route::post('seen-add/{id}', [MarkController::class, 'seenAdd'])->name('seen.add');
 Route::delete('seen-remove/{id}', [MarkController::class, 'seenRemove'])->name('seen.remove');
 
-// Route::get('watchlist', [MarkController::class, 'watchlist'])->name('watchlist');
-// Route::get('bookmark', [MarkController::class, 'bookmarkList'])->name('bookmark');
-
 // profile functions
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
 
@@ -52,7 +49,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('lists/{movie}/add', [ListController::class, 'add'])->name('lists.add');
-
+Route::get('lists', [ListController::class, 'index'])->name('lists.index'); 
+Route::get('lists/create', [ListController::class, 'create'])->name('lists.create');
+Route::post('lists/store', [ListController::class, 'store'])->name('lists.store');
 // Public routes
 Route::prefix('recommendations')->group(function () {
     
