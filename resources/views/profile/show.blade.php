@@ -21,9 +21,39 @@
                 <h1 class="text-4xl font-bold mb-4">
                      <span class="text-blue-400">{{ $user->name }} Profile</span>
                 </h1>
-                <form action="">
-                    <a href="" class="text-xl">Follow</a>
-                </form>
+                <div x-data="{ 
+                    following: {{ auth()->check() && auth()->user()->followees()->where('followee_id', $user->id)->exists() ? 'true' : 'false' }}, 
+                    loading: false,
+                    async toggle() {
+                        this.loading = true;
+                        const method = this.following ? 'DELETE' : 'POST';
+                        const endpoint = `/api/users/{{ $user->id }}/${this.following ? 'unfollow' : 'follow'}`;
+                        
+                        try {
+                            const res = await fetch(endpoint, {
+                                method: method,
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                }
+                            });
+                            const data = await res.json();
+                            if (res.ok) this.following = data.following;
+                            } catch (e) {
+                                console.error(e);
+                            }
+                            this.loading = false;
+                        }
+                    }">
+                    <button 
+                        @click="toggle()"
+                        :disabled="loading"
+                        class="px-4 py-2 rounded"
+                        :class="following ? 'bg-blue-500 text-white' : 'bg-blue-500 text-white'"
+                        x-text="loading ? 'Loading...' : (following ? 'Unfollow' : 'Follow')">
+                    </button>
+                </div>
                 <p class="text-xl text-gray-400">
                     Check out his/her favorite movies!
                 </p>

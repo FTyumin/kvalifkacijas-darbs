@@ -36,10 +36,14 @@ Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile
 Route::get('users/{userId}/followers', [UserRelationshipController::class, 'followers']);
 Route::get('users/{userId}/followees', [UserRelationshipController::class, 'followees']);
 
+Route::delete('api/users/{userId}/unfollow', [UserRelationshipController::class, 'unfollow']);
+Route::post('api/users/{userId}/follow', [UserRelationshipController::class, 'follow']);
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 
     Route::get('/quiz', [QuizController::class, 'show'])->name('quiz.show');
     Route::post('/quiz', [QuizController::class, 'store'])->name('quiz.store');

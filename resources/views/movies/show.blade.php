@@ -67,7 +67,7 @@
                           Already seen
                         </button>
                  </form>
-                    @if(Auth::check() && !($user->lists->isEmpty()))
+                    @if(Auth::check() && !(Auth::user()->lists->isEmpty()))
                         <form action="{{ route('lists.add', $movie->id) }}" method="POST" class="flex flex-col gap-8 border border-green-300">
                             <h2 class="text-white">Add movie to list</h2>
                             @csrf
