@@ -28,7 +28,6 @@ class UserRelationshipController extends Controller
     public function follow(Request $request, $userId)
     {
         $followerId = $request->user()->id; // The current user
-        \Log::info('debug');
         // Prevent self-following
         if ($followerId == $userId) {
             return response()->json(['message' => 'You cannot follow yourself'], 400);
