@@ -16,4 +16,6 @@ class Seen extends Mark
     {
         return 'viewingHistory';
     }
+
+    protected $table = 'markable_seen';
 }

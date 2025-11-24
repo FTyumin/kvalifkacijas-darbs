@@ -59,12 +59,21 @@
                         </button>
                  </form>
 
-                 <form action="{{ route('bookmark.add', $movie->id) }}" method="POST"
+                 <form action="{{ route('watchlist.add', $movie->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         <button class="p-2 bg-green-100 rounded hover:bg-green-600">
                           <img src="{{ asset('images/eye.svg') }}" alt="" class="size-9">
-                            
+
+                        </button>
+                 </form>
+
+                  <form action="{{ route('seen.add', $movie->id) }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <button class="p-2 bg-green-100 rounded hover:bg-green-600">
+                          <img src="{{ asset('images/eye.svg') }}" alt="" class="size-9">
+
                         </button>
                  </form>
 

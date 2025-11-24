@@ -16,4 +16,6 @@ class WantToWatch extends Mark
     {
         return 'wantToWatch'; // or 'watchlist'
     }
+
+    protected $table = 'markable_watchlist';
 }

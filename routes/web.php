@@ -1,12 +1,11 @@
 <?php
 
-use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\MarkController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\ListController;
@@ -21,14 +20,17 @@ Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(
 Route::resource('movies', MovieController::class)->only(['index', 'show']);
 Route::resource('genres', GenreController::class)->only(['index', 'show']);
 
-Route::post('favorite-add/{id}', [WatchlistController::class, 'favoriteAdd'])->name('favorite.add');
-Route::delete('favorite-remove/{id}', [WatchlistController::class, 'favoriteRemove'])->name('favorite.remove');
+Route::post('favorite-add/{id}', [MarkController::class, 'favoriteAdd'])->name('favorite.add');
+Route::delete('favorite-remove/{id}', [MarkController::class, 'favoriteRemove'])->name('favorite.remove');
 
-Route::post('bookmark-add/{id}', [BookmarkController::class, 'bookmarkAdd'])->name('bookmark.add');
-Route::delete('bookmark-remove/{id}', [BookmarkController::class, 'bookmarkRemove'])->name('bookmark.remove');
+Route::post('watchlist-add/{id}', [MarkController::class, 'watchlistAdd'])->name('watchlist.add');
+Route::delete('watchlist-remove/{id}', [MarkController::class, 'watchlistRemove'])->name('watchlist.remove');
 
-Route::get('watchlist', [WatchlistController::class, 'watchlist'])->name('watchlist');
-Route::get('bookmark', [BookmarkController::class, 'bookmarkList'])->name('bookmark');
+Route::post('seen-add/{id}', [MarkController::class, 'seenAdd'])->name('seen.add');
+Route::delete('seen-remove/{id}', [MarkController::class, 'seenRemove'])->name('seen.remove');
+
+// Route::get('watchlist', [MarkController::class, 'watchlist'])->name('watchlist');
+// Route::get('bookmark', [MarkController::class, 'bookmarkList'])->name('bookmark');
 
 // profile functions
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');

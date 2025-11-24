@@ -11,6 +11,8 @@ use Maize\Markable\Models\Favorite;
 use Maize\Markable\Models\Bookmark;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use App\Models\Seen;
+use App\Models\WantToWatch;
 
 
 class Movie extends Model
@@ -39,7 +41,8 @@ class Movie extends Model
 
     protected static $marks = [
         Favorite::class,
-        Bookmark::class,
+        Seen::class,
+        WantToWatch::class,
     ];
 
     public function getSlugOptions() : SlugOptions 
@@ -100,5 +103,21 @@ class Movie extends Model
         $rating = array_sum($reviews) / count($reviews);
 
         $this->update(['rating' => $rating]);
+    }
+
+    // relationships for marking
+    public function interestedUsers()
+    {
+        return $this->markableRelation(WantToWatch::class);
+    }
+    
+    public function viewers()
+    {
+        return $this->markableRelation(Seen::class);
+    }
+    
+    public function fans()
+    {
+        return $this->markableRelation(Favorite::class);
     }
 }
