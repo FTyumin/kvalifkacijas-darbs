@@ -21,6 +21,9 @@
                 <h1 class="text-4xl font-bold mb-4">
                      <span class="text-blue-400">{{ $user->name }} Profile</span>
                 </h1>
+                <form action="">
+                    <a href="" class="text-xl">Follow</a>
+                </form>
                 <p class="text-xl text-gray-400">
                     Check out his/her favorite movies!
                 </p>

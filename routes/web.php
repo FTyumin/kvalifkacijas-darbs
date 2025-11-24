@@ -11,6 +11,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\UserRelationshipController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
@@ -31,6 +32,9 @@ Route::get('bookmark', [BookmarkController::class, 'bookmarkList'])->name('bookm
 
 // profile functions
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+
+Route::get('users/{userId}/followers', [UserRelationshipController::class, 'followers']);
+Route::get('users/{userId}/followees', [UserRelationshipController::class, 'followees']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

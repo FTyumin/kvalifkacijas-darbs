@@ -67,24 +67,24 @@
                           Already seen
                         </button>
                  </form>
-                @if(empty(Auth::user()->lists))
-                <form action="{{ route('lists.add', $movie->id) }}" method="POST" class="flex flex-col gap-8 border border-green-300">
-                    <h2 class="text-white">Add movie to list</h2>
-                    @csrf
-                    <select name="listId" id="listId">
-                        @foreach(Auth::user()->lists as $option)
-                            <option value="{{ $option->id }}" class="text-white">{{$option->name}}</option>
-                        @endforeach
-                    </select>
+                    @if(Auth::check() && !($user->lists->isEmpty()))
+                        <form action="{{ route('lists.add', $movie->id) }}" method="POST" class="flex flex-col gap-8 border border-green-300">
+                            <h2 class="text-white">Add movie to list</h2>
+                            @csrf
+                            <select name="listId" id="listId">
+                                @foreach(Auth::user()->lists as $option)
+                                    <option value="{{ $option->id }}" class="text-white">{{$option->name}}</option>
+                                @endforeach
+                            </select>
 
-                    <button type="submit" class="text-white">
-                        Add to list
-                    </button>
+                            <button type="submit" class="text-white">
+                                Add to list
+                            </button>
 
-                </form>
-                @else
+                        </form>
+                    @else
 
-                @endif
+                    @endif
             </div>
         </div>
         <!-- Review section -->

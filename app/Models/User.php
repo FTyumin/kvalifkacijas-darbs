@@ -50,17 +50,16 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Get user's favorite movies (rating >= 4)
      */
-    public function favoriteMovies()
-    {
-        return $this->belongsToMany(Movie::class, 'reviews')
-            ->withPivot('rating', 'created_at')
-            ->wherePivot('rating', '>=', 4);
-    }
+    // public function favoriteMovies()
+    // {
+    //     return $this->belongsToMany(Movie::class, 'reviews')
+    //         ->withPivot('rating', 'created_at')
+    //         ->wherePivot('rating', '>=', 4);
+    // }
 
     public function lists()
     {
         return $this->hasMany(MovieList::class);
-
     }
 
     public function favoriteGenres() {
@@ -84,5 +83,17 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new CustomVerifyEmail);
+    }
+
+    public function followers()
+    {
+        return $this->hasMany(UserRelationship::class, 'followee_id');
+    }
+
+    // define relationship with UserRelationship model for followees
+
+    public function followees()
+    {
+        return $this->hasMany(UserRelationship::class, 'follower_id');
     }
 }
