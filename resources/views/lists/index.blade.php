@@ -91,8 +91,9 @@
                             {{-- List Footer --}}
                             <div class="flex items-center justify-between pt-4 border-t border-gray-700">
                                 <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-xs font-bold text-white">
-                                        {{ substr($list->user->name, 0, 2) }}
+                                    <div class="w-10 h-10 rounded-full overflow-hidden">
+                                        <!-- {{ substr($list->user->name, 0, 2) }} -->
+                                          <img src="{{ asset('storage/' . $list->user->image) }}">
                                     </div>
                                     <div>
                                         <p class="text-sm font-medium text-gray-300">{{ $list->user->name }}</p>

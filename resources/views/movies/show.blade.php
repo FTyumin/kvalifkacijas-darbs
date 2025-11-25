@@ -97,20 +97,31 @@
                 </form>
 
                     @if(Auth::check() && !(Auth::user()->lists->isEmpty()))
-                        <form action="{{ route('lists.add', $movie->id) }}" method="POST" class="flex flex-col gap-8 border border-green-300">
-                            <h2 class="text-white">Add movie to list</h2>
-                            @csrf
-                            <select name="listId" id="listId">
-                                @foreach(Auth::user()->lists as $option)
-                                    <option value="{{ $option->id }}" class="text-white">{{$option->name}}</option>
-                                @endforeach
-                            </select>
-
-                            <button type="submit" class="text-white">
-                                Add to list
+                        <div class="relative w-24">
+                            <button type="button" onclick="this.nextElementSibling.classList.toggle('hidden')"
+                                    class="group flex flex-col items-center gap-2 w-full py-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" 
+                                    stroke="currentColor" class="w-7 h-7 text-gray-400 group-hover:text-purple-500 transition-colors">
+                                    <path stroke-linecap="round" stroke-linejoin="round" 
+                                        d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                                </svg>
+                                <span class="text-xs text-gray-400 group-hover:text-white transition-colors">Add List</span>
                             </button>
-
-                        </form>
+                            
+                            <!-- Dropdown menu -->
+                            <div class="hidden absolute top-full mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-10">
+                                @foreach(Auth::user()->lists as $option)
+                                <form action="{{ route('lists.add', $movie->id) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="listId" value="{{ $option->id }}">
+                                    <button type="submit" 
+                                            class="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg transition-colors">
+                                        {{ $option->name }}
+                                    </button>
+                                </form>
+                                @endforeach
+                            </div>
+                        </div>
                     @else
 
                     @endif

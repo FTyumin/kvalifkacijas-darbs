@@ -49,9 +49,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('lists/{movie}/add', [ListController::class, 'add'])->name('lists.add');
-Route::get('lists', [ListController::class, 'index'])->name('lists.index'); 
-Route::get('lists/create', [ListController::class, 'create'])->name('lists.create');
-Route::post('lists/store', [ListController::class, 'store'])->name('lists.store');
+Route::delete('lists/{movie}/remove', [ListController::class, 'remove'])->name('lists.remove');
+
+Route::resource('lists', ListController::class)->only(['index', 'show', 'create', 'store']);
 // Public routes
 Route::prefix('recommendations')->group(function () {
     

@@ -80,19 +80,6 @@
                                 <p class="text-xs text-gray-400">Avg Rating</p>
                             </div>
                         </div>
-
-                        <div class="flex items-center gap-2">
-                            <div class="w-10 h-10 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                                <svg class="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-2xl font-bold text-white">{{ $list->views ?? 0 }}</p>
-                                <p class="text-xs text-gray-400">Views</p>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -101,7 +88,6 @@
                     @auth
                         @if(Auth::id() === $list->user_id)
                        
-                        
                         @else
                         <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors inline-flex items-center justify-center gap-2">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -138,7 +124,7 @@
                     <a href="{{ route('movies.show', $movie) }}" class="block">
                         <div class="aspect-[2/3] bg-gray-700/50 rounded-lg overflow-hidden border border-gray-600/50 hover:border-gray-500 transition-all group-hover:shadow-lg group-hover:shadow-blue-500/20">
                             <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                                 src="{{ asset('images/cinema.webp') }}" 
+                                 src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"  
                                  alt="{{ $movie->title }}" 
                                  loading="lazy" />
                         </div>

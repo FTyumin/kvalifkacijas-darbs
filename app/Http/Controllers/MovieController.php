@@ -22,26 +22,26 @@ class MovieController extends Controller
 
     public function index(Request $request) {
         $user = $request->user();
-        $recommendations = [];
+        // $recommendations = [];
 
-        if ($user && $user->ratings()->count() >= 5) {
-            $recommendations['personal'] = $this->contentRecommender
-                ->getRecommendationsForUser($user, 6);
-        } elseif ($user && $user->ratings()->count() >= 1) {
-            $recommendations['personal'] = $this->contentRecommender
-                ->getRecommendationsForUser($user, 6);
-        }
+        // if ($user && $user->ratings()->count() >= 5) {
+        //     $recommendations['personal'] = $this->contentRecommender
+        //         ->getRecommendationsForUser($user, 6);
+        // } elseif ($user && $user->ratings()->count() >= 1) {
+        //     $recommendations['personal'] = $this->contentRecommender
+        //         ->getRecommendationsForUser($user, 6);
+        // }
 
-        $recommendations['popular'] = Movie::select('movies.*')
-            ->leftJoin('ratings', 'movies.id', '=', 'ratings.movie_id')
-            ->groupBy('movies.id', 'movies.name')
-            ->orderByRaw('AVG(ratings.rating) DESC')
-            ->orderByRaw('COUNT(ratings.id) DESC')
-            ->limit(6)
-            ->with(['genres'])
-            ->get();
-
-        return view('movies.index', compact('recommendations'));
+        // $recommendations['popular'] = Movie::select('movies.*')
+        //     ->leftJoin('ratings', 'movies.id', '=', 'ratings.movie_id')
+        //     ->groupBy('movies.id', 'movies.name')
+        //     ->orderByRaw('AVG(ratings.rating) DESC')
+        //     ->orderByRaw('COUNT(ratings.id) DESC')
+        //     ->limit(6)
+        //     ->with(['genres'])
+        //     ->get();
+        $movies = Movie::all()->take(4);
+        return view('movies.index', compact('movies'));
     }
 
     public function show(Movie $movie)
