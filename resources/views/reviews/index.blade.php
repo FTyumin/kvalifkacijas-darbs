@@ -5,7 +5,7 @@
 <div class="py-4 px-28 flex flex-col gap-3">
     <h1 class="text-3xl">Most recent reviews</span></h1>
     @foreach($reviews as $review)
-      
+        <a href="{{ route('reviews.show', $review) }}">
         <div class="flex flex-col bg-white block w-full px-4 py-2 border border-gray-300 rounded-lg">
             <div class="p-4 md:p-5">
                 <h1 class="text-lg font-bold text-gray-800">
@@ -68,6 +68,7 @@
             </div>
         </div>
     @endif
+    </a>
     @endforeach
 </div>
 

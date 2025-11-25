@@ -30,4 +30,8 @@ class ReviewController extends Controller
 
         return view('reviews.index', compact('reviews'));
     }
+
+    public function show(Review $review) {
+        return view('reviews.show', compact('review'));
+    }
 }

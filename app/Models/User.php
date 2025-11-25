@@ -7,10 +7,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Maize\Markable\Markable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Markable;
 
     protected $fillable = [
         'name',
@@ -22,6 +23,12 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected static $marks = [
+        // Favorite::class,
+        Seen::class,
+        WantToWatch::class,
     ];
 
     /**
@@ -39,6 +46,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function reviews() {
         return $this->hasMany(Review::class);
+    }
+
+    public function wantToWatch()
+    {
+        return $this->hasMany(WantToWatch::class);
     }
 
     public function ratedMovies()
@@ -60,6 +72,8 @@ class User extends Authenticatable implements MustVerifyEmail
     //         ->withPivot('rating', 'created_at')
     //         ->wherePivot('rating', '>=', 4);
     // }
+
+
 
     public function lists()
     {

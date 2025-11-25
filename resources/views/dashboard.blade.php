@@ -33,7 +33,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-400">Watchlist</p>
-                            <p class="text-3xl font-bold text-blue-400">{{ count($movies) }}</p>
+                            <p class="text-3xl font-bold text-blue-400"></p>
                         </div>
                         <div class="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center">
                             <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,7 +110,7 @@
                         </div>
 
                         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                            @foreach($movies as $movie)
+                            @foreach($watchlist as $movie)
                             <div class="group relative">
                                 <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden">
                                     <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
