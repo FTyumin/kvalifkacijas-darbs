@@ -12,19 +12,14 @@ class DashboardController extends Controller
 {
     public function dashboard() {
         $movies = Movie::whereHasFavorite(auth()->user())->get();
-        // $watchlist = Movie::whereHasReaction(
-        //     auth()->user(),
-        //     'WantToWatch'
-        // )->get();
-        $watchlist = auth()->user()->wantToWatch;
-        $userId = \Auth::user()->id;
+        $watchlist = auth()->user()->wantToWatch; // Collection of Mark rows
+        $ids = $watchlist->pluck('markable_id')->unique();
+        $movies = Movie::whereIn('id', $ids)->get();
+
         $user = \Auth::user();
-        $reviews = Review::where('user_id', $userId)->get();
-
+        $reviews = Review::where('user_id', auth()->user()->id)->get();
         $review_count = count($reviews);
-        // dd($watchlist);
-        // dd(auth()->user()->wantToWatch);
 
-        return view('dashboard', compact('reviews', 'user', 'watchlist'));
+        return view('dashboard', compact('reviews', 'user', 'movies'));
     }
 }

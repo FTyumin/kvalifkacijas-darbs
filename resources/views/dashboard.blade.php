@@ -110,37 +110,28 @@
                         </div>
 
                         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                            @foreach($watchlist as $movie)
-                            <div class="group relative">
-                                <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden">
-                                    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                                         src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"
-                                         alt="Movie poster" />
-                                </div>
-                                
-                                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
-                                    <div class="text-center">
-                                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 w-16 rounded-lg text-sm mb-2 transition-colors">
-                                            <a href="{{ route('movies.show', $movie->slug) }}">View</a>
-                                        </button>
-                                        <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 w-16 rounded-lg text-sm block w-full transition-colors">
-                                            <form action="{{ route('favorite.remove',$movie->id) }}" method="POST"
-                                                    onsubmit="return confirm('{{ trans('Are you sure ? ') }}');"
-                                                    style="">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                    <input type="submit" value="Delete">
-                                                </form>
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Movie Title -->
-                                <h3 class="mt-2 text-sm font-medium text-white line-clamp-2">
-                                    {{ $movie->name }}
-                                </h3>
-                                <p class="text-xs text-gray-400"></p>
+                            @foreach($movies as $movie)
+                                <div class="group relative">
+                        <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden relative">
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                                 src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"  
+                                 alt="Movie poster" />
+                            
+                            <!-- Watched Badge -->
+                            <div class="absolute top-2 right-2 bg-green-600 rounded-full p-1">
+                                <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
                             </div>
+                        </div>
+                        
+                        <h3 class="mt-2 text-sm font-medium text-white line-clamp-2">
+                            {{ $movie->name }}
+                        </h3>
+                        <p class="text-xs text-gray-400">Watched  ago</p>
+                        
+                        
+                    </div>
                             @endforeach
                         </div>
                     </div>
