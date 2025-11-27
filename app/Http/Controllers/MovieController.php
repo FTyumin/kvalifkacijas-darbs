@@ -46,6 +46,7 @@ class MovieController extends Controller
 
     public function show(Movie $movie)
     {
+        // dd($movie->director);
         return view('movies.show', compact('movie'));
     }
 

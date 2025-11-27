@@ -61,7 +61,7 @@ class Movie extends Model
 
     public function director()
     {
-        return $this->hasOne(Person::class, 'id', 'director_id');
+        return $this->belongsTo(Person::class, 'director_id');
     }
 
     public function actors()

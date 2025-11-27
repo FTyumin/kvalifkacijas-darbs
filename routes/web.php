@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\MarkController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\ListController;
@@ -18,14 +19,13 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('auth')->name('dashboard');
 
 Route::resource('movies', MovieController::class)->only(['index', 'show']);
+Route::resource('people', PeopleController::class)->only(['index', 'show']);
 Route::resource('genres', GenreController::class)->only(['index', 'show']);
 
 Route::post('/favorite/toggle/{movie}', [MarkController::class, 'favoriteToggle'])->name('favorite.toggle');
-
 Route::post('/watchlist/toggle/{movie}', [MarkController::class, 'watchlistToggle'])->name('watchlist.toggle');
-// Route::post('seen-add/{id}', [MarkController::class, 'seenAdd'])->name('seen.add');
-// Route::delete('seen-remove/{id}', [MarkController::class, 'seenRemove'])->name('seen.remove');
 Route::post('/seen/toggle/{movie}', [MarkController::class, 'seenToggle'])->name('seen.toggle');
+
 // profile functions
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
 
@@ -39,7 +39,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
 
     Route::get('/quiz', [QuizController::class, 'show'])->name('quiz.show');
     Route::post('/quiz', [QuizController::class, 'store'])->name('quiz.store');

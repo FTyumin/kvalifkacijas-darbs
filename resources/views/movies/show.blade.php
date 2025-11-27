@@ -45,28 +45,14 @@
             <div class="space-y-4 py-4 border-t border-gray-700">
                 {{-- Director --}}
                 @if(isset($movie->director))
-                <div class="flex gap-3">
-                    <span class="text-sm font-semibold text-gray-400 min-w-[80px]">Director</span>
-                    <div class="flex flex-wrap gap-2">
-                        <a href="#" class="text-sm text-blue-400 hover:text-blue-300 hover:underline">
-                            {{ $movie->director->first_name }} {{ $movie->director->last_name }}
-                        </a>
+                    <div class="flex gap-3">
+                        <span class="text-sm font-semibold text-gray-400 min-w-[80px]">Director</span>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="{{ route('people.show', $movie->director) }}" class="text-sm text-blue-400 hover:text-blue-300 hover:underline">
+                                {{ $movie->director->first_name }} {{ $movie->director->last_name }}
+                            </a>
+                        </div>
                     </div>
-                </div>
-                @endif
-
-                {{-- Writers (if you have this data) --}}
-                @if(isset($movie->writers) && count($movie->writers) > 0)
-                <div class="flex gap-3">
-                    <span class="text-sm font-semibold text-gray-400 min-w-[80px]">Writers</span>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach($movie->writers as $writer)
-                        <a href="#" class="text-sm text-blue-400 hover:text-blue-300 hover:underline">
-                            {{ $writer->name }}<span class="text-gray-500">{{ !$loop->last ? ',' : '' }}</span>
-                        </a>
-                        @endforeach
-                    </div>
-                </div>
                 @endif
 
                 {{-- Cast --}}

@@ -112,7 +112,7 @@
                         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                             @foreach($movies as $movie)
                                 <div class="group relative">
-                        <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden relative">
+                                <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden relative">
                             <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
                                  src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"  
                                  alt="Movie poster" />
@@ -131,7 +131,7 @@
                         <p class="text-xs text-gray-400">Watched  ago</p>
                         
                         
-                    </div>
+                        </div>
                             @endforeach
                         </div>
                     </div>
