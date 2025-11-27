@@ -11,10 +11,7 @@ use Maize\Markable\Models\Favorite;
 class DashboardController extends Controller
 {
     public function dashboard() {
-        $movies = Movie::whereHasFavorite(auth()->user())->get();
-        $watchlist = auth()->user()->wantToWatch; // Collection of Mark rows
-        $ids = $watchlist->pluck('markable_id')->unique();
-        $movies = Movie::whereIn('id', $ids)->get();
+        $movies = auth()->user()->wantToWatch;
 
         $user = \Auth::user();
         $reviews = Review::where('user_id', auth()->user()->id)->get();

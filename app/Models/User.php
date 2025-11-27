@@ -12,6 +12,8 @@ use Maize\Markable\Markable;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, Markable;
+     protected static $markableTable = 'markables';
+
 
     protected $fillable = [
         'name',
@@ -26,7 +28,6 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     protected static $marks = [
-        // Favorite::class,
         Seen::class,
         WantToWatch::class,
     ];
@@ -50,7 +51,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function wantToWatch()
     {
-        return $this->hasMany(WantToWatch::class);
+        return $this->belongsToMany(Movie::class, 'markable_watchlist', 'user_id', 'markable_id');
     }
 
     public function ratedMovies()
@@ -60,7 +61,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function seenMovies() {
-        return $this->hasMany(Seen::class);
+        return $this->belongsToMany(Movie::class, 'markable_seen', 'user_id', 'markable_id');
+    }
+
+    public function favorites() {
+        return $this->belongsToMany(Movie::class, 'markable_favorites', 'user_id', 'markable_id');
     }
 
     /**

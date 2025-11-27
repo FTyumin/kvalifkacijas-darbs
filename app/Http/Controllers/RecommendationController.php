@@ -53,7 +53,6 @@ class RecommendationController extends Controller
         $contentSimilar = $this->contentRecommender
             ->findSimilarMovies($movie->id, $limit);
 
-
         return response()->json([
             'movie' => $movie->load(['genres', 'director', 'actors']),
             'content_similar' => $contentSimilar,

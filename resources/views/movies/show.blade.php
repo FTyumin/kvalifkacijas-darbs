@@ -48,43 +48,98 @@
             @if(Auth::check())
             <div class="flex gap-3 mt-6">
             <!-- Add to watchlist -->
-                <form action="{{ route('seen.add', $movie->id) }}" method="POST">
+            @php
+                $isSeen = Auth::user()->seenMovies->contains($movie->id);
+                $isWatchList = Auth::user()->wantToWatch->contains($movie->id);
+                $isFavorite = Auth::user()->favorites->contains($movie->id);
+            @endphp
+
+                <form action="{{ route('seen.toggle', $movie->id) }}" method="POST">
                     @csrf
                     <button type="submit"
-                            class="group flex flex-col items-center gap-2 w-24 px-4 py-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors relative">
+                        class="group flex flex-col items-center gap-2 w-24 px-4 py-3 
+                            rounded-lg transition-colors relative
+                            {{ $isSeen ? 'bg-green-600' : 'bg-gray-700/50 hover:bg-gray-700' }}">
 
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                         class="w-7 h-7 text-gray-400 group-hover:text-green-500 transition-colors">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        </svg>
-                        <span class="text-xs text-gray-400 group-hover:text-white transition-colors">Watch</span>
+                        @if($isSeen)
+                            {{-- ACTIVE (Seen) --}}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor"
+                                class="w-7 h-7 text-white transition-colors">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                <!-- <circle cx="12" cy="12" r="3" fill="white"/> -->
+                            </svg>
+                            <span class="text-xs text-white">Seen</span>
+
+                        @else
+                            {{-- INACTIVE --}}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor"
+                                class="w-7 h-7 text-gray-400 group-hover:text-green-500 transition-colors">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+                            <span class="text-xs text-gray-400 group-hover:text-white transition-colors">Watch</span>
+                        @endif
+
                     </button>
                 </form>
 
-                <form action="{{ route('favorite.add', $movie->id) }}" method="POST">
+                <form action="{{ route('favorite.toggle', $movie->id) }}" method="POST">
                     @csrf
                     <button type="submit" 
-                            class="group flex flex-col items-center gap-2 w-24 px-4 py-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-7 h-7 text-gray-400 group-hover:text-red-500 transition-colors">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                        </svg>
-                        <span class="text-xs text-gray-400 group-hover:text-white transition-colors">Like</span>
+                            class="group flex flex-col items-center gap-2 w-24 px-4 py-3 bg-gray-700/50 rounded-lg 
+                             transition-colors
+                            {{ $isFavorite ? 'bg-green-600' : 'bg-gray-700/50 hover:bg-gray-700' }}">
+
+                        @if($isFavorite)
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-7 h-7 text-white group-hover:text-red-500 transition-colors">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                    
+                            </svg>
+                        @else
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-7 h-7 text-gray-400 group-hover:text-red-500 transition-colors">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                    
+                            </svg>
+
+                        
+                        @endif
+
+                        <span class="text-xs text-white transition-colors">Like</span>
                     </button>
                 </form>
 
-                <form action="{{ route('watchlist.add', $movie->id) }}" method="POST">
+                <form action="{{ route('watchlist.toggle', $movie->id) }}" method="POST">
                     @csrf
                     <button type="submit"
-                            class="group flex flex-col items-center gap-2 w-24 px-4 py-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" 
-                            stroke="currentColor" class="w-7 h-7 text-gray-400 group-hover:text-blue-500 transition-colors">
-                            <path stroke-linecap="round" stroke-linejoin="round" 
-                                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                        <span class="text-xs text-gray-400 group-hover:text-white transition-colors">Watchlist</span>
+                            class="group flex flex-col items-center gap-2 w-24 px-4 py-3 bg-gray-700/50 rounded-lg 
+                            {{ $isWatchList ? 'bg-green-600' : 'bg-gray-700/50 hover:bg-gray-700' }}">
+
+                        @if($isWatchList)
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" 
+                                stroke="currentColor" class="w-7 h-7 text-white group-hover:text-blue-500 transition-colors">
+                                <path stroke-linecap="round" stroke-linejoin="round" 
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                        @else
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" 
+                                stroke="currentColor" class="w-7 h-7 text-gray-400 group-hover:text-green-500 transition-colors">
+                                <path stroke-linecap="round" stroke-linejoin="round" 
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                        @endif
+                            <span class="text-xs text-white transition-colors">Watchlist</span>
+
                          <!-- Plus badge -->
                         <div class="absolute top-2 right-2 w-4 h-4 bg-gray-600 rounded-full flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" 

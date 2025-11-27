@@ -33,7 +33,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-400">Watchlist</p>
-                            <p class="text-3xl font-bold text-blue-400"></p>
+                            <p class="text-3xl font-bold text-blue-400">{{ count(auth()->user()->wantToWatch) }} </p>
                         </div>
                         <div class="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center">
                             <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -48,7 +48,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-400">Watched</p>
-                            <p class="text-3xl font-bold text-green-400">{{ count($user->seenMovies) }}</p>
+                            <p class="text-3xl font-bold text-green-400">{{ count(auth()->user()->seenMovies) }}</p>
                         </div>
                         <div class="w-12 h-12 bg-green-600/20 rounded-xl flex items-center justify-center">
                             <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -20,6 +20,7 @@ class Movie extends Model
 
     public $incrementing = false;
     protected $keyType = 'int';
+    protected static $markableTable = 'markables';
 
     protected $fillable = [
         'id',
