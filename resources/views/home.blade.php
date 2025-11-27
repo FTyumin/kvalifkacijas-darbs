@@ -78,7 +78,7 @@
         <div class="mb-3 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
           <span>{{ $movie->year }}</span>
           <span>•</span>
-          <span>{{ $movie->duration }} min</span>
+          <span>{{ $movie->duration }} mins</span>
           <span>•</span>
           <!-- <span class="text-green-600 dark:text-green-400 font-medium">89% Fresh</span> -->
         </div>

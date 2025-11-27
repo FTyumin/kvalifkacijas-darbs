@@ -19,11 +19,10 @@
             <h1 class="text-3xl text-white font-bold">{{ $movie->name }}</h1>
             
             <div class="flex items-center gap-4 text-gray-600">
-                <span class="text-sm text-white">Released: {{ $movie->year }}</span>
-                <span class="text-sm text-white">Rating: ⭐ {{ $movie->rating }}</span>
-                <span class="text-sm text-white">Country: {{ $movie->title }}</span>
-                <span class="text-sm text-white">Language: </span>
-
+                <span class="text-sm text-white">Release year: {{ $movie->year }}</span>
+                <span class="text-sm text-white">Rating: {{ $movie->tmdb_rating }}</span>
+                <span class="text-sm text-white">Language: <span class="uppercase">{{ $movie->language }}</span></span>
+                <span class="text-sm text-white">Runtime: {{ $movie->duration }} mins</span>
             </div>
 
             {{-- Genres --}}
@@ -42,7 +41,53 @@
                 {{ $movie->description }}
             </p>
 
-            <!-- Actors,Director -->
+            {{-- Actors,Director --}}
+            <div class="space-y-4 py-4 border-t border-gray-700">
+                {{-- Director --}}
+                @if(isset($movie->director))
+                <div class="flex gap-3">
+                    <span class="text-sm font-semibold text-gray-400 min-w-[80px]">Director</span>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="#" class="text-sm text-blue-400 hover:text-blue-300 hover:underline">
+                            {{ $movie->director->first_name }} {{ $movie->director->last_name }}
+                        </a>
+                    </div>
+                </div>
+                @endif
+
+                {{-- Writers (if you have this data) --}}
+                @if(isset($movie->writers) && count($movie->writers) > 0)
+                <div class="flex gap-3">
+                    <span class="text-sm font-semibold text-gray-400 min-w-[80px]">Writers</span>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach($movie->writers as $writer)
+                        <a href="#" class="text-sm text-blue-400 hover:text-blue-300 hover:underline">
+                            {{ $writer->name }}<span class="text-gray-500">{{ !$loop->last ? ',' : '' }}</span>
+                        </a>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                {{-- Cast --}}
+                @if(isset($movie->actors) && count($movie->actors) > 0)
+                <div class="flex gap-3">
+                    <span class="text-sm font-semibold text-gray-400 min-w-[80px]">Stars</span>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach($movie->actors->take(5) as $actor)
+                            <a href="#" class="text-sm text-blue-400 hover:text-blue-300 hover:underline">
+                                {{ $actor->first_name }} {{ $actor->last_name }}<span class="text-gray-500">{{ !$loop->last ? ',' : '' }}</span>
+                            </a>
+                        @endforeach
+                        @if($movie->actors->count() > 5)
+                        <a href="#cast" class="text-sm text-blue-400 hover:text-blue-300 hover:underline">
+                            See all cast & crew
+                        </a>
+                        @endif
+                    </div>
+                </div>
+                @endif
+            </div>
 
             {{-- Actions --}}
             @if(Auth::check())
@@ -70,7 +115,6 @@
                                     d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                <!-- <circle cx="12" cy="12" r="3" fill="white"/> -->
                             </svg>
                             <span class="text-xs text-white">Seen</span>
 
@@ -305,7 +349,6 @@
                     </h3>      
                 </a>
 
-                
                 <!-- Spoiler Warning and Button -->
                 <div class="spoiler-warning-{{ $review->id }} mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                     <p class="text-sm text-yellow-800 font-medium">⚠️ This review contains spoilers</p>

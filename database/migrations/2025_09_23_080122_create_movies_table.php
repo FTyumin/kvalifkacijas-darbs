@@ -17,7 +17,9 @@ return new class extends Migration
             $table->string('slug')->nullable();
             $table->year('year'); 
             $table->text('description');
+            $table->text('language');
             $table->integer('duration')->nullable(); // Runtime in minutes
+            $table->decimal('tmdb_rating', 3, 1)->nullable(); 
             $table->decimal('rating', 3, 1)->nullable(); 
             $table->string('poster_url')->nullable();
             $table->foreignId('director_id')->nullable()->constrained(

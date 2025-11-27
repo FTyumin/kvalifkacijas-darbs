@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_favorite_genres', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('genre_id')->constrained();
+            $table->foreignId('genre_id')->constrained('genres')->onDelete('cascade');
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });

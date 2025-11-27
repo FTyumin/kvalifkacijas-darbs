@@ -30,7 +30,9 @@ class Movie extends Model
         'duration',
         'rating',
         'poster_url',
-        'director_id'
+        'director_id',
+        'language',
+        'tmdb_rating',
     ];
 
     protected $casts = [
@@ -59,19 +61,17 @@ class Movie extends Model
 
     public function director()
     {
-        return $this->belongsTo(Person::class);
+        return $this->hasOne(Person::class, 'id', 'director_id');
     }
 
     public function actors()
     {
-        return $this->belongsToMany(Person::class)
-                    ->withTimestamps();
+        return $this->belongsToMany(Person::class, 'actor_movie', 'movie_id', 'actor_id')->withTimestamps();
     }
 
     public function genres()
     {
-        return $this->belongsToMany(Genre::class)
-                    ->withTimestamps();
+        return $this->belongsToMany(Genre::class)->withTimestamps();
     }
 
     public function reviews()
