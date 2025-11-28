@@ -44,7 +44,7 @@
           <span>•</span>
           <span>{{ $movie->duration }} min</span>
           <span>•</span>
-          <span class="text-green-600 dark:text-green-400 font-medium">89% Fresh</span>
+          <span class="text-green-600 dark:text-green-400 font-medium">{{ $movie->tmdb_rating }}</span>
         </div>
 
         <p class="mb-4 text-sm text-gray-600 dark:text-gray-300 line-clamp-3 leading-relaxed">
@@ -65,5 +65,7 @@
     </div>
 
     @endforeach
+
+    {{ $movies->links() }}
 </div>
 @endsection

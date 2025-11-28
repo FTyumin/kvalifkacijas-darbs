@@ -170,7 +170,7 @@
                     </button>
                     
                     <a 
-                        href="{{ route('dashboard') }}" 
+                        href="{{ route('profile.show', auth()->user()->id) }}" 
                         class="sm:w-auto bg-gray-700/50 hover:bg-gray-700 text-white font-semibold py-4 px-8 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 inline-flex items-center justify-center gap-2"
                     >
                         Skip for Now

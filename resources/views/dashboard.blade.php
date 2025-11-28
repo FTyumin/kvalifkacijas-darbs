@@ -63,7 +63,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-400">Reviews</p>
-                            <p class="text-3xl font-bold text-purple-400">{{count($reviews)}}</p>
+                            <p class="text-3xl font-bold text-purple-400">{{ count($reviews) }}</p>
                         </div>
                         <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center">
                             <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

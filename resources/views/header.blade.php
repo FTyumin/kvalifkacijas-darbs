@@ -13,7 +13,7 @@
 
       <!-- Desktop Navigation -->
       <div class="hidden lg:flex items-center gap-8">
-        <a href="/" class="text-gray-300 hover:text-white transition-colors font-medium">Movies</a>
+        <a href="{{ route('movies.index') }}" class="text-gray-300 hover:text-white transition-colors font-medium">Movies</a>
       </div>
 
       <div class="hidden lg:flex items-center gap-8">
@@ -101,8 +101,8 @@
         @endauth -->
 
         <div class="w-10 h-10 rounded-full overflow-hidden">
-          <a href="/dashboard">
-            @auth
+          @auth
+          <a href="{{ route('profile.show', auth()->user()->id) }}">
               @if(auth()->user()->image)
                 <img src="{{ asset('storage/' . auth()->user()->image) }}"
                     alt="{{ auth()->user()->name}}"
@@ -114,9 +114,9 @@
                     class="w-full h-full object-cover">
                     
               @endif
+              
+            </a>
             @endauth
-
-          </a>
         </div>
       </div>
 

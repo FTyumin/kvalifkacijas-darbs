@@ -10,7 +10,6 @@ class QuizController extends Controller
 {
     public function show() {
         $genres = Genre::all();
-
         return view('quiz.show', compact('genres'));
     }
 

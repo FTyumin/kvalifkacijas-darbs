@@ -40,7 +40,7 @@ class MovieController extends Controller
         //     ->limit(6)
         //     ->with(['genres'])
         //     ->get();
-        $movies = Movie::all()->take(4);
+        $movies = Movie::paginate(12);
         return view('movies.index', compact('movies'));
     }
 

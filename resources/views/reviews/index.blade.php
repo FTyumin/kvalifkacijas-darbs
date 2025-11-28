@@ -30,7 +30,7 @@
                                     <span class="text-gray-300 text-sm font-medium">{{ $review->user->name }}</span>
                                 </a>
                                 <span class="text-gray-500">•</span>
-                                <time class="text-sm text-gray-400">{{ $review->created_at->format('M d, Y') }}</time>
+                                <time class="text-sm text-gray-400">{{ $review->created_at->diffForHumans() }}</time>
                                 <span class="text-gray-500">•</span>
                                 <span class="text-sm text-gray-400">{{ $review->comments->count() }} {{ Str::plural('comment', $review->comments->count()) }}</span>
                             </div>
@@ -44,7 +44,7 @@
                                 </svg>
                                 <span class="text-xl font-bold text-yellow-500">{{ $review->rating }}</span>
                             </div>
-                            <span class="text-xs text-gray-400">/10</span>
+                            <span class="text-xs text-gray-400">/5</span>
                         </div>
                     </div>
 
