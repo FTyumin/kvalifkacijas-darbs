@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\HomeController;
@@ -74,6 +75,8 @@ Route::get('/top-movies', [MovieController::class, 'topPage'])->name('movies.top
 Route::post('/reviews', [ReviewController::class, 'create'])->name('reviews.store');
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');
 Route::get('/reviews/{review}', [ReviewController::class, 'show'])->name('reviews.show');
+
+Route::post('/comments', [CommentController::class, 'create'])->name('comments.store');
 
 Route::get('/search', [MovieController::class, 'search'])->name('movies.search');
 

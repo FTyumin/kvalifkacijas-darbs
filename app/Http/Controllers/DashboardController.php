@@ -15,8 +15,9 @@ class DashboardController extends Controller
 
         $user = \Auth::user();
         $reviews = Review::where('user_id', auth()->user()->id)->get();
-        $review_count = count($reviews);
+        $review_count = Review::where('user_id', $user->id)->count();
+        $average_review = round(Review::where('user_id', $user->id)->avg('rating'), 2) ?? 0;
 
-        return view('dashboard', compact('reviews', 'user', 'movies'));
+        return view('dashboard', compact('reviews', 'user', 'movies', 'average_review'));
     }
 }

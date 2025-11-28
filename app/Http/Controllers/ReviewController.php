@@ -13,6 +13,13 @@ class ReviewController extends Controller
         } else {
             return back()->with('warning', 'You must be logged in to write a review.');
         }
+
+        $request->validate([
+            'rating' => 'required|numeric|min:1|max:5',
+            'comment' => 'required|string|max:1000'
+        ]);
+            
+    
         Review::create([
             'user_id' => $userId,
             'movie_id' => $request->movie_id, 
@@ -32,6 +39,7 @@ class ReviewController extends Controller
     }
 
     public function show(Review $review) {
+        $review->load('comments');
         return view('reviews.show', compact('review'));
     }
 }

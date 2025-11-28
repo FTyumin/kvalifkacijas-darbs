@@ -78,7 +78,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-400">Average Rating</p>
-                            <p class="text-3xl font-bold text-yellow-400">4.5</p>
+                            <p class="text-3xl font-bold text-yellow-400">{{ $average_review }}</p>
                         </div>
                         <div class="w-12 h-12 bg-yellow-600/20 rounded-xl flex items-center justify-center">
                             <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -129,7 +129,6 @@
                             {{ $movie->name }}
                         </h3>
                         <p class="text-xs text-gray-400">Watched  ago</p>
-                        
                         
                         </div>
                             @endforeach

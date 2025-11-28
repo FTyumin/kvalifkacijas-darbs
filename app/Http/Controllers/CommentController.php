@@ -9,10 +9,22 @@ class CommentController extends Controller
 {
     public function create(Request $request) {
 
-        Comment::create([
-            'user_id' => Auth::user()->id,
-            'review_id' => $request->review_id,
-            'text' => $request->description,
+        if (\Auth::check()) {
+            $userId = \Auth::user()->id;
+        } else {
+            return back()->with('warning', 'You must be logged in to write a comment.');
+        }
+
+        $request->validate([
+            'comment' => 'required|string|max:1000'
         ]);
+
+        Comment::create([
+            'user_id' => $userId,
+            'review_id' => $request->review_id,
+            'description' => $request->comment,
+        ]);
+
+        return back();
     }
 }
