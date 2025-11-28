@@ -120,6 +120,35 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="bg-gray-800/50 glass border border-gray-700 rounded-xl p-6 hover:border-gray-600 transition-colors">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-400">Followers</p>
+                            <p class="text-3xl font-bold text-blue-400">{{ count(auth()->user()->followers) }}</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800/50 glass border border-gray-700 rounded-xl p-6 hover:border-gray-600 transition-colors">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-400">Following</p>
+                            <p class="text-3xl font-bold text-blue-400">{{ count(auth()->user()->followees) }}</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -230,8 +259,6 @@
                             @endif
                         </div>
                     </div>
-
-                   
 
                 </div>
             </div>

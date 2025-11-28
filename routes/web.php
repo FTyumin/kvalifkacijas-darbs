@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
-// Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('auth')->name('dashboard');
-
 Route::resource('movies', MovieController::class)->only(['index', 'show']);
 Route::resource('people', PeopleController::class)->only(['index', 'show']);
 Route::resource('genres', GenreController::class)->only(['index', 'show']);

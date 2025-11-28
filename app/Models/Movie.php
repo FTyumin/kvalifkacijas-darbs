@@ -30,6 +30,7 @@ class Movie extends Model
         'duration',
         'rating',
         'poster_url',
+        'trailer_url',
         'director_id',
         'language',
         'tmdb_rating',

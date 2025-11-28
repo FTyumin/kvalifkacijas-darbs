@@ -219,7 +219,13 @@
                                 @csrf                               
                                 <button type="submit" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors w-full">
                                     <div class="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-white" ...>...</svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                                        </svg>
+
+                                     
+
+
                                     </div>   
                                     <span class="text-sm font-medium">{{ __('Log Out') }}</span>     
                                 </button>     

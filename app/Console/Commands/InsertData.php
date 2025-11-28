@@ -34,7 +34,7 @@ class InsertData extends Command
         $api = new TmdbApiClient;
         $genres = Genre::all()->keyBy('name');
 
-        $n = 50;
+        $n = 10;
         $data = $api->getTopMovies($n, ['method' => 'popular']);
 
         foreach($data as $movie) {
@@ -80,6 +80,7 @@ class InsertData extends Command
             $movie = Movie::find($movie['id']);
             $movie->director_id = $director->id;
             $movie->duration = $movie_info['runtime'];
+            $movie->trailer_url = $api->trailerKey($movie->id);
             $movie->save();
 
             // Data: [ ['id'=>28,'name'=>'Action'], ['id'=>12,'name'=>'Adventure'] ]

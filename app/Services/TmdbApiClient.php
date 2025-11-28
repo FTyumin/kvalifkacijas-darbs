@@ -61,6 +61,43 @@ class TmdbApiClient {
             return null;
         }
     }
+
+    public function trailerKey(int $movieId) {
+        $query = [];
+        if ($this->apiKey && empty($this->bearer)) {
+            $query['api_key'] = $this->apiKey;
+        }
+        if (!empty($append)) {
+            $query['append_to_response'] = implode(',', $append);
+        }
+
+        $options = [
+            'query' => $query
+        ];
+
+        if ($this->bearer) {
+            $options['headers'] = [
+                'Authorization' => 'Bearer ' . $this->bearer,
+                'Accept'        => 'application/json',
+            ];
+        }
+
+        try {
+            $res = $this->http->get("movie/{$movieId}/videos", $options);
+            $data = json_decode($res->getBody(), true);
+
+            $videos = $data['results'] ?? [];
+
+            $trailers = array_filter($videos, fn($v) => $v['type'] === 'Trailer');
+
+            $trailer = reset($trailers);
+            $trailer_key = $trailer['key'] ?? null;
+            return $trailer_key;
+        } catch (GuzzleException $e) {
+            \Log::warning('Api request failed');
+            return null;
+        }
+    }
     
     public function PosterUrl(?string $path, string $size = 'w500'): ?string {
         if (empty($path)) return null;

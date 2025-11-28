@@ -75,6 +75,19 @@
                 @endif
             </div>
 
+            @if ($movie->trailer_url)
+            <div class="aspect-w-16 aspect-h-9">
+                <iframe 
+                    src="https://www.youtube.com/embed/{{ $movie->trailer_url }}" 
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    class="w-full h-full rounded-lg"
+                ></iframe>
+            </div>
+        @endif
+
+
             {{-- Actions --}}
             @if(Auth::check())
             <div class="flex gap-3 mt-6">
