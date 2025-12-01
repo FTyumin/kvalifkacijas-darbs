@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Movie;
 use App\Services\ContentBasedRecommender;
 use App\Services\TmdbApiClient;
@@ -21,32 +22,12 @@ class MovieController extends Controller
     }
 
     public function index(Request $request) {
-        $user = $request->user();
-        // $recommendations = [];
-
-        // if ($user && $user->ratings()->count() >= 5) {
-        //     $recommendations['personal'] = $this->contentRecommender
-        //         ->getRecommendationsForUser($user, 6);
-        // } elseif ($user && $user->ratings()->count() >= 1) {
-        //     $recommendations['personal'] = $this->contentRecommender
-        //         ->getRecommendationsForUser($user, 6);
-        // }
-
-        // $recommendations['popular'] = Movie::select('movies.*')
-        //     ->leftJoin('ratings', 'movies.id', '=', 'ratings.movie_id')
-        //     ->groupBy('movies.id', 'movies.name')
-        //     ->orderByRaw('AVG(ratings.rating) DESC')
-        //     ->orderByRaw('COUNT(ratings.id) DESC')
-        //     ->limit(6)
-        //     ->with(['genres'])
-        //     ->get();
         $movies = Movie::paginate(12);
         return view('movies.index', compact('movies'));
     }
 
     public function show(Movie $movie)
     {
-        // dd($movie->director);
         return view('movies.show', compact('movie'));
     }
 
@@ -57,17 +38,17 @@ class MovieController extends Controller
     public function search(Request $request) {
         $search = $request->input('search');
 
-        $results = Movie::with(['director', 'actors'])
+        $movies = DB::table('movies')
             ->where('name', 'like', "%{$search}%")
-            ->orWhereHas('director', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            })
-            ->orWhereHas('actors', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            })
             ->get();
 
-        return view('movies.index', compact('results', 'search'));
+        $people = DB::table('persons')
+            ->where('first_name', 'like', "%{$search}%")
+            ->orWhere('last_name', 'like', "%{$search}%")
+            ->get();
+
+            // dd($people);
+        return view('movies.search', compact('movies', 'search', 'people'));
     }
 
     public function recommendations(Request $request)
