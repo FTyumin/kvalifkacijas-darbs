@@ -34,8 +34,8 @@ class InsertData extends Command
         $api = new TmdbApiClient;
         $genres = Genre::all()->keyBy('name');
 
-        $n = 10;
-        $data = $api->getTopMovies($n, ['method' => 'popular']);
+        $n = 150;
+        $data = $api->getTopMovies($n, ['method' => 'top-rated']);
 
         foreach($data as $movie) {
             Movie::updateOrCreate(

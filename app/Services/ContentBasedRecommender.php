@@ -14,6 +14,7 @@ class ContentBasedRecommender
 {
     private $documentFrequency = []; // IDF values
     private $allMoviesKeywords = [];
+    private $totalDocuments;
 
     function findSimilarMovies($movieId, $limit = 5) {
         $targetFeatures = $this->getMovieFeatures($movieId);
@@ -105,7 +106,6 @@ class ContentBasedRecommender
     }
 
     function jaccardIndex($set1, $set2) {
-        // If both sets are empty, return 0 (no similarity)
         if (empty($set1) && empty($set2)) {
             return 0;
         }
@@ -121,14 +121,14 @@ class ContentBasedRecommender
     }
 
     function calculateDescriptionSimilarity($movie1, $movie2) {
-        $text1 = $this->extractKeyWords($movie1->description);
-        $text2 = $this->extractKeyWords($movie2->description);
+        $text1 = $this->getTfIdfVector($movie1->description);
+        $text2 = $this->getTfIdfVector($movie2->description);
 
-        $textSimilarity = $this->jaccardIndex($text1, $text2);
+        $textSimilarity = $this->calculateCosineSimilarity($text1, $text2);
         return $textSimilarity;
     }
 
-    function getTfIdfVector($description, $movieId) {
+    function getTfIdfVector($description) {
         $keywords = $this->extractKeyWords($description);
         $termFrequency = array_count_values($keywords);
 
@@ -136,14 +136,14 @@ class ContentBasedRecommender
             $this->calculateDocumentFrequencies();
         }
 
-        $tfidVector = [];
+        $tfidfVector = [];
         $totalTerms = count($keywords);
 
         foreach($termFrequency as $term => $frequency) {
             $tf = $frequency / $totalTerms;
             
             // IDF: log(total documents / documents containing term)
-            $idf = $this->documentFrequency[$term] ?? 0;
+            $idf = $this->documentFrequency[$term] ?? log($this->totalDocuments / 1);
             
             // TF-IDF = TF × IDF
             $tfidfVector[$term] = $tf * $idf;
@@ -153,26 +153,32 @@ class ContentBasedRecommender
     }
 
     function calculateDocumentFrequencies() {
+        // Check cache first
         $cached = Cache::get('tfidf_document_frequencies');
         if ($cached) {
             $this->documentFrequency = $cached;
             return;
         }
-
-        $allMovies = Movie::all();
+        
+        // only load needed columns
+        $allMovies = Movie::whereNotNull('description')
+            ->select('id', 'description')
+            ->get();
+            
         $totalDocuments = $allMovies->count();
-
-        if($totalDocuments == 0) {
+        $this->totalDocuments = $totalDocuments;
+        if ($totalDocuments == 0) {
             return;
         }
-
+        
         $termDocumentCount = [];
-
-        foreach($allMovies as $movie) {
-            if(!$movie->description) {
+        
+        // Count documents containing each term
+         foreach ($allMovies as $movie) {
+            if (!$movie->description) {
                 continue;
             }
-
+            
             $keywords = $this->extractKeyWords($movie->description);
             $uniqueKeywords = array_unique($keywords);
             
@@ -183,10 +189,18 @@ class ContentBasedRecommender
                 $termDocumentCount[$keyword]++;
             }
         }
-
-        foreach($termDocumentCount as $term => $count) {
-            $this->documentFrequency[$term] = log($totalDocuments / $count);
+        
+        // Calculate IDF for each term
+        foreach ($termDocumentCount as $term => $count) {
+            if ($count > 0) {  // Safety check
+                $this->documentFrequency[$term] = log($totalDocuments / $count);
+            }
         }
+        
+        // Cache with expiration time (24 hours)
+        Cache::put('tfidf_document_frequencies', $this->documentFrequency, 86400);
+        Cache::put('tfidf_movie_count', $totalDocuments, 86400);
+        Cache::put('tfidf_last_calculated', now(), 86400);
     }
 
     function calculateCosineSimilarity($vector1, $vector2) {
@@ -213,26 +227,38 @@ class ContentBasedRecommender
             return 0;
         }
         
-        return $dotProduct / ($magnitude1 * $magnitude2);
+        return round($dotProduct / ($magnitude1 * $magnitude2), 2);
     }
 
     function extractKeyWords($movieDescription) {
         $text = strtolower($movieDescription);
         $removedPunctuation = preg_replace('/[\p{P}]/u', '', $text);
-        $words = explode(" ", $removedPunctuation);
+        $words = preg_split('/\s+/', $removedPunctuation);
+
 
         $stopWords = $this->getStopWords();
 
         $keywords = array_filter($words, function($word) use ($stopWords) {
-            return !in_array($word, $stopWords) && strlen($word) > 2;
+            return !in_array($word, $stopWords)
+                && strlen($word) > 2
+                && !ctype_digit($word);
         });
 
-        return array_unique(array_values($keywords));
+        return array_values($keywords);
     }
 
     function getStopWords() {
         return [
             'a', 'an', 'the', 'and', 'but'
+        ];
+    }
+
+    function getIdfInfo() {
+         return [
+            'is_cached' => Cache::has('tfidf_document_frequencies'),
+            'movie_count' => Cache::get('tfidf_movie_count', 0),
+            'last_calculated' => Cache::get('tfidf_last_calculated'),
+            'terms_count' => count($this->documentFrequency),
         ];
     }
 
@@ -254,9 +280,10 @@ class ContentBasedRecommender
             return $this->getPopularMovies($limit);
         }
 
+        $movies = [];
         if($watchedIds) {
             foreach($watchedIds as $movieId) {
-                $this->findSimilarMovies($movieId);
+                $movies[] = $this->findSimilarMovies($movieId);
 
             }
         }
@@ -279,14 +306,8 @@ class ContentBasedRecommender
     }
 
     function getPopularMovies($limit) {
-        $popularMovies = Movie::select('movies.id', 'movies.name', 'movies.rating')
-            ->leftJoin('reviews', 'movies.id', '=', 'reviews.movie_id')
-            ->groupBy('movies.id', 'movies.name', 'movies.rating')
-            ->orderByRaw('AVG(reviews.rating) DESC')
-            ->orderByRaw('COUNT(reviews.id) DESC')
-            ->limit($limit)
-            ->with(['genres'])
-            ->get();
+   
+        $popularMovies = Movie::where('tmdb_rating', '>', 4)->get(12);
         
         return $popularMovies;
     }
