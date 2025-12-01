@@ -130,26 +130,30 @@ class ContentBasedRecommender
 
     function getTfIdfVector($description) {
         $keywords = $this->extractKeyWords($description);
+        
+        if(empty($keywords)) {
+            return [];
+        }
         $termFrequency = array_count_values($keywords);
+        $totalTerms = count($keywords);
 
         if (empty($this->documentFrequency)) {
             $this->calculateDocumentFrequencies();
         }
 
         $tfidfVector = [];
-        $totalTerms = count($keywords);
+        // $totalDocuments = Cache::get('tfidf_movie_count', 0);
 
-        foreach($termFrequency as $term => $frequency) {
+        foreach ($termFrequency as $term => $frequency) {
+            // Calculate TF (Term Frequency)
             $tf = $frequency / $totalTerms;
             
-            // IDF: log(total documents / documents containing term)
-            $idf = $this->documentFrequency[$term] ?? log($this->totalDocuments / 1);
+            $idf = $this->documentFrequency[$term] ?? 0;
             
             // TF-IDF = TF × IDF
             $tfidfVector[$term] = $tf * $idf;
         }
         return $tfidfVector;
-
     }
 
     function calculateDocumentFrequencies() {
