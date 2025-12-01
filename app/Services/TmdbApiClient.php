@@ -113,11 +113,13 @@ class TmdbApiClient {
         $maxPages = 1000;
         
         $discoverDefaults = [
-            'sort_by' =>  'release_date',
-            'vote_count.gte' => $opts['vote_count.gte'] ?? 50,
+            'sort_by' =>  'vote_average.desc',
+            'vote_count.gte' => $opts['vote_count.gte'] ?? 1000,
             'language' => 'en-US',
             'include_adult' => true,
-            'region' => $opts['region'] ?? null,
+            // 'region' => $opts['region'] ?? null,
+            // 'region' => null,
+            'without_genres' => 10402, 10749,99
         ];
         
         while(count($collected) < $limit && $page <=$maxPages) {
@@ -161,13 +163,16 @@ class TmdbApiClient {
             if (empty($results)) break;
             
             foreach ($results as $r) {
-                $collected[] = $r;
+                if($r['release_date'] > '1970-01-01') {
+                    $collected[] = $r;
+                } else {
+                    continue;
+                }
+
                 if (count($collected) >= $limit) break 2;
             }
-            
             $page++;
         }
-        
         return array_slice($collected, 0, $limit);
     }
 }
