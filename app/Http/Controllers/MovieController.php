@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Movie;
+use App\Models\Genre;
 use App\Services\ContentBasedRecommender;
 use App\Services\TmdbApiClient;
 
@@ -23,7 +24,31 @@ class MovieController extends Controller
 
     public function index(Request $request) {
         $movies = Movie::paginate(12);
-        return view('movies.index', compact('movies'));
+        $query = Movie::with('genres');
+
+        if($request->filled('genre')) {
+            $query->whereHas('genres', function($q) use ($request) {
+                $q->where('genres.id', $request->genre);
+            });
+        }
+
+        if ($request->filled('min_rating')) {
+            $query->where('tmdb_rating', '>=', $request->min_rating);
+        }
+    
+        // Year filter
+        if ($request->filled('year')) {
+            $query->where('year', $request->year);
+        }
+        $sortBy = $request->get('sort', 'created_at');
+        $sortOrder = $request->get('order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $movies = $query->paginate(12)->withQueryString(); // withQueryString preserves filters in pagination
+        $genres = Genre::orderBy('name')->get();
+        $years = Movie::distinct()->orderBy('year', 'desc')->pluck('year');
+
+        return view('movies.index', compact('movies', 'genres', 'years'));
     }
 
     public function show(Movie $movie)

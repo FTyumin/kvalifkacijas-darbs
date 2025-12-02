@@ -4,9 +4,109 @@
 
 @section('content')
 <div class="relative min-h-[55vh] md:min-h-[45vh] lg:min-h-[40vh] mx-16 py-12">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl text-yellow-600">Movies</h1>
+        <button id="filterToggle" class="lg:hidden px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+            </svg>
+            Filters
+        </button>
+    </div>
 
-    <h1 class="text-2xl text-yellow-600">Movies</h1>
+        <!-- Filters Section -->
+    <div id="filtersSection" class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 hidden lg:block">
+        <form method="GET" action="{{ route('movies.index') }}" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Genre Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Genre</label>
+                    <select name="genre" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
+                        <option value="">All Genres</option>
+                        @foreach($genres as $genre)
+                            <option value="{{ $genre->id }}" {{ request('genre') == $genre->id ? 'selected' : '' }}>
+                                {{ $genre->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Rating Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Min Rating</label>
+                    <select name="min_rating" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
+                        <option value="">Any Rating</option>
+                        @foreach([9, 8, 7, 6, 5] as $rating)
+                            <option value="{{ $rating }}" {{ request('min_rating') == $rating ? 'selected' : '' }}>
+                                {{ $rating }}+ ⭐
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Year Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
+                    <select name="year" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
+                        <option value="">All Years</option>
+                        @foreach($years as $year)
+                            <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>
+                                {{ $year }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Sort Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sort By</label>
+                    <select name="sort" class="w-full px-3 py-2 border border-gray-300 text-black dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
+                        <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>Rating</option>
+                        <option value="year" {{ request('sort') == 'year' ? 'selected' : '' }}>Year</option>
+                        <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Title</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                    Apply Filters
+                </button>
+                <a href="{{ route('movies.index') }}" class="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium">
+                    Clear All
+                </a>
+            </div>
+        </form>
+    </div>
+
+    @if(request()->hasAny(['genre', 'min_rating', 'year']))
+        <div class="mb-4 flex flex-wrap gap-2">
+            <span class="text-sm text-gray-600 dark:text-gray-400">Active filters:</span>
+            @if(request('genre'))
+                <span class="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
+                    {{ $genres->find(request('genre'))->name }}
+                    <a href="{{ route('movies.index', array_filter(request()->except('genre'))) }}" class="hover:text-blue-600">×</a>
+                </span>
+            @endif
+            @if(request('min_rating'))
+                <span class="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
+                    Rating {{ request('min_rating') }}+
+                    <a href="{{ route('movies.index', array_filter(request()->except('min_rating'))) }}" class="hover:text-blue-600">×</a>
+                </span>
+            @endif
+            @if(request('year'))
+                <span class="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
+                    Year: {{ request('year') }}
+                    <a href="{{ route('movies.index', array_filter(request()->except('year'))) }}" class="hover:text-blue-600">×</a>
+                </span>
+            @endif
+        </div>
+    @endif
+  
+
+    <!-- <h1 class="text-2xl text-yellow-600">Movies</h1> -->
  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-3">
+  
     @foreach($movies as $movie)
     <div class="group bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600 overflow-hidden">
       
@@ -68,4 +168,11 @@
 
     {{ $movies->links() }}
 </div>
+<!-- Mobile Filter Toggle Script -->
+<script>
+  document.getElementById('filterToggle')?.addEventListener('click', function() {
+      const filters = document.getElementById('filtersSection');
+      filters.classList.toggle('hidden');
+  });
+</script>
 @endsection

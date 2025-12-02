@@ -117,8 +117,6 @@ class TmdbApiClient {
             'vote_count.gte' => $opts['vote_count.gte'] ?? 1000,
             'language' => 'en-US',
             'include_adult' => true,
-            // 'region' => $opts['region'] ?? null,
-            // 'region' => null,
             'without_genres' => 10402, 10749,99
         ];
         
