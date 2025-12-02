@@ -11,6 +11,8 @@ use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\UserRelationshipController;
+use App\Http\Controllers\FeedController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [MovieController::class, 'home'])->name('home');
@@ -39,6 +41,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/quiz', [QuizController::class, 'show'])->name('quiz.show');
     Route::post('/quiz', [QuizController::class, 'store'])->name('quiz.store');
+
+    Route::get('/feed', [FeedController::class, 'index'])->name('feed.index');
 });
 
 Route::post('lists/{movie}/add', [ListController::class, 'add'])->name('lists.add');
