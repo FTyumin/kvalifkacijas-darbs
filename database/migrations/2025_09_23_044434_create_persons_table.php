@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('slug')->nullable();
             $table->enum('type', ['actor', 'director']);
+            $table->string('profile_path')->nullable();
+            $table->text('biography')->nullable();
             $table->string('nationality')->nullable();
             $table->string('birth_year')->nullable();
             $table->timestamps();

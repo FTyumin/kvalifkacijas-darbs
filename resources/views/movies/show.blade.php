@@ -61,7 +61,7 @@
                     <span class="text-sm font-semibold text-gray-400 min-w-[80px]">Stars</span>
                     <div class="flex flex-wrap gap-2">
                         @foreach($movie->actors->take(5) as $actor)
-                            <a href="#" class="text-sm text-blue-400 hover:text-blue-300 hover:underline">
+                            <a href="{{ route('people.show', $actor->slug) }}" class="text-sm text-blue-400 hover:text-blue-300 hover:underline">
                                 {{ $actor->first_name }} {{ $actor->last_name }}<span class="text-gray-500">{{ !$loop->last ? ',' : '' }}</span>
                             </a>
                         @endforeach

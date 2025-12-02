@@ -18,7 +18,9 @@ class Person extends Model
         'type',
         'nationality',
         'birth_year',
-        'birth_date'
+        'birth_date',
+        'profile_path',
+        'biography',
     ];
 
     protected $casts = [

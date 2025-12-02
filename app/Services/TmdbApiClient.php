@@ -104,6 +104,15 @@ class TmdbApiClient {
         
         return "https://image.tmdb.org/t/p/{$size}{$path}";
     }
+
+    public function personData(int $id) {
+        $query['api_key'] = $this->apiKey;
+        $options = ['query' => $query];
+        $res = $this->http->get("person/{$id}", $options);
+        $data = json_decode((string) $res->getBody(), true);
+        \Log::info($data);
+        return $data;
+    }
     
     public function getTopMovies(int $limit = 50, array $opts = []): array {
         $method = $opts['method'] ?? 'discover';

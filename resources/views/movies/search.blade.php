@@ -66,21 +66,40 @@
     </div>
     
   @else
-    <h1 class="text-3xl text-white">No Results were found for <span class="text-green-500">"{{ $search }}"</span></h1>
+    <!-- <h1 class="text-3xl text-white">No Results were found for <span class="text-green-500">"{{ $search }}"</span></h1> -->
   @endif
+  @if($people && $people->count() > 0)
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold text-white mb-6">
+            People <span class="text-gray-400 text-lg font-normal">({{ $people->count() }} results)</span>
+        </h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach($people as $person)
+                <a href="{{ route('people.show', $person->slug) }}" 
+                   class="group flex items-center gap-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-lg hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300">
+                    
+                    <!-- Profile Image -->
+                    
 
-  <div>
-      <h1 class="text-3xl text-white">Results for <span class="text-green-500">"{{ $search }}"</span></h1>
+                    <!-- Person Info -->
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-base font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                            {{ $person->first_name }} {{ $person->last_name }}
+                        </h3>
+                        
+                        
+                    </div>
 
-      @foreach($people as $person)
-        <div class="flex gap-3">
-          <a href="{{ route('people.show', $person->slug) }}" class="text-sm text-blue-400 hover:text-blue-300 hover:underline">
-            <h2 class="text-white">{{ $person->first_name }}</h2>
-            <h2 class="text-white"> {{ $person->last_name }}</h2>
-          </a>
+                    <!-- Arrow Icon -->
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            @endforeach
         </div>
-      @endforeach
     </div>
+@endif
 </div>
 
 @endsection

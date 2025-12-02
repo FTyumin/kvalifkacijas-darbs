@@ -34,7 +34,7 @@ class InsertData extends Command
         $api = new TmdbApiClient;
         $genres = Genre::all()->keyBy('name');
 
-        $n = 200;
+        $n = 30;
         $data = $api->getTopMovies($n, ['method' => 'discover']);
 
         foreach($data as $movie) {
@@ -87,14 +87,18 @@ class InsertData extends Command
             $movieGenres = $movie_info['genres'] ?? [];
             foreach ($actor_info as $actor) {
                 $nameParts = explode(" ", $actor['name']);
+                $actor_data = $api->personData($actor['id']);
                 Person::updateOrCreate(
                     ['id' => $actor['id']],
                     [
                         'first_name' => array_shift($nameParts),
                         'last_name' => implode(' ', $nameParts),
                         'type' => 'actor',
+                        'profile_path' => $actor_data['profile_path'],
+                        'biography' => $actor_data['biography'],
                     ]
                 );
+
             }
 
             // Sync all actors at once (won't create duplicates)
