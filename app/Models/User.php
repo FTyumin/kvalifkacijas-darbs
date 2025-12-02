@@ -113,9 +113,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(UserRelationship::class, 'followee_id');
     }
 
-
     public function followees()
     {
         return $this->hasMany(UserRelationship::class, 'follower_id');
     }
+
+    public function likedReviews() {
+        return $this->belongsToMany(Review::class, 'review_likes');
+    }
+
 }

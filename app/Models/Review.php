@@ -29,4 +29,8 @@ class Review extends Model
     public function comments() {
         return $this->hasMany(Comment::class);
     }
+
+    public function likedBy() {
+        return $this->belongsToMany(User::class, 'review_likes');
+    }
 }

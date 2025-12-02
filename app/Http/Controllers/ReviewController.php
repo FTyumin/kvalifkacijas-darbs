@@ -42,4 +42,20 @@ class ReviewController extends Controller
         $review->load('comments');
         return view('reviews.show', compact('review'));
     }
+
+    public function toggleLike(Review $review)
+    {
+        $user = auth()->user();
+        if ($review->likedBy()->where('user_id', $user->id)->exists()) {
+            // Unlike
+            $review->likedBy()->detach($user->id);
+        } else {
+            // Like
+            $review->likedBy()->attach($user->id);
+        }
+
+        return back();
+    }
+
+
 }

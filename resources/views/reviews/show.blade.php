@@ -76,7 +76,20 @@
                     <p class="text-gray-300 leading-relaxed whitespace-pre-line">{{ $review->description }}</p>
                 </div>
             @endif
+            <form action="{{ route('reviews.like', $review) }}" method="POST">
+                @csrf
+    
+                <button type="submit" class="flex items-center gap-1">
+                    @if($review->likedBy->contains(auth()->id()))
+                        ❤️
+                    @else
+                        🤍
+                    @endif
+                    <span class="text-white">{{ $review->likedBy->count() }}</span>
+                </button>
+            </form>
         </div>
+
     </article>
 
     {{-- Comments Section --}}
