@@ -19,19 +19,6 @@
         <div class="flex-1 space-y-4">
             <h1 class="text-3xl font-bold text-white">{{ $person->first_name }} {{ $person->last_name }}</h1>
 
-            <div class="flex items-center gap-6 text-gray-600">
-                @if($person->birth_year)
-                    <span>Born: {{ $person->birth_year }}</span>
-                @endif
-                @if($person->death_date)
-                    <span>Died: {{ $person->death_date->format('M d, Y') }}</span>
-                @endif
-                @if($person->birth_place)
-                    <span>From: {{ $person->birth_place }}</span>
-                @endif
-                <span>Nationality: {{ $person->nationality }}</span>
-            </div>
-
             @if($person->biography)
                 <p class="text-white leading-relaxed">
                     {{ $person->biography }}

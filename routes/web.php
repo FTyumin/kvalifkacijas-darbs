@@ -1,9 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GenreController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\MarkController;
 use App\Http\Controllers\ProfileController;
@@ -15,7 +13,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\UserRelationshipController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/', [MovieController::class, 'home'])->name('home');
 
 Route::resource('movies', MovieController::class)->only(['index', 'show']);
 Route::resource('people', PeopleController::class)->only(['index', 'show']);

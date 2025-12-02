@@ -22,6 +22,13 @@ class MovieController extends Controller
         $this->apiClient = $apiClient;
     }
 
+    public function home() {
+        $movies = Movie::all()->take(4);
+        $genres = Genre::all()->take(4);
+
+        return view('home', compact('movies', 'genres'));
+    }
+
     public function index(Request $request) {
         $movies = Movie::paginate(12);
         $query = Movie::with('genres');
@@ -63,8 +70,8 @@ class MovieController extends Controller
     public function search(Request $request) {
         $search = $request->input('search');
 
-        $movies = DB::table('movies')
-            ->where('name', 'like', "%{$search}%")
+        $movies = Movie::where('name', 'like', "%{$search}%")
+            ->with('genres')
             ->get();
 
         $people = DB::table('persons')
@@ -72,7 +79,6 @@ class MovieController extends Controller
             ->orWhere('last_name', 'like', "%{$search}%")
             ->get();
 
-            // dd($people);
         return view('movies.search', compact('movies', 'search', 'people'));
     }
 

@@ -108,9 +108,9 @@ class TmdbApiClient {
     public function personData(int $id) {
         $query['api_key'] = $this->apiKey;
         $options = ['query' => $query];
+        
         $res = $this->http->get("person/{$id}", $options);
         $data = json_decode((string) $res->getBody(), true);
-        \Log::info($data);
         return $data;
     }
     

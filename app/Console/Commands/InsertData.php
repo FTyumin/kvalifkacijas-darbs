@@ -34,7 +34,7 @@ class InsertData extends Command
         $api = new TmdbApiClient;
         $genres = Genre::all()->keyBy('name');
 
-        $n = 30;
+        $n = 200;
         $data = $api->getTopMovies($n, ['method' => 'discover']);
 
         foreach($data as $movie) {
@@ -67,6 +67,7 @@ class InsertData extends Command
             $director = reset($director);
 
             $nameParts = explode(" ", $director['name']);
+            $director_data = $api->personData($director['id']);
             $director = Person::updateOrCreate(
                 [
                     'id' => $director['id'],
@@ -74,7 +75,9 @@ class InsertData extends Command
                 [
                     'first_name' => array_shift($nameParts),
                     'last_name' => implode(' ', $nameParts),
-                    'type' => 'director'
+                    'type' => 'director',
+                    'profile_path' => $director_data['profile_path'],
+                    'biography' => $director_data['biography'],
                 ]
             );
             $movie = Movie::find($movie['id']);
