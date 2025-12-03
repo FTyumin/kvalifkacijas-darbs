@@ -33,4 +33,14 @@ class Review extends Model
     public function likedBy() {
         return $this->belongsToMany(User::class, 'review_likes');
     }
+
+    protected static function booted() {
+        static::created(function ($review) {
+            Activity::create([
+                'user_id' => $review->user_id,
+                'activityable_type' => Review::class,
+                'activityable_id' => $review->id,
+            ]);
+        });
+    }
 }

@@ -49,6 +49,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Review::class);
     }
 
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+
     public function wantToWatch()
     {
         return $this->belongsToMany(Movie::class, 'markable_watchlist', 'user_id', 'markable_id');
@@ -67,18 +71,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function favorites() {
         return $this->belongsToMany(Movie::class, 'markable_favorites', 'user_id', 'markable_id');
     }
-
-    /**
-     * Get user's favorite movies (rating >= 4)
-     */
-    // public function favoriteMovies()
-    // {
-    //     return $this->belongsToMany(Movie::class, 'reviews')
-    //         ->withPivot('rating', 'created_at')
-    //         ->wherePivot('rating', '>=', 4);
-    // }
-
-
 
     public function lists()
     {

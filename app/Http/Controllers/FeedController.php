@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Review;
-use App\Models\Comment;
+use App\Models\Activity;
 
 class FeedController extends Controller
 {
@@ -16,18 +16,13 @@ class FeedController extends Controller
         $followingIds = $user->followees()
             ->pluck('followee_id')
             ->toArray();
-        
-        // Get reviews, comments from followed users 
-        $reviews = Review::whereIn('user_id', $followingIds)
-            ->with(['user', 'movie']) 
+
+        // Get activities of users, that current user follows
+        $activities = Activity::whereIn('user_id', $followingIds)
+            ->with('user')
             ->latest()
             ->paginate(20);
 
-        $comments = Comment::whereIn('user_id', $followingIds)
-            ->with(['user', 'review']) 
-            ->latest()
-            ->paginate(20);
-
-        return view('feed.index', compact('reviews'));
+        return view('feed.index', compact('activities'));
     }
 }
