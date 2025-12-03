@@ -5,9 +5,6 @@
     <div class="flex items-center gap-6 h-full">
       <!-- Logo -->
       <a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
-        <!-- <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-         
-        </div> -->
         <span class="text-xl font-bold text-white tracking-tight">Movie Platform</span>
       </a>
 
@@ -22,6 +19,10 @@
 
       <div class="hidden lg:flex items-center gap-8">
         <a href="/lists" class="text-gray-300 hover:text-white transition-colors font-medium">Lists</a>
+      </div>
+
+      <div class="hidden lg:flex items-center gap-8">
+        <a href="/feed" class="text-gray-300 hover:text-white transition-colors font-medium">Feed</a>
       </div>
 
       </div>
@@ -63,15 +64,7 @@
 
     <!-- Right Section: Actions -->
     <div class="flex items-center gap-4 h-full">
-      <!-- Watchlist -->
-     
 
-      @auth
-      <!-- <a href="/dashboard" class="hidden sm:flex items-center gap-2 text-gray-300 hover:text-white transition-colors font-medium">
-        <span class="hidden  md:inline">Dashboard</span>
-      </a> -->
-
-      @endauth
       
       <!-- User Menu / Sign In -->
       <div class="flex items-center gap-3 h-full">
@@ -86,19 +79,6 @@
         </a>
         @endguest
 
-        <!-- @auth
-          <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            
-            <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-4 py-2 transition-colors focus:outline-none
-             focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 flex ">
-              <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"/>
-              </svg>
-              {{ __('Log Out') }}
-            </button>
-          </form>
-        @endauth -->
 
         <div class="w-10 h-10 rounded-full overflow-hidden">
           @auth
