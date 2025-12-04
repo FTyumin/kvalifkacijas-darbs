@@ -47,5 +47,13 @@ class MovieList extends Model
         $this->movies()->detach($movieId);
     }
 
-
+    protected static function booted() {
+        static::created(function ($movieList) {
+            Activity::create([
+                'user_id' => $movieList->user_id,
+                'activityable_type' => MovieList::class,
+                'activityable_id' => $movieList->id,
+            ]);
+        });
+    }
 }

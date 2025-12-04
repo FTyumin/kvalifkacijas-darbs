@@ -20,4 +20,14 @@ class UserRelationship extends Model
     {
         return $this->belongsTo(User::class, 'followee_id');
     }
+
+    protected static function booted() {
+        static::created(function ($userRelationship) {
+            Activity::create([
+                'user_id' => $userRelationship->followee_id,
+                'activityable_type' => userRelationship::class,
+                'activityable_id' => $userRelationship->id,
+            ]);
+        });
+    }
 }
