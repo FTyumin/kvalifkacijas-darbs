@@ -60,7 +60,9 @@ class MovieController extends Controller
 
     public function show(Movie $movie)
     {
-        return view('movies.show', compact('movie'));
+        $similarMovies = $this->contentRecommender->findSimilarMovies($movie->id);
+        // dd($similarMovies);
+        return view('movies.show', compact('movie', 'similarMovies'));
     }
 
     public function display() {

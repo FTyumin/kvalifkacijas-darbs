@@ -22,7 +22,6 @@ class ContentBasedRecommender
         $similarities = [];
         
         foreach($allMovies as $movie) {
-            // dd($movie->id);
             $similarity = $this->calculateMovieSimilarity($movieId, $movie->id);
     
             if($similarity > 0.1) {
@@ -41,10 +40,13 @@ class ContentBasedRecommender
     }
 
     function calculateMovieSimilarity($movie1, $movie2) {
-        // Get genre IDs as arrays
+        if((!$movie1) or (!$movie2)) {
+            return;
+        }
         $movie1 = Movie::find($movie1);
         $movie2 = Movie::find($movie2);
-
+        
+        // Get genre IDs as arrays
         $genres1 = DB::table('genre_movie')
             ->where('movie_id', $movie1->id)
             ->get('genre_id');
@@ -56,7 +58,7 @@ class ContentBasedRecommender
         $actors1 = DB::table('actor_movie')
             ->where('movie_id', $movie1->id)
             ->get('actor_id');
-        // $actors2 = $movie2->actors->pluck('id')->toArray();
+
         $actors2 = DB::table('actor_movie')
             ->where('movie_id', $movie2->id)
             ->get('actor_id');
@@ -75,11 +77,12 @@ class ContentBasedRecommender
         $genreJaccard = $this->jaccardIndex($genres1, $genres2);
         $actorJaccard = $this->jaccardIndex($actors1, $actors2);
         $directorJaccard = $this->jaccardIndex($director1, $director2);
-        
+        $descriptionSimilarity = $this->calculateDescriptionSimilarity($movie1, $movie2);
         // Weighted combination
-        $similarity = (0.4 * $genreJaccard) + 
-                      (0.3 * $directorJaccard) + 
-                      (0.3 * $actorJaccard);
+        $similarity = (0.25 * $genreJaccard) + 
+                      (0.2 * $directorJaccard) + 
+                      (0.25 * $actorJaccard); 
+                    //   (0.3 * $descriptionSimilarity);
         
         return $similarity;
     }
@@ -232,7 +235,14 @@ class ContentBasedRecommender
 
     function getStopWords() {
         return [
-            'a', 'an', 'the', 'and', 'but'
+            'a', 'an', 'the', 'and', 'but', 'or', 'as', 'at', 'be', 'by',
+            'for', 'from', 'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on',
+            'that', 'to', 'was', 'will', 'with', 'they', 'their', 'this',
+            'have', 'had', 'what', 'when', 'where', 'who', 'which', 'why',
+            'how', 'all', 'are', 'been', 'can', 'could', 'do', 'does', 'did',
+            'his', 'her', 'his', 'him', 'she', 'them', 'there', 'these',
+            'those', 'would', 'should', 'into', 'through', 'about', 'after',
+            'before', 'between', 'under', 'over', 'up', 'down', 'out', 'off'
         ];
     }
 
