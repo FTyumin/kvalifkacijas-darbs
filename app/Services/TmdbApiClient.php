@@ -126,7 +126,7 @@ class TmdbApiClient {
             'vote_count.gte' => $opts['vote_count.gte'] ?? 1000,
             'language' => 'en-US',
             'include_adult' => true,
-            'without_genres' => 10402, 10749,99,5
+            'without_genres' => '10402, 10749, 99, 16'
         ];
         
         while(count($collected) < $limit && $page <=$maxPages) {

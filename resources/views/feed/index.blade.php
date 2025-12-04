@@ -127,7 +127,6 @@
                                         <img src="https://image.tmdb.org/t/p/w200/{{ $post->activityable->movie->poster_url }}" 
                                         alt="movie poster" 
                                         class="w-24 h-36 object-cover rounded-lg shadow-md">
-
                                     </a>
                                 </div>
 
@@ -204,10 +203,7 @@
                         </div>
                     </article>
                 @endif
-
                 @endforeach
         </div>
-        
-        
     </div>
 @endsection

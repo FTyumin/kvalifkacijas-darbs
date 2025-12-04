@@ -70,7 +70,6 @@ class ProfileController extends Controller
     }
 
     public function show(User $user) {
-        // $user = auth()->user();
         if($user->id == auth()->user()->id) {
             $movies = auth()->user()->wantToWatch;
             $user = \Auth::user();

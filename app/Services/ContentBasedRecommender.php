@@ -16,15 +16,13 @@ class ContentBasedRecommender
     private $allMoviesKeywords = [];
     private $totalDocuments;
 
-    function findSimilarMovies($movieId, $limit = 5) {
-        $targetFeatures = $this->getMovieFeatures($movieId);
-    
+    function findSimilarMovies($movieId, $limit = 5) {    
+
         $allMovies = Movie::where('id', '!=', $movieId)->get();
         $similarities = [];
         
         foreach($allMovies as $movie) {
             // dd($movie->id);
-            $movieFeatures = $this->getMovieFeatures($movie->id);
             $similarity = $this->calculateMovieSimilarity($movieId, $movie->id);
     
             if($similarity > 0.1) {
@@ -42,62 +40,43 @@ class ContentBasedRecommender
         return array_slice($similarities, 0, $limit);
     }
 
-    function getMovieFeatures($movieId) {
-        $movie = Movie::with(['genres', 'director', 'actors'])->find($movieId);
-        $features = [];
-
-        $allGenres = Genre::all();
-
-        foreach ($allGenres as $genre) {
-            $key = 'genre_' . $genre->id;
-            $features[$key] = $movie->genres->contains($genre->id) ? 1 : 0;
-        }
-
-        $allDirectors = Person::where('type', 'director')->get(30);
-        foreach ($allDirectors as $director) {
-            $key = 'director_' . $director->id;
-            // dd($movie->director->id);
-            $features[$key] = (int) ($movie->director?->id === $director->id);
-        }
-
-        $topActors = Person::whereIn('id', function($query) {
-            $query->select('person_id')
-                ->from('actor_movie')
-                ->groupBy('actor_id')
-                ->orderByRaw('COUNT(*) DESC');
-                // ->limit(100);
-        })->get();
-
-        foreach ($topActors as $actor) {
-            $key = 'actor_' . $actor->id;
-            $features[$key] = $movie->actors->contains($actor->id) ? 1 : 0;
-        }
-
-        return $features;
-    }
-
     function calculateMovieSimilarity($movie1, $movie2) {
-        // Get genre IDs as sets
-        $genres1 = $movie1->genres->pluck('id')->toArray();
-        $genres2 = $movie2->genres->pluck('id')->toArray();
+        // Get genre IDs as arrays
+        $movie1 = Movie::find($movie1);
+        $movie2 = Movie::find($movie2);
+
+        $genres1 = DB::table('genre_movie')
+            ->where('movie_id', $movie1->id)
+            ->get('genre_id');
+        $genres2 = DB::table('genre_movie')
+            ->where('movie_id', $movie2->id)
+            ->get('genre_id');
         
-        // Get actor IDs as sets
-        $actors1 = $movie1->actors->pluck('id')->toArray();
-        $actors2 = $movie2->actors->pluck('id')->toArray();
+        // Get actor IDs as arrays
+        $actors1 = DB::table('actor_movie')
+            ->where('movie_id', $movie1->id)
+            ->get('actor_id');
+        // $actors2 = $movie2->actors->pluck('id')->toArray();
+        $actors2 = DB::table('actor_movie')
+            ->where('movie_id', $movie2->id)
+            ->get('actor_id');
         
         // Get director IDs as sets
-        $director1 = $movie1->director ? [$movie1->director->id] : [];
-        $director2 = $movie2->director ? [$movie2->director->id] : [];
+        $director1 = [$movie1->director->id];
+        $director2 = [$movie2->director->id];
         
+        $genres1 = $genres1->pluck('genre_id')->toArray();
+        $genres2 = $genres2->pluck('genre_id')->toArray();
+
+        $actors1 = $actors1->pluck('actor_id')->toArray();
+        $actors2= $actors2->pluck('actor_id')->toArray();
+
         // Calculate Jaccard index for each component
         $genreJaccard = $this->jaccardIndex($genres1, $genres2);
         $actorJaccard = $this->jaccardIndex($actors1, $actors2);
         $directorJaccard = $this->jaccardIndex($director1, $director2);
         
         // Weighted combination
-        // Genre: 40% 
-        // Director: 30% 
-        // Actors: 30% 
         $similarity = (0.4 * $genreJaccard) + 
                       (0.3 * $directorJaccard) + 
                       (0.3 * $actorJaccard);
