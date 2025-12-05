@@ -11,7 +11,7 @@
         <div class="md:col-span-1">
             <img src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}" 
                  alt="{{ $movie->name }} poster" 
-                 class="rounded-xl shadow-md w-full sticky top-4">
+                 class="rounded-xl shadow-md w-full top-4">
         </div>
 
         {{-- Details --}}
