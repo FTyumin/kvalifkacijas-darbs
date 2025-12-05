@@ -26,14 +26,13 @@ class ContentBasedRecommender
     
             if($similarity > 0.1) {
                 $similarities[] = [
-                    'id' => $movie->id,
-                    'value' => $similarity,
-                    'name'  => $movie->name,
+                    'movie' => $movie,
+                    'similarity' => $similarity,
                 ];
             }
         }
         usort($similarities, function($a, $b) {
-            return $b['value'] <=> $a['value'];
+            return $b['similarity'] <=> $a['similarity'];
         });
     
         return array_slice($similarities, 0, $limit);

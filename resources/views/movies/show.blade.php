@@ -176,15 +176,14 @@
     @if(count($similarMovies) > 0)
     <div class="mt-12 pt-8 border-t border-gray-700">
         <h2 class="text-2xl font-bold text-white mb-6">You May Also Like</h2>
-        <div class="relative">
-            <div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
-                @foreach($similarMovies as $recommendation)
-                <a href="" 
-                   class="w-50 snap-start group">
-                    <div class="relative overflow-hidden rounded-lg shadow-lg">
-                        <img src="" 
-                             alt="{{ $recommendation['name'] }}" 
-                             class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            @foreach($similarMovies as $recommendation)
+                <a href="{{ route('movies.show', $recommendation['movie']->slug) }}" 
+                class="group">
+                    <div class="relative overflow-hidden rounded-lg shadow-lg aspect-[2/3]">
+                        <img src="https://image.tmdb.org/t/p/w500/{{ $recommendation['movie']->poster_url }}" 
+                            alt="{{ $recommendation['movie']->name }}" 
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity">
                             <div class="absolute bottom-0 left-0 right-0 p-3">
                                 <div class="flex items-center gap-1 mb-1">
@@ -197,12 +196,11 @@
                         </div>
                     </div>
                     <h3 class="mt-2 text-sm font-medium text-white group-hover:text-blue-400 transition-colors line-clamp-2">
-                        {{ $recommendation['name'] }}
+                        {{ $recommendation['movie']->name }}
                     </h3>
-                    <p class="text-xs text-gray-400">{{ $recommendation['year'] ?? '' }}</p>
+                    <p class="text-xs text-gray-400"></p>
                 </a>
-                @endforeach
-            </div>
+            @endforeach
         </div>
     </div>
     @endif
