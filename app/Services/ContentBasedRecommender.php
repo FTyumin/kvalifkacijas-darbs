@@ -255,51 +255,59 @@ class ContentBasedRecommender
 
     function getRecommendationsForUser($userId, $limit) {
         $user = User::find($userId);
+        if(!$user) {
+            return;
+        }
     
         // retrieve user's favorite genres
         $favoriteGenreIds = $user->favoriteGenres->pluck('id')->toArray();
-        $favoriteActorIds = $user->favoriteActors->pluck('id')->toArray();
-        $favoriteDirectorIds = $user->favoriteDirectors->pluck('id')->toArray();
+        // $favoriteActorIds = $user->favoriteActors->pluck('id')->toArray();
+        // $favoriteDirectorIds = $user->favoriteDirectors->pluck('id')->toArray();
 
         //movies that user shouldn't get as recommendations
-        $watchedIds = $user->watchedMovies()->pluck('film_id')->toArray();
-        $watchlistIds = $user->watchlist()->pluck('film_id')->toArray();
+        $watchedIds = $user->seenMovies()->pluck('markable_id')->toArray();
+        $watchlistIds = $user->wantToWatch()->pluck('markable_id')->toArray();
         $excludeIds = array_merge($watchedIds, $watchlistIds);
         
         // If no favorites, fall back to popular movies
-        if (empty($favoriteGenreIds) && empty($favoriteDirectorIds)) {
-            return $this->getPopularMovies($limit);
-        }
+        // if (empty($favoriteGenreIds) && empty($favoriteDirectorIds)) {
+        //     return $this->getPopularMovies($limit);
+        // }
 
-        $movies = [];
-        if($watchedIds) {
-            foreach($watchedIds as $movieId) {
-                $movies[] = $this->findSimilarMovies($movieId);
-
+        $allRecommendations = [];
+     
+    
+        foreach ($watchedIds as $watchedMovieId) {
+            $similarMovies = $this->findSimilarMovies($watchedMovieId, $limit);
+            
+            foreach ($similarMovies as $movie) {
+                // Skip if it's a movie user already watched
+                if (in_array($movie["movie"]['id'], $watchedIds)) {
+                    continue;  
+                }
+                
+                // Add to recommendations
+                $movieId = $movie["movie"]['id'];
+                
+                // If movie already in list, keep the one with higher similarity
+                if (!isset($allRecommendations[$movieId]) || 
+                    $movie['similarity'] > $allRecommendations[$movieId]['similarity']) {
+                    $allRecommendations[$movieId] = $movie;
+                }
             }
         }
-    
-        // Find movies matching user's taste
-        // $recommendations = Movie::query()
-        //     ->whereHas('genres', function($q) use ($favoriteGenres) {
-        //         $q->whereIn('genres.id', $favoriteGenres);
-        //     })
-        //     ->orWhereHas('directors', function($q) use ($favoriteDirectors) {
-        //         $q->whereIn('directors.id', $favoriteDirectors);
-        //     })
-        //     ->withAvg('ratings', 'rating')
-        //     ->orderByDesc('ratings_avg_rating')
-        //     ->limit($limit)
-        //     ->get();
 
-            
-        // return $recommendations;
+        usort($allRecommendations, function($a, $b) {
+            return $b['similarity'] <=> $a['similarity'];
+        });
+        
+        // Return top recommendations
+        return array_slice($allRecommendations, 0, $limit);
     }
 
     function getPopularMovies($limit) {
    
-        $popularMovies = Movie::where('tmdb_rating', '>', 4)->get(12);
-        
+        $popularMovies = Movie::where('tmdb_rating', '>', 4)->limit(10)->get();
         return $popularMovies;
     }
 

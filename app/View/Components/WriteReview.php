@@ -8,12 +8,13 @@ use Illuminate\View\Component;
 
 class WriteReview extends Component
 {
+    public $movie;
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public function __construct($movie)
     {
-        //
+        $this->movie = $movie;
     }
 
     /**

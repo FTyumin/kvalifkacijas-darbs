@@ -92,6 +92,11 @@
 
             {{-- Actions --}}
             @if(Auth::check())
+                @php
+                    $isSeen = Auth::user()->seenMovies->contains($movie->id);
+                    $isWatchList = Auth::user()->wantToWatch->contains($movie->id);
+                    $isFavorite = Auth::user()->favorites->contains($movie->id);
+                @endphp
                 <div class="flex gap-3 mt-6">
                     <form action="{{ route('seen.toggle', $movie->id) }}" method="POST">
                         @csrf
@@ -208,7 +213,7 @@
     {{-- Write Review Section --}}
     @if(Auth::check())
     <div class="mt-12 pt-8 border-t border-gray-700">
-        <x-write-review/>
+        <x-write-review :movie="$movie"/>
     </div>
     @endif
 
