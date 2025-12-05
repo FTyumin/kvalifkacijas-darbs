@@ -7,7 +7,6 @@ use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class ContentBasedRecommender

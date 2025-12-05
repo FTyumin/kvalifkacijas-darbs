@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Movie;
 use App\Models\Genre;
+use App\Models\MovieList;
 use App\Services\ContentBasedRecommender;
 use App\Services\TmdbApiClient;
 
@@ -23,10 +24,13 @@ class MovieController extends Controller
     }
 
     public function home() {
-        $movies = Movie::all()->take(4);
-        $genres = Genre::all()->take(4);
+        $movies = Movie::inRandomOrder()->take(4)->get();
+        $genres = Genre::inRandomOrder()->take(4)->get();
 
-        return view('home', compact('movies', 'genres'));
+        $lists = MovieList::all()->take(4);
+        // dd($lists);
+
+        return view('home', compact('movies', 'genres', 'lists'));
     }
 
     public function index(Request $request) {
@@ -115,5 +119,9 @@ class MovieController extends Controller
         })->all();
 
         return view('movies.top', compact('movies'));
+    }
+
+    public function add() {
+        return view('movies.add');
     }
 }

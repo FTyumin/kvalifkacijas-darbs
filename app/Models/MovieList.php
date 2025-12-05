@@ -21,10 +21,10 @@ class MovieList extends Model
 
     public function movies() {
         return $this->belongsToMany(
-        \App\Models\Movie::class, 
-        'movie_lists',           
-        'list_id',                
-        'movie_id'                
+            \App\Models\Movie::class, 
+            'movie_lists',           
+            'list_id',                
+            'movie_id'                
         )
         ->withTimestamps()
         ->withPivot('position');
