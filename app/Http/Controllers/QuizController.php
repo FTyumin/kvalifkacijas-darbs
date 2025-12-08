@@ -20,7 +20,7 @@ class QuizController extends Controller
         $user->save();
         $input = $request->all();
 
-        // $user->favoriteGenres()->attach($input["genres"]);
+        $user->favoriteGenres()->attach($input["genres"]);
         
         return redirect()->route('home')->with('success', 'Quiz completed!');
     }

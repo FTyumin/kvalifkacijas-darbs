@@ -9,10 +9,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Maize\Markable\Markable;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     use HasFactory, Notifiable, Markable;
-     protected static $markableTable = 'markables';
+    protected static $markableTable = 'markables';
 
 
     protected $fillable = [

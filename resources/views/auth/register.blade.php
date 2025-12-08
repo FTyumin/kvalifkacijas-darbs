@@ -107,7 +107,7 @@
                         <!-- Name Field -->
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-300 mb-2">
-                                Full Name
+                                Username
                             </label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -124,7 +124,7 @@
                                     autocomplete="name" 
                                     autofocus
                                     class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all @error('name') border-red-500 focus:ring-red-500 @enderror"
-                                    placeholder="Enter your full name"
+                                    placeholder="Enter your username"
                                 >
                             </div>
                             @error('name')

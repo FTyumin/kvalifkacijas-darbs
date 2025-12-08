@@ -258,58 +258,117 @@ class ContentBasedRecommender
         if(!$user) {
             return;
         }
-    
+        
         // retrieve user's favorite genres
-        $favoriteGenreIds = $user->favoriteGenres->pluck('id')->toArray();
+        $favoriteGenres = $user->favoriteGenres;
         // $favoriteActorIds = $user->favoriteActors->pluck('id')->toArray();
         // $favoriteDirectorIds = $user->favoriteDirectors->pluck('id')->toArray();
-
+        
         //movies that user shouldn't get as recommendations
         $watchedIds = $user->seenMovies()->pluck('markable_id')->toArray();
         $watchlistIds = $user->wantToWatch()->pluck('markable_id')->toArray();
         $favoriteIds = $user->favorites()->pluck('markable_id')->toArray();
         $excludeIds = array_merge($watchedIds, $watchlistIds);
-        
-        // if no favorites, fall back to popular movies
-        // if (empty($favoriteGenreIds) && empty($favoriteDirectorIds)) {
-        //     return $this->getPopularMovies($limit);
-        // }
 
-        if (empty($watchedIds)) {
-            return $this->getRecommendationsForNewUser($favoriteGenreIds, $limit);
-        }
-
+        // get user's high ratings(4-5 stars)
+        $reviews = $user->reviews()->where('rating', '>=', 4)->get();
         $allRecommendations = [];
-     
-        foreach ($watchedIds as $movieId) {
-            $similarMovies = $this->findSimilarMovies($movieId, $limit);
-            
-            foreach ($similarMovies as $movie) {
-                // skip if user has already seen this movie
-                if (in_array($movie["movie"]['id'], $excludeIds)) {
-                    continue;  
-                }
-                
-                // add to recommendations
-                $movieId = $movie["movie"]["id"];
-                $movieObj = Movie::with('genres')->find($movieId);
 
-                $baseScore = $movie["similarity"];
-                $movieGenreIds = $movieObj->genres->pluck('id')->toArray();
-
-                $hasGenre = !empty(array_intersect($movieGenreIds, $favoriteGenreIds));
-
-                // if movie has user's favorite genres, increase similarity
-                $finalScore = $hasGenre ? : $baseScore * 1.2;
-                $movie["similarity"] = $finalScore;
-                
-                // if movie already in list, keep the one with higher similarity
-                if (!isset($allRecommendations[$movieId]) || 
-                $movie["similarity"] > $allRecommendations[$movieId]["similarity"]) {
-                    $allRecommendations[$movieId] = $movie;
-                }
+        $favoriteSimilar = [];
+        if($favoriteIds) {
+            foreach ($favoriteIds as $id) {
+                $favoriteSimilar = array_merge($favoriteSimilar, $this->findSimilarMovies($id, 5));
             }
+
+            foreach ($favoriteSimilar as &$movieData) {
+                $movieData['similarity'] *= 1.4;
+            }
+            
+            // $allRecommendations = array_merge();
+            dd(count($allRecommendations));
+        } elseif ($reviews) {
+            // similarity boost: 0.3
+            $reviewSimilar = [];
+            $movieIds = $reviews->pluck('movie_id')->toArray();
+            foreach($movieIds as $id) {
+                $reviewSimilar = array_merge($reviewSimilar, $this->findSimilarMovies($id, 5));
+            }
+
+            foreach ($reviewSimilar as &$movieData) {
+                $movieData['similarity'] *= 1.3;
+            }
+
+            // $allRecommendations
+            
+        } elseif($watchedIds) {
+            // similarity boost - 0.05
+            $seenList = [];
+            foreach($watchedIds as $id) {
+                $seenList = array_merge($seenList, $this->findSimilarMovies($id, 5));
+            }
+
+            foreach ($seenList as &$movieData) {
+                $movieData['similarity'] *= 1.05;
+            }
+
+        } elseif($favoriteGenres) {
+            // similarity boost - 0.2
+            $genreList = [];
+            foreach($favoriteGenres as $genre) {
+                $genreList = array_merge($genreList, $this->getGenreMovies($genre, 5));
+            }
+
+            foreach ($genreList as &$movieData) {
+                $movieData['similarity'] *= 1.2;
+            }
+
+
+        } else {
+            $this->getRecommendationsForNewUser($favoriteGenres, 10);
         }
+
+        $allRecommendations = array_merge($favoriteSimilar, $reviewSimilar, $seenList, $genreList);
+
+        // $allRecommendations = $favoriteSimilar;
+
+             
+        // echo "debug";
+
+        // if($watchedIds) {
+
+        //     foreach ($watchedIds as $movieId) {
+        //         $similarMovies = $this->findSimilarMovies($movieId, $limit);
+                
+        //         foreach ($similarMovies as $movie) {
+        //             // skip if user has already seen this movie
+        //             if (in_array($movie["movie"]['id'], $excludeIds)) {
+        //                 continue;  
+        //             }
+                    
+        //             // add to recommendations
+        //             $movieId = $movie["movie"]["id"];
+        //             $movieObj = Movie::with('genres')->find($movieId);
+
+        //             $baseScore = $movie["similarity"];
+        //             $movieGenreIds = $movieObj->genres->pluck('id')->toArray();
+
+        //             $hasGenre = !empty(array_intersect($movieGenreIds, $favoriteGenreIds));
+
+        //             // if movie has user's favorite genres, increase similarity
+        //             $finalScore = $hasGenre ? : $baseScore * 1.2;
+        //             $movie["similarity"] = $finalScore;
+                    
+        //             // if movie already in list, keep the one with higher similarity
+        //             if (!isset($allRecommendations[$movieId]) || 
+        //             $movie["similarity"] > $allRecommendations[$movieId]["similarity"]) {
+        //                 $allRecommendations[$movieId] = $movie;
+        //             }
+        //         }
+        //     }
+        // } else {
+           
+        // }
+        
 
         usort($allRecommendations, function($a, $b) {
             return $b['similarity'] <=> $a['similarity'];
@@ -324,6 +383,7 @@ class ContentBasedRecommender
             // no preferences - show popular movies
             return $this->getPopularMovies($limit);
         }
+        echo "debug";
         
         return Movie::whereHas('genres', function($query) use ($favoriteGenreIds) {
                 $query->whereIn('genres.id', $favoriteGenreIds);
@@ -342,6 +402,10 @@ class ContentBasedRecommender
                     'reason' => 'Matches your favorite genres',
                 ];
             });
+    }
+
+    private function getGenreMovies(Genre $genre) {
+        return $genre->movies()->limit(12)->get();
     }
 
     function getPopularMovies($limit) {
