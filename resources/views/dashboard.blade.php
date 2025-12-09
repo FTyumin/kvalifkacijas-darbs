@@ -7,24 +7,31 @@
 <section>
    
 <div class="min-h-screen bg-black text-white">
-
-    <!-- Background Elements -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-600 rounded-full mix-blend-multiply filter blur-xl opacity-10 floating-element"></div>
-        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-600 rounded-full mix-blend-multiply filter blur-xl opacity-10 floating-element"></div>
-        <div class="absolute top-1/3 left-1/3 w-60 h-60 bg-pink-600 rounded-full mix-blend-multiply filter blur-xl opacity-5 floating-element"></div>
-    </div>
-
     <main class="relative z-10">
         <div class="py-12 px-6 lg:px-28">
             <div class="mb-8">
-                <h1 class="text-4xl font-bold mb-4">
+                <h1 class="text-4xl font-bold mb-2">
                     Welcome back, <span class="text-blue-400">{{ $user->name }}</span>!
                 </h1>
+
+                <!-- Followers / Following -->
+                <p class="text-lg text-gray-300 mb-2 flex items-center gap-4">
+                    <span class="flex items-center gap-1">
+                        <x-heroicon-o-user-group class="w-5 h-5 text-gray-400" />
+                        {{ count($user->followers) }} Followers
+                    </span>
+
+                    <span class="flex items-center gap-1">
+                        <x-heroicon-o-user-plus class="w-5 h-5 text-gray-400" />
+                        {{ count($user->followees) }} Following
+                    </span>
+                </p>
+
                 <p class="text-xl text-gray-400">
                     Here's what's happening with your movie collection
                 </p>
             </div>
+
 
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -153,33 +160,41 @@
 
                         <div class="space-y-4">
                             @foreach($reviews as $review)
-                            <div class="border border-gray-700 rounded-lg p-4 hover:border-gray-600 transition-colors">
-                                <div class="flex items-start gap-3">
-                                    <img class="w-12 h-16 object-cover rounded" 
-                                         src="{{ asset('images/cinema.webp') }}" 
-                                         alt="Movie poster" />
-                                    <div class="flex-1">
-                                        <h4 class="font-semibold text-white mb-1">
-                                            {{ $review->movie->name }}
-                                        </h4>
-                                        
-                                        <!-- Star Rating -->
-                                        <div class="flex items-center gap-1 mb-2">
-                                            @for ($j = 0; $j < 5; $j++)
-                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                            </svg>
-                                            @endfor
-                                            <span class="text-sm text-gray-400 ml-1">{{ $review->rating }}</span>
+                            <a href="{{ route('reviews.show', $review) }}">
+                                <div class="border border-gray-700 rounded-lg p-4 hover:border-gray-600 transition-colors">
+                                    <div class="flex items-start gap-3">
+                                        <img class="w-12 h-16 object-cover rounded" 
+                                            src="https://image.tmdb.org/t/p/w500/{{ $review->movie->poster_url }}"
+                                            alt="Movie poster" />
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-white mb-1">
+                                                {{ $review->movie->name }}
+                                            </h4>
+                                            
+                                            <!-- Star Rating -->
+                                            <div class="flex items-center gap-1 mb-2">
+                                                @for ($j = 0; $j < $review->rating; $j++)
+                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                @endfor
+
+                                                @for($j = $review->rating; $j < 5; $j++)
+                                                    <svg class="w-4 h-4" fill="gray" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                @endfor
+                                                <span class="text-sm text-gray-400 ml-1">{{ $review->rating }}</span>
+                                            </div>
+                                            
+                                            <p class="text-sm text-gray-300 line-clamp-2">
+                                            </p>
+                                            
+                                            <p class="text-xs text-gray-500 mt-2"> days ago</p>
                                         </div>
-                                        
-                                        <p class="text-sm text-gray-300 line-clamp-2">
-                                        </p>
-                                        
-                                        <p class="text-xs text-gray-500 mt-2"> days ago</p>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                             @endforeach
                         </div>
                     </div>
@@ -206,15 +221,6 @@
                                 <span class="text-sm font-medium">Edit profile</span>
                             </a>
                             
-                            <a href="/recommendations" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
-                                <div class="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                                    </svg>
-                                </div>
-                                <span class="text-sm font-medium">Get Recommendations</span>
-                            </a>
-
                             <form method="POST" action="{{ route('logout') }}" class="w-full"> 
                                 @csrf                               
                                 <button type="submit" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors w-full">
@@ -222,9 +228,6 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                                         </svg>
-
-                                     
-
 
                                     </div>   
                                     <span class="text-sm font-medium">{{ __('Log Out') }}</span>     
@@ -254,11 +257,11 @@
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                    @for ($i = 0; $i < 6; $i++)
+                    @foreach($seen as $movie)
                     <div class="group relative">
                         <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden relative">
                             <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                                 src="{{ asset('images/cinema.webp') }}" 
+                                 src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}" 
                                  alt="Movie poster" />
                             
                             <!-- Watched Badge -->
@@ -269,21 +272,13 @@
                             </div>
                         </div>
                         
-                        <h3 class="mt-2 text-sm font-medium text-white line-clamp-2">
-                            MOVIE TITLE
+                        <h3 class="mt-2 text-sm font-medium line-clamp-2">
+                            {{ $movie->name }}
                         </h3>
-                        <p class="text-xs text-gray-400">Watched {{ $i + 1 }} {{ $i == 0 ? 'day' : 'days' }} ago</p>
+                        <p class="text-xs text-gray-400">Watched {{ $movie->created_at->diffForHumans() }}</p>
                         
-                        <!-- Your Rating -->
-                        <div class="flex items-center gap-1 mt-1">
-                            @for ($j = 0; $j < 5; $j++)
-                            <svg class="w-3 h-3 {{ $j < (4 - $i%3) ? 'text-yellow-400' : 'text-gray-600' }}" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                            </svg>
-                            @endfor
-                        </div>
                     </div>
-                    @endfor
+                    @endforeach
                 </div>
             </div>
         </div>

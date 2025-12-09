@@ -31,7 +31,7 @@ class ProfileController extends Controller
     {
         $request->user()->fill($request->validated());
 
-        // Augšupielādēt failu
+        // Uploading file
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('profiles', 'public'); 
             $request->user()->image = $path;
@@ -72,12 +72,13 @@ class ProfileController extends Controller
     public function show(User $user) {
         if($user->id == auth()->user()->id) {
             $movies = auth()->user()->wantToWatch;
-            $user = \Auth::user();
-            $reviews = Review::where('user_id', auth()->user()->id)->get();
+            $seen = auth()->user()->seenMovies;
+
+            $reviews = Review::where('user_id', $user->id)->get();
             $review_count = Review::where('user_id', $user->id)->count();
             $average_review = round(Review::where('user_id', $user->id)->avg('rating'), 2) ?? 0;
 
-            return view('dashboard', compact('reviews', 'user', 'movies', 'average_review'));
+            return view('dashboard', compact('reviews', 'user', 'movies', 'average_review', 'seen'));
         } else {
             $movies = $user->movies;
             $reviews = $user->reviews;
