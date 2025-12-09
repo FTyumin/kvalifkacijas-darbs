@@ -28,9 +28,15 @@ class MovieController extends Controller
         $genres = Genre::inRandomOrder()->take(4)->get();
 
         $lists = MovieList::all()->take(4);
-        // dd($lists);
 
-        return view('home', compact('movies', 'genres', 'lists'));
+        $id = auth()->id();
+        $userRecommendations = [];
+
+        if($id) {
+            $userRecommendations = $this->contentRecommender->getRecommendationsForUser($id, 10);
+        } 
+
+        return view('home', compact('movies', 'genres', 'lists', 'userRecommendations'));
     }
 
     public function index(Request $request) {

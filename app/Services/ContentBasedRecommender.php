@@ -263,7 +263,7 @@ class ContentBasedRecommender
         $favoriteGenres = $user->favoriteGenres;
         // $favoriteActorIds = $user->favoriteActors->pluck('id')->toArray();
         // $favoriteDirectorIds = $user->favoriteDirectors->pluck('id')->toArray();
-        // dd($favoriteGenres);
+
         //movies that user shouldn't get as recommendations
         $watchedIds = $user->seenMovies()->pluck('markable_id')->toArray();
         $watchlistIds = $user->wantToWatch()->pluck('markable_id')->toArray();
@@ -310,7 +310,6 @@ class ContentBasedRecommender
     if (count($watchedIds) > 0) {   
         $userHasData = true;
 
-
         foreach($watchedIds as $id) {
             $seenList = array_merge($seenList, $this->findSimilarMovies($id, 5));
         }
@@ -318,7 +317,6 @@ class ContentBasedRecommender
         foreach ($seenList as &$movieData) {
             $movieData['similarity'] *= 1.05;
         }
-
     }
     if ($favoriteGenres->count() > 0) {
         $userHasData = true;
@@ -329,20 +327,25 @@ class ContentBasedRecommender
         foreach($favoriteGenres as $genre) {
             $genreList = array_merge($genreList, $this->getGenreMovies($genre, $perGenre));
         }
-        echo "genre case";
 
+        foreach($genreList as &$movieData) {
+            $movieData['similarity'] *= 1.2;
+        }
     } 
     if(!$userHasData) {
-        dd("user doesn't have data");
         $this->getRecommendationsForNewUser($favoriteGenres, 10);
     }
 
         $allRecommendations = array_merge($favoriteSimilar, $reviewSimilar, $seenList, $genreList);
-
+        // TODO:
+        // add description comparison(or remove that functionality)
+        // 
         usort($allRecommendations, function($a, $b) {
             return $b['similarity'] <=> $a['similarity'];
         });
-        return $allRecommendations;
+
+        $result = array_slice($allRecommendations, 0, $limit);
+        return $result;
     }
 
     private function getRecommendationsForNewUser($favoriteGenreIds, $limit) {
@@ -356,8 +359,6 @@ class ContentBasedRecommender
                 $query->whereIn('genres.id', $favoriteGenreIds);
             })
             ->withAvg('reviews', 'rating')
-            ->withCount('reviews')
-            ->having('reviews_count', '>=', 5)
             ->orderByDesc('reviews_avg_rating')
             ->limit($limit)
             ->get()
@@ -365,34 +366,11 @@ class ContentBasedRecommender
                 return [
                     'id' => $movie->id,
                     'name' => $movie->name,
-                    'value' => $movie->reviews_avg_rating / 5, // Normalize to 0-1
+                    'value' => $movie->reviews_avg_rating / 5,
                     'reason' => 'Matches your favorite genres',
                 ];
             });
     }
-
-    // private function getGenreMovies(Genre $genre, $count) {
-    //     $movies = $genre->movies()->limit($count)->get();
-
-    //     // If not enough movies, fill from global pool
-    //     if ($movies->count() < $count) {
-    //         $missing = $count - $movies->count();
-
-    //         $extra = Movie::whereDoesntHave('genres', function ($q) use ($genre) {
-    //             $q->where('genres.id', $genre->id);
-    //         })
-    //         ->limit($missing)
-    //         ->get();
-
-    //         $movies = $movies->merge($extra);
-    //     }
-
-    //     // Build result format
-    //     return $movies->map(fn($movie) => [
-    //         'movie' => $movie,
-    //         'similarity' => 0.2,
-    //     ])->toArray();
-    // }
 
     private function getGenreMovies(Genre $genre, $count) {
         $result = [];
@@ -412,5 +390,4 @@ class ContentBasedRecommender
         $popularMovies = Movie::where('tmdb_rating', '>', 4)->limit(10)->get();
         return $popularMovies;
     }
-
 }
