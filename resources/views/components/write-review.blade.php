@@ -2,6 +2,13 @@
     <form action="{{ route('reviews.store') }}" method="POST" class="mt-16 mx-auto space-y-6 mb-12">
         @csrf
 
+        <div>
+            <label for="title" class="block text-sm font-medium text-white mb-1">
+                Title of your review
+            </label>
+            <input type="text" id="title" name="title" required>
+        </div>
+
         <h3 class="text-3xl text-white font-semibold">Write a Review for <span class="text-green-600">{{ $movie->name }}</span></h3>
         <input type="hidden" name="movie_id" value="{{ $movie->id }}">
         {{-- Star Rating --}}
@@ -54,35 +61,35 @@
             </label>
         </fieldset>
         @error('rating')
-        <p class="text-red-600 text-sm">{{ $message }}</p>
+            <p class="text-red-600 text-sm">{{ $message }}</p>
         @enderror
+
         @if (session('warning'))
-        <div class="alert alert-warning">
-            <p class="text-red-600 text-sm">{{ session('warning') }}</p>
-        </div>
+            <div class="alert alert-warning">
+                <p class="text-red-600 text-sm">{{ session('warning') }}</p>
+            </div>
         @endif
+
         @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
         @endif
 
         {{-- Review Text --}}
         <div>
-        <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">
-            Your Review
-        </label>
-        <textarea
-            id="comment"
-            name="comment"
-            rows="4"
-            class="block w-full px-4 py-2 border border-gray-300 rounded-lg 
-                focus:ring-blue-500 focus:border-blue-500 transition
-                disabled:opacity-50 disabled:pointer-events-none"
-            placeholder="Share your thoughts about this movie"
-        >{{ old('comment') }}</textarea>
-        @error('comment')
-            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+            <label for="comment" class="block text-sm font-medium text-white mb-1">
+                Your Review
+            </label>
+            <textarea id="comment" name="comment" rows="4"
+                class="block w-full px-4 py-2 border border-gray-300 rounded-lg 
+                        focus:ring-blue-500 focus:border-blue-500 transition
+                        disabled:opacity-50 disabled:pointer-events-none"
+                    placeholder="Share your thoughts about this movie"
+                >{{ old('comment') }}
+            </textarea>
+            @error('comment')
+                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
         <div class="flex flex-row gap-3 items-center text-white">
@@ -90,12 +97,10 @@
         </div>
 
         {{-- Submit --}}
-        <button
-        type="submit"
-        class="inline-block px-6 py-3 bg-blue-600 text-white font-medium 
-                rounded-lg hover:bg-blue-700 transition">
-        Submit Review
+        <button type="submit" class="inline-block px-6 py-3 bg-blue-600 text-white 
+            font-medium rounded-lg hover:bg-blue-700 transition">
+            Submit Review
         </button>
-        </form>
+    </form>
 
 </div>

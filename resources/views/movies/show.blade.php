@@ -244,10 +244,12 @@
                             <div class="flex items-center gap-3">
                                 <a href="{{ route('profile.show', $review->user) }}" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
                                     <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                                        <span class="text-white font-semibold">{{ substr($review->user->name, 0, 1) }}</span>
+                                        <!-- <span class="text-white font-semibold">{{ substr($review->user->name, 0, 1) }}</span> -->
+                                        <img src="{{ asset('storage/' . $review->user->image) }}">
                                     </div>
                                     <div>
-                                        <p class="font-medium text-white">{{ $review->user->name }}</p>
+                                        <h1 class="font-medium text-xl text-white">{{ $review->title }}</h1>
+                                        <p class="font-medium text-gray-200">{{ $review->user->name }}</p>
                                         <time class="text-xs text-gray-400">{{ $review->created_at->diffForHumans() }}</time>
                                     </div>
                                 </a>
@@ -258,7 +260,7 @@
                                     <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
                                 </svg>
                                 <span class="text-lg font-bold text-yellow-500">{{ $review->rating }}</span>
-                                <span class="text-xs text-gray-400">/10</span>
+                                <span class="text-xs text-gray-400">/5</span>
                             </div>
                         </div>
 
