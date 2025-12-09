@@ -33,9 +33,9 @@ class MovieController extends Controller
         $userRecommendations = [];
 
         if($id) {
-            $userRecommendations = $this->contentRecommender->getRecommendationsForUser($id, 10);
+            $userRecommendations = $this->contentRecommender->getRecommendationsForUser($id, 8);
         } 
-
+        // dd($userRecommendations);
         return view('home', compact('movies', 'genres', 'lists', 'userRecommendations'));
     }
 

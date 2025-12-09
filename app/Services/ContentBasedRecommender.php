@@ -268,7 +268,7 @@ class ContentBasedRecommender
         $watchedIds = $user->seenMovies()->pluck('markable_id')->toArray();
         $watchlistIds = $user->wantToWatch()->pluck('markable_id')->toArray();
         $favoriteIds = $user->favorites()->pluck('markable_id')->toArray();
-        $excludeIds = array_merge($watchedIds, $watchlistIds);
+        $excludeIds = array_merge($watchedIds, $watchlistIds, $favoriteIds);
 
         // get user's high ratings(4-5 stars)
         $reviews = $user->reviews()->where('rating', '>=', 4)->get();
@@ -297,14 +297,14 @@ class ContentBasedRecommender
         $userHasData = true;
 
         $movieIds = $reviews->pluck('movie_id')->toArray();
-
         foreach($movieIds as $id) {
             $reviewSimilar = array_merge($reviewSimilar, $this->findSimilarMovies($id, 5));
         }
-
+        
         foreach ($reviewSimilar as &$movieData) {
             $movieData['similarity'] *= 1.3;
         }
+        // dd($reviewSimilar);
 
     } 
     if (count($watchedIds) > 0) {   
@@ -340,11 +340,33 @@ class ContentBasedRecommender
         // TODO:
         // add description comparison(or remove that functionality)
         // 
-        usort($allRecommendations, function($a, $b) {
+
+        $unique = [];
+        foreach ($allRecommendations as $rec) {
+            $movieId = $rec['movie']->id;
+
+            if (!isset($unique[$movieId])) {
+                $unique[$movieId] = $rec;
+            }
+        }
+
+        $noDuplicates = array_values($unique);
+
+        usort($noDuplicates, function($a, $b) {
             return $b['similarity'] <=> $a['similarity'];
         });
+        // dd($allRecommendations);
+        $result = $noDuplicates;
 
-        $result = array_slice($allRecommendations, 0, $limit);
+        //exclude seen, favorites
+        if ($watchedIds) {
+            $result = array_filter($result, function ($rec) use ($excludeIds) {
+                return !in_array($rec['movie']->id, $excludeIds);
+            });
+            // $result = array_values($result); // reindex
+        }
+        
+        $result = array_slice($result, 0, $limit);
         return $result;
     }
 
@@ -373,21 +395,29 @@ class ContentBasedRecommender
     }
 
     private function getGenreMovies(Genre $genre, $count) {
-        $result = [];
-        // echo "debug";
+
         $movies = $genre->movies()->limit($count)->get();
-        foreach($movies as $movie) {
-            $result[] = [
-                'movie' => $movie,
-                'similarity' => 0.2,
-            ];
+
+        // If not enough movies, fill from global pool
+        if ($movies->count() < $count) {
+            $missing = $count - $movies->count();
+
+            $extra = $this->getPopularMovies($missing);
+
+            $movies = $movies->merge($extra);
         }
-        return $result;
+
+        // Build result format
+        return $movies->map(fn($movie) => [
+            'movie' => $movie,
+            'similarity' => 0.2,
+        ])->toArray();
     }
+
 
     function getPopularMovies($limit) {
    
-        $popularMovies = Movie::where('tmdb_rating', '>', 4)->limit(10)->get();
+        $popularMovies = Movie::where('tmdb_rating', '>', 4)->limit($limit)->get();
         return $popularMovies;
     }
 }
