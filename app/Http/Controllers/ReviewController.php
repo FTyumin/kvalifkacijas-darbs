@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ReviewController extends Controller
 {
@@ -19,7 +20,6 @@ class ReviewController extends Controller
             'comment' => 'required|string|max:1000'
         ]);
             
-    
         Review::create([
             'user_id' => $userId,
             'movie_id' => $request->movie_id, 
@@ -28,6 +28,8 @@ class ReviewController extends Controller
             'description' => $request->comment,
             'spoilers' => $request->has('spoiler')
         ]);
+
+        Cache::forget("user:{$userId}:recs");
 
         return back()->with('success', 'Thank for your review');
     }

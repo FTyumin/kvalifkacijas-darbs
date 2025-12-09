@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Movie;
 use App\Models\Genre;
 use App\Models\MovieList;
@@ -24,7 +25,7 @@ class MovieController extends Controller
     }
 
     public function home() {
-        $movies = Movie::inRandomOrder()->take(4)->get();
+        $movies = Movie::all()->take(4);
         $genres = Genre::inRandomOrder()->take(4)->get();
 
         $lists = MovieList::all()->take(4);
@@ -33,9 +34,12 @@ class MovieController extends Controller
         $userRecommendations = [];
 
         if($id) {
-            $userRecommendations = $this->contentRecommender->getRecommendationsForUser($id, 8);
+            // $userRecommendations = $this->contentRecommender->getRecommendationsForUser($id, 8);
+            $userRecommendations = Cache::remember("user:{$id}:recs", 3600, function () use ($id) {
+                return $this->contentRecommender->getRecommendationsForUser($id, 8);
+            });
+
         } 
-        // dd($userRecommendations);
         return view('home', compact('movies', 'genres', 'lists', 'userRecommendations'));
     }
 

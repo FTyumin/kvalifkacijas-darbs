@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Models\Favorite;
 use App\Models\WatchHistory;
 use App\Models\Movie;
@@ -21,6 +22,7 @@ class MarkController extends Controller
             Favorite::remove($movie, $user);
         } else {
             Favorite::add($movie, $user);
+            Cache::forget("user:{$user->id}:recs");
         }
 
         return back();
@@ -46,11 +48,10 @@ class MarkController extends Controller
         $user = auth()->user();
 
         if ($user->seenMovies()->where('markable_id', $movieId)->exists()) {
-            // Already seen → remove
             Seen::remove($movie, $user);
         } else {
-            // Not seen → add
             Seen::add($movie, $user);
+            Cache::forget("user:{$user->id}:recs");
         }
 
         return back();
