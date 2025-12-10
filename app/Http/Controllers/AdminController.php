@@ -31,7 +31,6 @@ class AdminController extends Controller
             ->take(5)
             ->get();
             
-            
         return view('admin');
     }
 }

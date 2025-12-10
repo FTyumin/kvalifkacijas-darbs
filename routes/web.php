@@ -13,13 +13,16 @@ use App\Http\Controllers\ListController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\UserRelationshipController;
 use App\Http\Controllers\FeedController;
-
+use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [MovieController::class, 'home'])->name('home');
 
-Route::get('admin', [AdminController::class, 'dashboard'])->name('admin');
+Route::get('admin', [AdminController::class, 'dashboard'])->middleware([Admin::class]);
+// Route::get('admin', function () {
 
+
+// })->middleware([Admin::class]);
 Route::resource('movies', MovieController::class)->only(['index', 'show']);
 Route::resource('people', PeopleController::class)->only(['index', 'show']);
 Route::resource('genres', GenreController::class)->only(['index', 'show']);
