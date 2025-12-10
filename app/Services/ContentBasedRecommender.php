@@ -371,7 +371,6 @@ class ContentBasedRecommender
     }
 
     private function getRecommendationsForNewUser($favoriteGenreIds, $limit) {
-        echo "debug";
         if (empty($favoriteGenreIds)) {
             // no preferences - show popular movies
             return $this->getPopularMovies($limit);

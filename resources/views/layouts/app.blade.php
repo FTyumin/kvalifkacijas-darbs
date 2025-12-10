@@ -16,13 +16,13 @@
 </head>
 <body class="font-sans antialiased flex flex-col min-h-screen">
   @include('header')
-  
-  <main class="bg-black px-6 sm:px-4 lg:px-28 py-8">
+
+  <main class="bg-black px-6 sm:px-4 lg:px-28 py-8 flex-1">
     @yield('content')
   </main>
-  
-  @include('footer')
 
+  @include('footer')
+  
   @vite([
     'resources/css/app.css',
     'resources/js/app.js',

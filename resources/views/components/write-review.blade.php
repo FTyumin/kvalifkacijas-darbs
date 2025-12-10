@@ -6,7 +6,9 @@
             <label for="title" class="block text-sm font-medium text-white mb-1">
                 Title of your review
             </label>
-            <input type="text" id="title" name="title" required>
+            <input type="text" id="title" name="title" required class="px-4 py-2 border border-gray-300 rounded-lg 
+                        focus:ring-blue-500 focus:border-blue-500 transition
+                        disabled:opacity-50 disabled:pointer-events-none">
         </div>
 
         <h3 class="text-3xl text-white font-semibold">Write a Review for <span class="text-green-600">{{ $movie->name }}</span></h3>

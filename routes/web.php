@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\MovieController;
@@ -16,6 +17,8 @@ use App\Http\Controllers\FeedController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [MovieController::class, 'home'])->name('home');
+
+Route::get('admin', [AdminController::class, 'dashboard'])->name('admin');
 
 Route::resource('movies', MovieController::class)->only(['index', 'show']);
 Route::resource('people', PeopleController::class)->only(['index', 'show']);
@@ -49,28 +52,9 @@ Route::post('lists/{movie}/add', [ListController::class, 'add'])->name('lists.ad
 Route::delete('lists/{movie}/remove', [ListController::class, 'remove'])->name('lists.remove');
 
 Route::resource('lists', ListController::class)->only(['index', 'show', 'create', 'store']);
-// Public routes
-Route::prefix('recommendations')->group(function () {
-    
-    // Homepage recommendations
-    Route::get('/homepage', [RecommendationController::class, 'homepage'])
-        ->name('recommendations.homepage');
-    
-    // Movies similar to a specific movie
-    Route::get('/movies/{movie}/similar', [RecommendationController::class, 'SimilarMovies'])
-        ->name('recommendations.similar');
-    
-    // Trending movies
-    Route::get('/trending', [RecommendationController::class, 'trending'])
-        ->name('recommendations.trending');
-    
-    // Recommendations by genre
-    Route::get('/genre', [RecommendationController::class, 'byGenre'])
-        ->name('recommendations.genre');
-});
 
-Route::get('/recommendations', [MovieController::class, 'recommendations'])->name('movies.recommendations');
-Route::get('/top-movies', [MovieController::class, 'topPage'])->name('movies.top');
+// Route::get('/recommendations', [MovieController::class, 'recommendations'])->name('movies.recommendations');
+// Route::get('/top-movies', [MovieController::class, 'topPage'])->name('movies.top');
 
 Route::post('/reviews', [ReviewController::class, 'create'])->name('reviews.store');
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');

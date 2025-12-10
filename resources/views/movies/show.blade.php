@@ -79,13 +79,13 @@
 
             {{-- Trailer --}}
             @if ($movie->trailer_url)
-                <div class="aspect-video rounded-xl overflow-hidden bg-gray-900">
+                <div class="h-[500px] rounded-xl overflow-hidden bg-gray-900">
                     <iframe 
-                        src="https://www.youtube.com/embed/{{ $movie->trailer_url }}" 
+                        src="https://www.youtube-nocookie.com/embed/{{ $movie->trailer_url }}" 
                         frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen
-                        class="w-full h-full"
+                        class="w-full h-[400px]"
                     ></iframe>
                 </div>
             @endif
@@ -243,9 +243,9 @@
                         <div class="flex items-start justify-between gap-4 mb-4">
                             <div class="flex items-center gap-3">
                                 <a href="{{ route('profile.show', $review->user) }}" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                                        <!-- <span class="text-white font-semibold">{{ substr($review->user->name, 0, 1) }}</span> -->
-                                        <img src="{{ asset('storage/' . $review->user->image) }}">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
+                                      <img src="{{ $review->user->image ? asset('storage/' . $post->user->image) : asset('images/person-placeholder.png') }}" alt="" class="w-full h-full object-cover">
+
                                     </div>
                                     <div>
                                         <h1 class="font-medium text-xl text-white">{{ $review->title }}</h1>
