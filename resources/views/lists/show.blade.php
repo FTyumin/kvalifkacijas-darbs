@@ -37,9 +37,10 @@
                             </h1>
                             <div class="flex items-center gap-4 flex-wrap">
                                 <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-xs font-bold text-white">
+                                    <!-- <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-xs font-bold text-white">
                                         {{ substr($list->user->name, 0, 2) }}
-                                    </div>
+                                    </div> -->
+                                    <img src="{{ $list->user->image ? asset('storage/' . $list->user->image) : asset('images/person-placeholder.png') }}" alt="" class="h-8 w-8 object-cover rounded-xl">
                                     <span class="text-gray-300 text-sm">by <span class="font-medium">{{ $list->user->name }}</span></span>
                                 </div>
                                 <span class="text-gray-500 text-sm">•</span>
@@ -98,12 +99,6 @@
                         @endif
                     @endauth
 
-                    <button class="bg-gray-700/50 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors inline-flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-                        </svg>
-                        Share
-                    </button>
                 </div>
             </div>
         </div>
