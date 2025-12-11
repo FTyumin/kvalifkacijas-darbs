@@ -2,19 +2,9 @@
 
 @section('content')
 
-<!-- INPUTS:
-MOVIE TITLE
-DIRECTOR ID
-GENRES
-ACTORS
-DESCRIPTION
-YEAR
-POSTER 
-
--->
-
 <div>
-    <form action="{{ route('movies.store') }}">
+    <form method="POST" action="{{ route('movies.store') }}">
+        @csrf
         <div>
             <label for="name">Movie title</label>
 
@@ -27,7 +17,44 @@ POSTER
 
 
         <div></div>
-        <div></div>
+
+
+        <fieldset>
+            <legend class="text-white">Genres</legend>
+            <ul>    
+                @foreach($genres as $genre)
+                <li>
+                    <label class="text-white" for="genre_{{ $genre->id }}">
+                        <input type="checkbox" 
+                            id="genre_{{ $genre->id }}" 
+                            name="genres[]" 
+                            value="{{ $genre->id }}">
+                        {{ $genre->name }}
+                    </label>
+                </li>
+                @endforeach
+            </ul>
+        </fieldset>
+
+        <div>
+            <label for="">Director</label>
+            <div class="director-selector">
+                <div class="selected-actors" id="selectedDirector"></div>
+                
+                <input 
+                    type="text" 
+                    id="directorSearch" 
+                    class="form-control" 
+                    placeholder="Search director by name..."
+                    autocomplete="off"
+                >
+                
+                <div id="directorDropdown" class="dropdown" style="display: none;"></div>
+            </div>
+            
+            <div id="directorIdInput"></div>
+
+        </div>
         <div>
 
             <div class="form-group mb-3">
@@ -46,14 +73,12 @@ POSTER
                 >
                 
                 <!-- Dropdown for search results -->
-                <div id="dropdown" class="dropdown" style="display: none;"></div>
+                <div id="dropdownActor" class="dropdown" style="display: none;"></div>
             </div>
             
-            <!-- Hidden inputs that will be submitted with the form -->
             <div id="hiddenInputs"></div>
         </div>
 
-        
         </div>
         <div>
             <label for="description">Movie title</label>
@@ -66,7 +91,7 @@ POSTER
         <div></div>
         <div></div>
 
-        <button type="submit" class="btn btn-primary">Save Movie</button>
+        <button type="submit" class="btn btn-primary text-white mt-8">Save Movie</button>
     </form>
 </div>
 @endsection
@@ -76,7 +101,8 @@ POSTER
 <script>
     const selectedActors = new Set();
     const searchInput = document.getElementById('actorSearch');
-    const dropdown = document.getElementById('dropdown');
+    const dropdown = document.getElementById('dropdownActor');
+    const dropdownDirectors = document.getElementById('dropdownDirector');
     const selectedActorsContainer = document.getElementById('selectedActors');
     const hiddenInputsContainer = document.getElementById('hiddenInputs');
     
@@ -112,15 +138,35 @@ POSTER
             });
     }
 
-    function displayResults(results) {
+    function searchDirector(query) {
+        dropdownDirectors.innerHTML = '<div class="loading">Searching...</div>';
+        dropdownDirectors.style.display = 'block';
+        
+        fetch(`{{ route('directors.search') }}?search=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                const people = Array.isArray(data) ? data : (data.results || []);
+                const directors = people.map(person => ({
+                    id: person.id,
+                    name: `${person.first_name} ${person.last_name}`
+                }));
+                displayResults(directors);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                dropdownDirectors.innerHTML = '<div class="no-results">Error loading directors</div>';
+            });
+    }
+
+    function displayResults(results, type) {
+        // if()
         const availableResults = results.filter(actor => !selectedActors.has(actor.id));
         
         if (availableResults.length === 0) {
-            dropdown.innerHTML = '<div class="no-results">No actors found</div>';
+            dropdown.innerHTML = '<div class="no-results text-white">No actors found</div>';
             dropdown.style.display = 'block';
             return;
         }
-        console.log(availableResults);
         dropdown.innerHTML = availableResults.map(actor => `
             <div class="dropdown-item text-white" data-id="${actor.id}" data-name="${actor.name}">
                 ${actor.name}
@@ -195,6 +241,99 @@ POSTER
             dropdown.style.display = 'none';
         }
     });
+
+    // Director selector
+const directorSearchInput = document.getElementById('directorSearch');
+const directorDropdown = document.getElementById('directorDropdown');
+const selectedDirectorContainer = document.getElementById('selectedDirector');
+const directorIdInput = document.getElementById('directorIdInput');
+
+let selectedDirectorId = null;
+let directorDebounceTimer;
+
+
+function searchDirectors(query) {
+    directorDropdown.innerHTML = '<div class="loading">Searching...</div>';
+    directorDropdown.style.display = 'block';
+    
+    fetch(`{{ route('directors.search') }}?search=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+            const people = Array.isArray(data) ? data : (data.results || []);
+            const directors = people.map(person => ({
+                id: person.id,
+                name: `${person.first_name} ${person.last_name}`
+            }));
+            displayDirectorResults(directors);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            directorDropdown.innerHTML = '<div class="no-results">Error loading directors</div>';
+        });
+}
+
+function displayDirectorResults(results) {
+    if (results.length === 0) {
+        directorDropdown.innerHTML = '<div class="no-results">No directors found</div>';
+        directorDropdown.style.display = 'block';
+        return;
+    }
+
+    directorDropdown.innerHTML = results.map(director => `
+        <div class="dropdown-item text-white" data-id="${director.id}" data-name="${director.name}">
+            ${director.name}
+        </div>
+    `).join('');
+    
+    directorDropdown.style.display = 'block';
+
+    directorDropdown.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', () => {
+            setDirector(parseInt(item.dataset.id), item.dataset.name);
+        });
+    });
+}
+
+function setDirector(id, name) {
+    selectedDirectorId = id;
+    directorIdInput.value = id;
+    
+    selectedDirectorContainer.innerHTML = `
+        <div class="director-tag text-white">
+            ${name}
+            <button type="button" onclick="clearDirector()">&times;</button>
+        </div>
+    `;
+    
+    directorSearchInput.value = '';
+    directorDropdown.style.display = 'none';
+}
+
+function clearDirector() {
+    selectedDirectorId = null;
+    directorIdInput.value = '';
+    selectedDirectorContainer.innerHTML = '';
+}
+
+directorSearchInput.addEventListener('input', (e) => {
+    clearTimeout(directorDebounceTimer);
+    const query = e.target.value.trim();
+
+    if (query.length < 2) {
+        directorDropdown.style.display = 'none';
+        return;
+    }
+
+    directorDebounceTimer = setTimeout(() => {
+        searchDirectors(query);
+    }, 300);
+});
+
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.director-selector')) {
+        directorDropdown.style.display = 'none';
+    }
+});
 
 </script>
 @endpush

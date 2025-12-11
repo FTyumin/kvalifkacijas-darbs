@@ -114,12 +114,16 @@ class MovieController extends Controller
         $genres = Genre::all();
         
 
-        return view('movies.add');
+        return view('movies.add', compact('genres'));
     }
 
-    public function store() {
+    public function store(Request $request) {
+        // dd($request->genres);
         Movie::create([
-
+            'name' => $request->title,
+            'description' => $request->description,
+            'year' => $request->year,
+            'poster_url' => $request->poster_url,
         ]);
 
     }
