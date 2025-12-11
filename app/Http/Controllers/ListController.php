@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\MovieList;
 
-
 class ListController extends Controller
 {
     public function store(Request $request) {
@@ -16,18 +15,25 @@ class ListController extends Controller
             'user_id' => $userId,
             'name' => $data['name'],
             'description' => $data['description'],
-            'is_public' => $request->has('is_public'),
+            'is_private' => $request->has('is_private'),
         ]);
 
         return redirect()->route('lists.index');
     }
 
     public function show(MovieList $list) {
+        if (!$list->canView(auth()->user())) {
+            abort(403, 'This list is private.');
+        }
+
         return view('lists.show', compact('list'));
     }
 
     public function index() {
-        $lists = MovieList::all();
+         $lists = MovieList::visibleTo(auth()->user())
+            ->with('user')
+            ->latest()
+            ->paginate(20);
 
         return view('lists.index', compact('lists'));
     }

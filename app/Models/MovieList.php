@@ -10,7 +10,7 @@ class MovieList extends Model
         'user_id',
         'name',
         'description',
-        'is_public',
+        'is_private',
     ];
 
     protected $table = 'lists';
@@ -45,6 +45,28 @@ class MovieList extends Model
 
     public function removeMovie(int $movieId) {
         $this->movies()->detach($movieId);
+    }
+
+    public function scopeVisibleTo($query, $user)
+    {
+        if (!$user) {
+            return $query->where('is_private', false);
+        }
+
+        return $query->where(function($q) use ($user) {
+            $q->where('is_private', false)
+              ->orWhere('user_id', $user->id);
+        });
+    }
+
+    // Check if user can view this list
+    public function canView($user)
+    {
+        if (!$this->is_private) {
+            return true;
+        }
+
+        return $user && $this->user_id === $user->id;
     }
 
     protected static function booted() {
