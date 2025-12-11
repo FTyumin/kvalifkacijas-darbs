@@ -15,9 +15,15 @@
             >
         </div>
 
+        <div>>
+            <label for="id">Movie title</label>
 
-        <div></div>
-
+            <input type="text" id="id" name="id" required 
+                autocomplete=""
+                class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all @error('email') border-red-500 focus:ring-red-500 @enderror"
+                placeholder="Enter movie ID"
+            >
+        </div>
 
         <fieldset>
             <legend class="text-white">Genres</legend>
@@ -39,7 +45,7 @@
         <div>
             <label for="">Director</label>
             <div class="director-selector">
-                <div class="selected-actors" id="selectedDirector"></div>
+                <div class="selected-directors" id="selectedDirector"></div>
                 
                 <input 
                     type="text" 
@@ -52,11 +58,10 @@
                 <div id="directorDropdown" class="dropdown" style="display: none;"></div>
             </div>
             
-            <div id="directorIdInput"></div>
-
+            <input type="hidden" name="director_id" id="directorIdInput" value="">
         </div>
-        <div>
 
+        <div>
             <div class="form-group mb-3">
             <label>Actors</label>
             <div class="actor-selector">
@@ -88,8 +93,23 @@
                 placeholder="Enter a description(optional)"
             >
         </div>
-        <div></div>
-        <div></div>
+        <div>
+            <label for="year">Release year</label>
+
+            <input type="text" id="year" name="year" required 
+                class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all @error('email') border-red-500 focus:ring-red-500 @enderror"
+                placeholder="Enter release year"
+            >
+        </div>
+
+        <div>
+             <label for="year">Poster URL</label>
+
+            <input type="text" id="poster_url" name="poster_url"  
+                class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all @error('email') border-red-500 focus:ring-red-500 @enderror"
+                placeholder="Enter poster url"
+            >
+        </div>
 
         <button type="submit" class="btn btn-primary text-white mt-8">Save Movie</button>
     </form>

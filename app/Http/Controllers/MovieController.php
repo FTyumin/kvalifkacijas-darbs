@@ -112,19 +112,19 @@ class MovieController extends Controller
 
     public function add() {
         $genres = Genre::all();
-        
-
         return view('movies.add', compact('genres'));
     }
 
     public function store(Request $request) {
-        // dd($request->genres);
         Movie::create([
-            'name' => $request->title,
+            'id' => $request->id,
+            'name' => $request->name,
+            'director_id' => $request->director_id,
             'description' => $request->description,
+            'language' => 'EN',
             'year' => $request->year,
             'poster_url' => $request->poster_url,
         ]);
-
+        return redirect('movies');
     }
 }
