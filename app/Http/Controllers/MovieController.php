@@ -79,10 +79,6 @@ class MovieController extends Controller
         return view('movies.show', compact('movie', 'similarMovies'));
     }
 
-    public function display() {
-        return view('movies.display');
-    }
-
     public function search(Request $request) {
         $search = $request->input('search');
 
@@ -96,23 +92,6 @@ class MovieController extends Controller
             ->get();
 
         return view('movies.search', compact('movies', 'search', 'people'));
-    }
-
-    public function recommendations(Request $request)
-    {
-        $user = $request->user();
-        
-        if (!$user) {
-            return redirect()->route('login');
-        }
-
-        // $userRatingsCount = $user->reviews()->count();
-        
-        $recommendations = $this->contentRecommender
-            ->getRecommendationsForUser($user, 20);
-        $method = 'Content-Based';
-
-        return view('movies.recommendations', compact('recommendations', 'method', 'userRatingsCount'));
     }
 
     public function topPage(TmdbApiClient $tmdb)
@@ -132,6 +111,16 @@ class MovieController extends Controller
     }
 
     public function add() {
+        $genres = Genre::all();
+        
+
         return view('movies.add');
+    }
+
+    public function store() {
+        Movie::create([
+
+        ]);
+
     }
 }

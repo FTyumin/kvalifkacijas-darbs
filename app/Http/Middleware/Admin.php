@@ -21,9 +21,10 @@ class Admin
 
         }
         if($user->is_admin != '1') {
-            return redirect('');
+            // return redirect('');
+            return $next($request);
+
         }
 
-        return $next($request);
     }
 }

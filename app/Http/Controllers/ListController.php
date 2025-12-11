@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Movie;
-use App\Models\User;
 use App\Models\MovieList;
 
 
@@ -32,10 +30,6 @@ class ListController extends Controller
         $lists = MovieList::all();
 
         return view('lists.index', compact('lists'));
-    }
-
-    public function share() {
-
     }
 
     public function create() {

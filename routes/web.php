@@ -23,7 +23,11 @@ Route::get('admin', [AdminController::class, 'dashboard'])->middleware([Admin::c
 
 
 // })->middleware([Admin::class]);
+// Route::post('movies/add', [MovieController::class, 'store'])->name('movies.store')->middleware(Admin::class);
+Route::get('movies/add', [MovieController::class, 'add'])->name('movies.add');
 Route::resource('movies', MovieController::class)->only(['index', 'show']);
+
+Route::get('/actors/search', [PeopleController::class, 'search'])->name('actors.search');
 Route::resource('people', PeopleController::class)->only(['index', 'show']);
 Route::resource('genres', GenreController::class)->only(['index', 'show']);
 
