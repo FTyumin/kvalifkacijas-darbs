@@ -19,13 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [MovieController::class, 'home'])->name('home');
 
 Route::get('admin', [AdminController::class, 'dashboard'])->middleware([Admin::class]);
-// Route::get('admin', function () {
+Route::get('movies/add', [MovieController::class, 'add'])->name('movies.add')->middleware(Admin::class);
+Route::post('movies/store', [MovieController::class, 'store'])->name('movies.store')->middleware(Admin::class);
 
-
-// })->middleware([Admin::class]);
-// Route::post('movies/add', [MovieController::class, 'store'])->name('movies.store')->middleware(Admin::class);
-Route::get('movies/add', [MovieController::class, 'add'])->name('movies.add');
-Route::post('movies/store', [MovieController::class, 'store'])->name('movies.store');
 Route::resource('movies', MovieController::class)->only(['index', 'show']);
 
 Route::get('/actors/search', [PeopleController::class, 'search'])->name('actors.search');
@@ -61,9 +57,6 @@ Route::post('lists/{movie}/add', [ListController::class, 'add'])->name('lists.ad
 Route::delete('lists/{movie}/remove', [ListController::class, 'remove'])->name('lists.remove');
 
 Route::resource('lists', ListController::class)->only(['index', 'show', 'create', 'store']);
-
-// Route::get('/recommendations', [MovieController::class, 'recommendations'])->name('movies.recommendations');
-// Route::get('/top-movies', [MovieController::class, 'topPage'])->name('movies.top');
 
 Route::post('/reviews', [ReviewController::class, 'create'])->name('reviews.store');
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');

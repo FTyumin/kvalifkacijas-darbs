@@ -116,7 +116,7 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                 @foreach($list->movies as $movie)
                 <div class="group relative">
-                    <a href="{{ route('movies.show', $movie) }}" class="block">
+                    <a href="{{ route('movies.show', $movie->slug) }}" class="block">
                         <div class="aspect-[2/3] bg-gray-700/50 rounded-lg overflow-hidden border border-gray-600/50 hover:border-gray-500 transition-all group-hover:shadow-lg group-hover:shadow-blue-500/20">
                             <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
                                  src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"  
@@ -192,13 +192,4 @@
         @endif
     </div>
 </div>
-
-<style>
-.line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-</style>
 @endsection

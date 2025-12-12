@@ -34,8 +34,8 @@ class MovieController extends Controller
         $userRecommendations = [];
 
         if($id) {
-            // $userRecommendations = $this->contentRecommender->getRecommendationsForUser($id, 8);
-            $userRecommendations = Cache::remember("user:{$id}:recs", 3600, function () use ($id) {
+            $userRecommendations = $this->contentRecommender->getRecommendationsForUser($id, 8);
+            Cache::remember("user:{$id}:recs", 3600, function () use ($id) {
                 return $this->contentRecommender->getRecommendationsForUser($id, 8);
             });
 
@@ -47,12 +47,14 @@ class MovieController extends Controller
         $movies = Movie::paginate(12);
         $query = Movie::with('genres');
 
+        // genre filter
         if($request->filled('genre')) {
             $query->whereHas('genres', function($q) use ($request) {
                 $q->where('genres.id', $request->genre);
             });
         }
 
+        // rating filter
         if ($request->filled('min_rating')) {
             $query->where('tmdb_rating', '>=', $request->min_rating);
         }
@@ -75,7 +77,10 @@ class MovieController extends Controller
     public function show(Movie $movie)
     {
         $similarMovies = $this->contentRecommender->findSimilarMovies($movie->id);
-        // dd($similarMovies);
+        $id = $movie->id;
+        Cache::remember("movie:{$id}:recs", 3600, function () use ($id) {
+                return $this->contentRecommender->findSimilarMovies($id, 8);
+            });
         return view('movies.show', compact('movie', 'similarMovies'));
     }
 
@@ -92,22 +97,6 @@ class MovieController extends Controller
             ->get();
 
         return view('movies.search', compact('movies', 'search', 'people'));
-    }
-
-    public function topPage(TmdbApiClient $tmdb)
-    {
-        $n = 100;
-        $data = $tmdb->getTopMovies($n, ['method' => 'top-rated']);
-        $movies = collect($data ?? [])->map(function ($r) use ($tmdb) {
-            return [
-                'id' => $r['id'] ?? null,
-                'title' => $r['title'] ?? null,
-                'poster' => isset($r['poster_path']) ? $tmdb->posterUrl($r['poster_path'],'w500') : asset('images/cinema.webp'),
-                'year' => !empty($r['release_date']) ? substr($r['release_date'],0,4) : null,
-            ];
-        })->all();
-
-        return view('movies.top', compact('movies'));
     }
 
     public function add() {

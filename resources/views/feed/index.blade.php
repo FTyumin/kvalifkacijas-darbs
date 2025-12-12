@@ -203,7 +203,13 @@
                         </div>
                     </article>
                 @endif
-                @endforeach
+            @endforeach
+
+            @if(count($activities) == 0)
+                <div>
+                    <p class="text-white">You don't follow anyone, yet.</p>
+                </div>
+            @endif
         </div>
     </div>
 @endsection

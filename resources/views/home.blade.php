@@ -119,6 +119,7 @@
   </div>
 
     <!-- Responsive Grid -->
+     <h2 class="text-white">Recommendations</h2>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ">
     @foreach($userRecommendations as $movie)
       
@@ -245,7 +246,7 @@
                     <div class="flex items-center gap-2">
                         <div class="w-10 h-10 rounded-full overflow-hidden">
                             <!-- {{ substr($list->user->name, 0, 2) }} -->
-                              <img src="{{ asset('storage/' . $list->user->image) }}">
+                              <img src="{{ $list->user->image ? asset('storage/' . $list->user->image) : asset('images/person-placeholder.png') }}" alt="" class="h-8 w-8 object-cover">
                         </div>
                         <div>
                             <p class="text-sm font-medium text-gray-300">{{ $list->user->name }}</p>
