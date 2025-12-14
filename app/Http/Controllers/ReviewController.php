@@ -15,13 +15,12 @@ class ReviewController extends Controller
             return back()->with('warning', 'You must be logged in to write a review.');
         }
 
-        $request->validate([
-            'title' => 'required|string|max:30',
-            'rating' => 'required|numeric|min:1|max:5',
-            'comment' => 'required|string|max:1000'
-        ]);
+        // $request->validate([
+        //     'title' => 'required|string|max:30',
+        //     'rating' => 'required|numeric|min:1|max:5',
+        //     'comment' => 'required|string|max:1000'
+        // ]);
 
-        // dd($request->title);
         Review::create([
             'user_id' => $userId,
             'movie_id' => $request->movie_id, 
@@ -33,7 +32,7 @@ class ReviewController extends Controller
 
         Cache::forget("user:{$userId}:recs");
 
-        return back()->with('success', 'Thank for your review');
+        // return back()->with('success', 'Thank for your review');
     }
 
     public function index(Request $request) {

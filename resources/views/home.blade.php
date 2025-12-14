@@ -8,11 +8,11 @@
 
     <!-- Content -->
     <div class="relative mx-auto max-w-6xl px-6 py-32 md:py-40 flex flex-col items-start">
-
+      @auth
         <span class="text-blue-400 font-semibold tracking-wide text-sm md:text-base uppercase mb-4">
-            Welcome to Your Movie World
+            Welcome to Your Movie World {{  $user->name  ?? '' }}
         </span>
-
+      @endauth
         <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight max-w-3xl drop-shadow-xl">
             Discover. Track. Share<span class="text-blue-500">.</span>
         </h1>
@@ -35,6 +35,9 @@
         </div>
     </div>
 
+    <div>
+      <p>How are recommendations created?</p>
+    </div>
 </section>
 
 

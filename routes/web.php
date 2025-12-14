@@ -8,13 +8,13 @@ use App\Http\Controllers\MarkController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\UserRelationshipController;
 use App\Http\Controllers\FeedController;
 use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\CreateReview;
 
 Route::get('/', [MovieController::class, 'home'])->name('home');
 
@@ -58,10 +58,11 @@ Route::delete('lists/{movie}/remove', [ListController::class, 'remove'])->name('
 
 Route::resource('lists', ListController::class)->only(['index', 'show', 'create', 'store']);
 
-Route::post('/reviews', [ReviewController::class, 'create'])->name('reviews.store');
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');
 Route::get('/reviews/{review}', [ReviewController::class, 'show'])->name('reviews.show');
 Route::post('review/{review}/like', [ReviewController::class, 'toggleLike'])->name('reviews.like');
+
+// Route::get('/create-review', CreateReview::class);
 
 Route::post('/comments', [CommentController::class, 'create'])->name('comments.store');
 
