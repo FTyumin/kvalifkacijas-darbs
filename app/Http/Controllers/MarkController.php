@@ -10,6 +10,7 @@ use App\Models\Movie;
 use App\Models\Seen;
 use App\Models\WantToWatch;
 use Redirect;
+use Devrabiul\ToastMagic\Facades\ToastMagic;
 
 class MarkController extends Controller
 {
@@ -37,6 +38,8 @@ class MarkController extends Controller
             WantToWatch::remove($movie, $user);
         } else {
             WantToWatch::add($movie, $user);
+            // ToastMagic::success('Movie added to watchlist!');
+
         }
 
         return back();

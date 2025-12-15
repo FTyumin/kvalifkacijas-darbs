@@ -7,14 +7,14 @@
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   
   <title>Movie Platform</title>
-  
+  {!! ToastMagic::styles() !!}
  
    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
   @livewireStyles
 </head>
-<body class="font-sans antialiased flex flex-col min-h-screen">
+<body theme="dark" class="font-sans antialiased flex flex-col min-h-screen">
   @include('header')
 
   <main class="bg-black px-6 sm:px-4 lg:px-28 py-8 flex-1">
@@ -29,5 +29,6 @@
     ])
     @stack('scripts')
     @livewireScripts
+    {!! ToastMagic::scripts() !!}
 </body>
 </html>

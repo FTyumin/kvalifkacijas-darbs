@@ -8,33 +8,7 @@ use Illuminate\Support\Facades\Cache;
 
 class ReviewController extends Controller
 {
-    public function create(Request $request) {
-        if (\Auth::check()) {
-            $userId = \Auth::user()->id;
-        } else {
-            return back()->with('warning', 'You must be logged in to write a review.');
-        }
-
-        // $request->validate([
-        //     'title' => 'required|string|max:30',
-        //     'rating' => 'required|numeric|min:1|max:5',
-        //     'comment' => 'required|string|max:1000'
-        // ]);
-
-        Review::create([
-            'user_id' => $userId,
-            'movie_id' => $request->movie_id, 
-            'rating' => $request->rating,
-            'title' => $request->title,
-            'description' => $request->comment,
-            'spoilers' => $request->has('spoiler')
-        ]);
-
-        Cache::forget("user:{$userId}:recs");
-
-        // return back()->with('success', 'Thank for your review');
-    }
-
+  
     public function index(Request $request) {
         $reviews = Review::with('user')->get();
 
@@ -59,6 +33,4 @@ class ReviewController extends Controller
 
         return back();
     }
-
-
 }

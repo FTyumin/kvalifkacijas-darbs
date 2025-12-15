@@ -1,16 +1,23 @@
 <div class="md:col-span-full">
-    <!-- Success/Warning Messages -->
+    <!-- Success/Warning/Error Messages -->
+       @if (session()->has('error'))
+        <div class="alert alert-danger bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {{ session('error') }}
+        </div>
+    @endif
+    
     @if (session()->has('warning'))
-        <div class="alert alert-warning">
+        <div class="alert alert-warning bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
             {{ session('warning') }}
         </div>
     @endif
     
-    @if (session()->has('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
+    @if (session()->has('status'))
+        <div class="alert alert-success bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            {{ session('status') }}
         </div>
     @endif
+
     <form wire:submit.prevent="save" class="mt-16 mx-auto space-y-6 mb-12">
 
         <div>
@@ -25,7 +32,7 @@
         </div>
 
         <h3 class="text-3xl text-white font-semibold">Write a Review for <span class="text-green-600">{{ $movie->name }}</span></h3>
-        <input type="hidden" name="movie_id" value="{{ $movie->id }}" autocomplete="off" >
+        <input type="hidden" name="movie_id" value="{{ $movie->id }}" wire:model="movieId" autocomplete="off" >
         {{-- Star Rating --}}
         <fieldset class="flex items-center space-x-1" wire:model="rating" autocomplete="off">
             <legend class="sr-only">Rating</legend>
@@ -111,11 +118,35 @@
             <input type="checkbox" name="spoiler" wire:model="spoilers"> <p>Contains spoilers</p>
         </div>
 
-        {{-- Submit --}}
-        <button type="submit" class="inline-block px-6 py-3 bg-blue-600 text-white 
-            font-medium rounded-lg hover:bg-blue-700 transition">
-            Submit Review
-        </button>
+        <!-- Buttons -->
+        <div class="flex gap-4">
+                <button type="submit" 
+                        wire:loading.attr="disabled"
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded">
+                    <span wire:loading.remove wire:target="save">
+                        {{ $isEditing ? 'Update Review' : 'Submit Review' }}
+                    </span>
+                    <span wire:loading wire:target="save">
+                        {{ $isEditing ? 'Updating...' : 'Submitting...' }}
+                    </span>
+                </button>
+                
+                @if($isEditing)
+                    <button type="button" 
+                            wire:click="cancelEdit"
+                            class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded">
+                        Cancel
+                    </button>
+                    
+                    <button type="button" 
+                            wire:click="delete"
+                            wire:confirm="Are you sure you want to delete this review?"
+                            class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded">
+                        <span wire:loading.remove wire:target="delete">Delete Review</span>
+                        <span wire:loading wire:target="delete">Deleting...</span>
+                    </button>
+                @endif
+            </div>
     </form>
 
     {{-- Reviews Section --}}

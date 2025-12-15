@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Movie;
 use App\Models\Genre;
 use App\Models\MovieList;
+use App\Models\Suggestion;
 use App\Services\ContentBasedRecommender;
 use App\Services\TmdbApiClient;
 
@@ -115,5 +116,20 @@ class MovieController extends Controller
             'poster_url' => $request->poster_url,
         ]);
         return redirect('movies');
+    }
+
+    public function storeSuggestion(Request $request) {
+        $id = auth()->id();
+
+        Suggestion::create([
+            'user_id' => $id,
+            'title' => $request->title,
+        ]);
+
+        session()->flash('success', 'Suggestion has been sent to admin');
+    }
+
+    public function sendSuggestion(Request $request) {
+        return view('suggestion');
     }
 }

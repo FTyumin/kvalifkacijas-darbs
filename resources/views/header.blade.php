@@ -14,7 +14,7 @@
       </div>
 
       <div class="hidden lg:flex items-center gap-8">
-        <a href="{{ route('reviews') }}" class="text-gray-300 hover:text-white transition-colors font-medium">Reviews</a>
+        <a href="/reviews" class="text-gray-300 hover:text-white transition-colors font-medium">Reviews</a>
       </div>
 
       <div class="hidden lg:flex items-center gap-8">
