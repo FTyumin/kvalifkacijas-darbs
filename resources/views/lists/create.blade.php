@@ -30,12 +30,12 @@
                 <div class="relative">
                     
                     <textarea 
-                        type="description" 
+                        type="text" 
                         id="description" 
                         name="description" 
                         required 
                         autocomplete="description"
-                        class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all @error('email') border-red-500 focus:ring-red-500 @enderror"
+                        class="w-full   bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all "
                         placeholder="Enter list's description"
                         rows="5" cols="20"
                     >

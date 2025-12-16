@@ -7,11 +7,9 @@
     <div class="absolute inset-0 opacity-10">
         <img src="{{ asset('images/bg-hero.jpg') }}" 
              alt="Cinema background" 
-             class="w-full h-full object-cover">
+             class="w-full h-full object-cover rounded-md">
     </div>
     
-    <!-- Dark cinematic overlay with gradient -->
-    <!-- <div class="absolute inset-0 bg-gradient-to-b from-black/70  to-neutral-800"></div> -->
     <!-- Content -->
     <div class="relative mx-auto max-w-6xl px-6 py-32 md:py-40 flex flex-col items-start">
       @auth
@@ -50,7 +48,7 @@
 
 
 <!-- Trending Movies -->
-<div class="my-20 mt-[20rem] mx-6 sm:mx-8 lg:mx-28 p-8">
+<div class="my-20 mt-[10rem] mx-6 sm:mx-8 lg:mx-28 p-8">
   <div class="mb-12">
     <h1 class="mb-3 text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
       Featured <span class="text-yellow-600">Movies</span>
@@ -134,8 +132,11 @@
     </a>
   </div>
 
-    <!-- Responsive Grid -->
-     <h2 class="text-white">Recommendations</h2>
+  <h1 class="mb-3 mt-10 text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+      Our picks <span class="text-yellow-600">For You</span>
+  </h1>
+
+
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ">
     @foreach($userRecommendations as $movie)
       

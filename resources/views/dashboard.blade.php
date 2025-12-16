@@ -111,17 +111,15 @@
                                 </svg>
                                 My Watchlist
                             </h2>
-                            <a href="/watchlist" class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">
-                                View All →
-                            </a>
+                            
                         </div>
 
                         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                            @foreach($movies as $movie)
+                            @foreach($watchList as $movie)
                                 <div class="group relative">
                                 <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden relative">
                             <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                                 src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"  
+                                 src="https://image.tmdb.org/t/p/w500/{{ $movie->movie->poster_url }}"  
                                  alt="Movie poster" />
                             
                             <!-- Watched Badge -->
@@ -133,9 +131,9 @@
                         </div>
                         
                         <h3 class="mt-2 text-sm font-medium text-white line-clamp-2">
-                            {{ $movie->name }}
+                            {{ $movie->movie->name }}
                         </h3>
-                        <p class="text-xs text-gray-400">Watched  ago</p>
+                        <p class="text-xs text-gray-400">Watched {{$movie->created_at->diffForHumans()}}</p>
                         
                         </div>
                             @endforeach
@@ -203,14 +201,6 @@
                     <div class="bg-gray-800/50 glass border border-gray-700 rounded-2xl p-6">
                         <h3 class="text-lg font-bold text-white mb-4">Quick Actions</h3>
                         <div class="space-y-3">
-                            <a href="/movies/random" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
-                                <div class="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                                    </svg>
-                                </div>
-                                <span class="text-sm font-medium">Discover New Movies</span>
-                            </a>
                             
                             <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
                                 <div class="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
@@ -265,9 +255,35 @@
                             
                         </div>
                     </div>
+                    @endif
 
-                    @else
+                    @if(auth()->user()->is_admin)
+                    <div class="bg-gray-800/50 glass border border-gray-700 rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">Admin Actions</h3>
+                        <div class="space-y-3">
+                            <a href="/admin" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
+                                <div class="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm font-medium">Admin dashboard</span>
+                            </a>
+                        </div>
 
+                        <div class="space-y-3">
+                            
+                            <a href="/movies/add" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
+                                <div class="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm font-medium">Add movie</span>
+                            </a>
+
+                        </div>
+</div>
                     @endif
 
                 </div>
@@ -287,7 +303,7 @@
 
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
                     @forelse($seen as $movie)
                     <a href="{{ route('movies.show', $movie->movie->slug) }}">
                         <div class="group relative">

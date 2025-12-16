@@ -101,7 +101,6 @@ class InsertData extends Command
                         'biography' => $actor_data['biography'],
                     ]
                 );
-
             }
 
             // Sync all actors at once (won't create duplicates)

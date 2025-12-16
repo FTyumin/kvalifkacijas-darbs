@@ -1,4 +1,4 @@
-<footer class="bg-black border-t border-border py-5 px-8">
+<footer class="bg-gradient-to-b from-neutral-800 to-neutral-900 border-t border-border py-5 px-8">
     <div class="px-5 sm:px-8 lg:px-28">
     <div class="grid lg:grid-cols-4 gap-8 mb-12 ">
         <div class="space-y-4">

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-black text-white overflow-x-hidden">
+<div class="min-h-screen text-white overflow-x-hidden">
    
     
     <div class="relative z-10 min-h-screen flex">
@@ -21,7 +21,7 @@
                 <!-- Logo -->
                 <div class="flex items-center justify-center gap-3 mb-8">
                     <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-8 h-8 text-white" fill="yellow" viewBox="0 0 20 20">
                             <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
                         </svg>
                     </div>
@@ -37,7 +37,7 @@
                 <div class="space-y-4 text-left max-w-md">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-4 h-4" fill="green" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </div>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-4 h-4" fill="green" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </div>
@@ -53,7 +53,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-4 h-4" fill="green" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </div>
