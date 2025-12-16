@@ -9,12 +9,16 @@ class WantToWatch extends Mark
 {
     public static function markableRelationName(): string
     {
-        return 'interestedUsers'; // or 'watchers'
+        return 'interestedUsers'; 
     }
     
     public static function markRelationName(): string
     {
-        return 'wantToWatch'; // or 'watchlist'
+        return 'wantToWatch'; 
+    }
+
+    public function movie() {
+        return $this->belongsTo(Movie::class, 'markable_id');
     }
 
     protected $table = 'markable_watchlist';

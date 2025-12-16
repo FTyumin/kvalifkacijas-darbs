@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Review;
 use App\Models\Movie;
+use App\Models\Suggestion;
 use App\Models\User;
+use App\Notifications\SuggestionAccepted;
 
 class AdminController extends Controller
 {
@@ -30,7 +32,20 @@ class AdminController extends Controller
             ->orderBy('watchers_count', 'desc')
             ->take(5)
             ->get();
-            
-        return view('admin');
+
+        $suggestions = Suggestion::where('accepted', '0')->get();
+
+        return view('admin', compact('suggestions'));
+    }
+
+    public function approveSuggestion(Suggestion $suggestion) {
+        $suggestion->update(['accepted' => 1]);
+        $user = $suggestion->user;
+        $user->notify(new SuggestionAccepted());
+        return back();
+    }
+
+    public function rejectSuggestion(Suggestion $suggestion) {
+
     }
 }

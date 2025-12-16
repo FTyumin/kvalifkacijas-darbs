@@ -26,6 +26,8 @@ Route::resource('movies', MovieController::class)->only(['index', 'show']);
 Route::get('suggestion', [MovieController::class, 'sendSuggestion'])->middleware('auth');
 Route::post('suggestions/store', [MovieController::class, 'storeSuggestion'])->name('suggestions.store');
 
+Route::post('/suggestions/{suggestion}/approve', [AdminController::class, 'approveSuggestion'])->name('suggestions.approve');
+
 Route::get('/actors/search', [PeopleController::class, 'search'])->name('actors.search');
 Route::get('/directors/search', [PeopleController::class, 'directorSearch'])->name('directors.search');
 Route::resource('people', PeopleController::class)->only(['index', 'show']);

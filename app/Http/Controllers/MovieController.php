@@ -27,7 +27,7 @@ class MovieController extends Controller
 
     public function home() {
         $movies = Movie::all()->take(4);
-        $genres = Genre::inRandomOrder()->take(4)->get();
+        $genres = Genre::inRandomOrder()->take(4)->withCount('movies')->get();
 
         $lists = MovieList::all()->take(4);
 
@@ -121,12 +121,17 @@ class MovieController extends Controller
     public function storeSuggestion(Request $request) {
         $id = auth()->id();
 
+        $request->validate([
+            'title' => 'required|string|min:3|max:30',
+        ]);
+        
         Suggestion::create([
             'user_id' => $id,
             'title' => $request->title,
         ]);
 
         session()->flash('success', 'Suggestion has been sent to admin');
+        return redirect('');
     }
 
     public function sendSuggestion(Request $request) {

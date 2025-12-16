@@ -17,7 +17,7 @@
 <body theme="dark" class="font-sans antialiased flex flex-col min-h-screen">
   @include('header')
 
-  <main class="bg-black px-6 sm:px-4 lg:px-28 py-8 flex-1">
+  <main class="px-6 sm:px-4  py-8 flex-1 bg-gradient-to-b from-neutral-900 to-neutral-800">
     @yield('content')
   </main>
 

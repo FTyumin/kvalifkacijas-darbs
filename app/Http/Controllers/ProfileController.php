@@ -45,7 +45,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.show')->with('status', 'profile-updated');
+        return Redirect::route('profile.show', $request->user()->id)->with('status', 'profile-updated');
     }
 
     /**
@@ -77,7 +77,7 @@ class ProfileController extends Controller
             $reviews = Review::where('user_id', $user->id)->get();
             $review_count = Review::where('user_id', $user->id)->count();
             $average_review = round(Review::where('user_id', $user->id)->avg('rating'), 2) ?? 0;
-
+            
             return view('dashboard', compact('reviews', 'user', 'movies', 'average_review', 'seen'));
         } else {
             $movies = $user->movies;

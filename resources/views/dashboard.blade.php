@@ -246,6 +246,30 @@
 
                         </div>
                     </div>
+
+                        <!-- Notifications -->
+                    @if(auth()->user()->notifications->isNotEmpty())
+                    <div class="bg-gray-800/50 glass border border-gray-700 rounded-2xl p-6 mt-4">
+                        <h3 class="text-lg font-bold text-white mb-4">Notifications</h3>
+                        <div class="space-y-3">
+                            @foreach(auth()->user()->notifications as $notification)
+                                <div class="p-4 bg-gray-800 rounded">
+                                    <p class="text-white">
+                                        {{ $notification->data['message'] }}
+                                    </p>
+                                    <span class="text-sm text-gray-400">
+                                        {{ $notification->created_at->diffForHumans() }}
+                                    </span>
+                                </div>
+                            @endforeach
+                            
+                        </div>
+                    </div>
+
+                    @else
+
+                    @endif
+
                 </div>
             </div>
         </div>
@@ -264,28 +288,32 @@
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                    @foreach($seen as $movie)
-                    <div class="group relative">
-                        <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden relative">
-                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                                 src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}" 
-                                 alt="Movie poster" />
-                            
-                            <!-- Watched Badge -->
-                            <div class="absolute top-2 right-2 bg-green-600 rounded-full p-1">
-                                <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                                </svg>
+                    @forelse($seen as $movie)
+                    <a href="{{ route('movies.show', $movie->movie->slug) }}">
+                        <div class="group relative">
+                            <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden relative">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                                    src="https://image.tmdb.org/t/p/w500/{{ $movie->movie->poster_url }}" 
+                                    alt="Movie poster" />
+                                
+                                <!-- Watched Badge -->
+                                <div class="absolute top-2 right-2 bg-green-600 rounded-full p-1">
+                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
                             </div>
+                            
+                            <h3 class="mt-2 text-sm font-medium line-clamp-2">
+                                {{ $movie->movie->name }}
+                            </h3>
+                            <p class="text-xs text-gray-400">Watched {{ $movie->created_at->diffForHumans() }}</p>
+                            
                         </div>
-                        
-                        <h3 class="mt-2 text-sm font-medium line-clamp-2">
-                            {{ $movie->name }}
-                        </h3>
-                        <p class="text-xs text-gray-400">Watched {{ $movie->created_at->diffForHumans() }}</p>
-                        
-                    </div>
-                    @endforeach
+                    </a>
+                    @empty
+                    
+                    @endforelse
                 </div>
             </div>
         </div>

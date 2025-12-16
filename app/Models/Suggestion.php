@@ -9,6 +9,11 @@ class Suggestion extends Model
     protected $fillable = [
         'user_id',
         'title',
+        'accepted',
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 
 }

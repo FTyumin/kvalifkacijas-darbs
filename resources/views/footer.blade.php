@@ -37,17 +37,7 @@
 
     <div class="border-t border-border pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground text-white">
         <p>&copy; 2025  All rights reserved.</p>
-        <div class="flex gap-6">
-        <a href="#" class="hover:text-foreground transition-colors text-white">
-            Privacy Policy
-        </a>
-        <a href="#" class="hover:text-foreground transition-colors text-white">
-            Terms of Service
-        </a>
-        <a href="#" class="hover:text-foreground transition-colors text-white">
-            Contact
-        </a>
-        </div>
+        
     </div>
     </div>
 </footer>

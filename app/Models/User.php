@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Maize\Markable\Markable;
+use Maize\Markable\Models\Favorite;
 
 class User extends Authenticatable
 {
@@ -55,7 +56,7 @@ class User extends Authenticatable
 
     public function wantToWatch()
     {
-        return $this->belongsToMany(Movie::class, 'markable_watchlist', 'user_id', 'markable_id');
+        return $this->hasMany(WantToWatch::class);
     }
 
     public function ratedMovies()
@@ -65,11 +66,11 @@ class User extends Authenticatable
     }
 
     public function seenMovies() {
-        return $this->belongsToMany(Movie::class, 'markable_seen', 'user_id', 'markable_id');
+        return $this->hasMany(Seen::class);
     }
 
     public function favorites() {
-        return $this->belongsToMany(Movie::class, 'markable_favorites', 'user_id', 'markable_id');
+        return $this->hasMany(Favorite::class);
     }
 
     public function lists()

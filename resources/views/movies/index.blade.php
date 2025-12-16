@@ -21,7 +21,7 @@
                 <!-- Genre Filter -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Genre</label>
-                    <select name="genre" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
+                    <select name="genre" class="w-full px-3 py-2 border border-gray-300 text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
                         <option value="">All Genres</option>
                         @foreach($genres as $genre)
                             <option value="{{ $genre->id }}" {{ request('genre') == $genre->id ? 'selected' : '' }}>
@@ -34,7 +34,7 @@
                 <!-- Rating Filter -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Min Rating</label>
-                    <select name="min_rating" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
+                    <select name="min_rating" class="w-full px-3 py-2 border border-gray-300 text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
                         <option value="">Any Rating</option>
                         @foreach([9, 8, 7, 6, 5] as $rating)
                             <option value="{{ $rating }}" {{ request('min_rating') == $rating ? 'selected' : '' }}>
@@ -47,7 +47,7 @@
                 <!-- Year Filter -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
-                    <select name="year" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
+                    <select name="year" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
                         <option value="">All Years</option>
                         @foreach($years as $year)
                             <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>
@@ -60,7 +60,7 @@
                 <!-- Sort Filter -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sort By</label>
-                    <select name="sort" class="w-full px-3 py-2 border border-gray-300 text-black dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
+                    <select name="sort" class="w-full px-3 py-2 border border-gray-300 text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
                         <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>Rating</option>
                         <option value="year" {{ request('sort') == 'year' ? 'selected' : '' }}>Year</option>
                         <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Title</option>
@@ -72,7 +72,7 @@
                 <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
                     Apply Filters
                 </button>
-                <a href="{{ route('movies.index') }}" class="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium">
+                <a href="{{ route('movies.index') }}" class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300  transition-colors font-medium">
                     Clear All
                 </a>
             </div>
@@ -81,7 +81,7 @@
 
     @if(request()->hasAny(['genre', 'min_rating', 'year']))
         <div class="mb-4 flex flex-wrap gap-2">
-            <span class="text-sm text-gray-600 dark:text-gray-400">Active filters:</span>
+            <span class="text-sm text-white ">Active filters:</span>
             @if(request('genre'))
                 <span class="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
                     {{ $genres->find(request('genre'))->name }}

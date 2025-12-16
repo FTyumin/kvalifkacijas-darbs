@@ -4,17 +4,23 @@
 
 
     <!-- Dark cinematic overlay -->
-    <div class="absolute inset-0 bg-gradient-to-b"></div>
-
+    <div class="absolute inset-0 opacity-10">
+        <img src="{{ asset('images/bg-hero.jpg') }}" 
+             alt="Cinema background" 
+             class="w-full h-full object-cover">
+    </div>
+    
+    <!-- Dark cinematic overlay with gradient -->
+    <!-- <div class="absolute inset-0 bg-gradient-to-b from-black/70  to-neutral-800"></div> -->
     <!-- Content -->
     <div class="relative mx-auto max-w-6xl px-6 py-32 md:py-40 flex flex-col items-start">
       @auth
-        <span class="text-blue-400 font-semibold tracking-wide text-sm md:text-base uppercase mb-4">
-            Welcome to Your Movie World {{  $user->name  ?? '' }}
+        <span class="text-yellow-300 font-semibold tracking-wide text-sm md:text-base uppercase mb-4">
+            Welcome Back, {{  $user->name  ?? '' }}
         </span>
       @endauth
         <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight max-w-3xl drop-shadow-xl">
-            Discover. Track. Share<span class="text-blue-500">.</span>
+            Discover. Track. Share.
         </h1>
 
         <p class="mt-5 max-w-2xl text-white/80 md:text-lg leading-relaxed">
@@ -24,28 +30,30 @@
         <!-- Buttons -->
         <div class="mt-8 flex flex-wrap gap-4">
             <a href="/reviews"
-               class="px-6 py-3 rounded-xl text-white font-medium bg-white/10 backdrop-blur border border-white/20 hover:bg-white/20 hover:border-white/30 transition">
-                Browse Latest Reviews
+               class="flex items-center px-6 py-3 rounded-xl text-white font-medium bg-white/10 backdrop-blur border border-white/20 hover:bg-white/20 hover:border-white/30 transition">
+               @svg('heroicon-o-star', 'h-10') 
+               Browse Latest Reviews
             </a>
 
             <a href="#search"
-               class="px-6 py-3 rounded-xl font-medium bg-blue-600 text-white hover:bg-blue-700 transition shadow-lg shadow-blue-600/20">
-                Find a Movie
+               class="flex items-center px-6 py-3 rounded-xl font-medium bg-blue-600 text-white hover:bg-blue-700 transition shadow-lg shadow-blue-600/20">
+               @svg('heroicon-o-magnifying-glass-circle', 'h-10') 
+               Find a Movie
             </a>
         </div>
     </div>
 
     <div>
-      <p>How are recommendations created?</p>
+      <!-- <p>How are recommendations created?</p> -->
     </div>
 </section>
 
 
 <!-- Trending Movies -->
-<div class="my-20 mx-6 sm:mx-8 lg:mx-28 p-8">
+<div class="my-20 mt-[20rem] mx-6 sm:mx-8 lg:mx-28 p-8">
   <div class="mb-12">
     <h1 class="mb-3 text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-      Biggest movies <span class="text-blue-600 dark:text-blue-400">Right Now</span>
+      Featured <span class="text-yellow-600">Movies</span>
     </h1>
     <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl">
       Discover the most popular and trending movies that everyone is talking about
@@ -53,7 +61,7 @@
   </div>
 
   <!-- Responsive Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-16 ">
     @foreach($movies as $movie)
       
       <div class="group bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600 overflow-hidden">
@@ -64,17 +72,22 @@
                 src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}" 
                 alt="Movie poster" />
           </a>
-          
-          <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-sm text-white px-2 py-1 rounded-md text-sm font-medium flex items-center gap-1">
-            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-            </svg>
-            {{ $movie->rating }}
-          </div>
+
+          @if($movie->rating)
+            <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-sm text-white px-2 py-1 rounded-md text-sm font-medium flex items-center gap-1">
+              <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+              </svg>
+              {{ $movie->rating }}
+            </div>
+          @endif
 
           <div class="absolute bottom-3 left-3 flex gap-1">
             @foreach($movie->genres as $genre)
-              <span class="bg-blue-600/90 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">{{ $genre->name }}</span>
+              <span class="bg-blue-600/90 backdrop-blur-md text-white text-xl px-2 py-1 rounded-full">{{ $genre->name }} 
+                
+            </span>
+         
             @endforeach
           </div>
         </div>
@@ -113,7 +126,7 @@
 
   <!-- View All Button -->
   <div class="mt-12 text-center">
-    <a href="/movies" class="inline-flex items-center px-6 py-3 text-base font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/30 dark:focus:ring-blue-800 transition-colors">
+    <a href="/movies" class="inline-flex items-center px-6 py-3 text-base font-medium text-yellow-300  rounded-lg 0 focus:outline-none focus:ring-4 focus:ring-blue-300 bg-black transition-colors">
       View All Movies
       <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -195,8 +208,11 @@
                 <div class="p-5">
                     <a href="#">
                         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                        {{ $genre->name }}
+                        {{ $genre->name }} ({{ $genre->movies_count }})
                         </h5>
+                        <span class="text-2xl font-bold tracking-tight text-gray-900">
+                         
+                        </span>
                     </a>
                     <a href="{{ route('genres.show', $genre->id ) }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus-visible:ring-blue-800">
                         View Movies
