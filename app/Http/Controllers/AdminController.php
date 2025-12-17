@@ -35,7 +35,8 @@ class AdminController extends Controller
 
         $suggestions = Suggestion::where('accepted', '0')->get();
 
-        return view('admin', compact('suggestions'));
+        return view('admin', compact('suggestions', 'userWithMostFollowers', 'topReview', 
+            'mostFavorites', 'mostWatched'));
     }
 
     public function approveSuggestion(Suggestion $suggestion) {

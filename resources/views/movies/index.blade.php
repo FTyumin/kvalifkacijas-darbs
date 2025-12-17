@@ -14,22 +14,25 @@
         </button>
     </div>
 
-        <!-- Filters Section -->
+    <!-- Filters Section -->
     <div id="filtersSection" class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 hidden lg:block">
         <form method="GET" action="{{ route('movies.index') }}" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Genre Filter -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Genre</label>
-                    <select name="genre" class="w-full px-3 py-2 border border-gray-300 text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
-                        <option value="">All Genres</option>
-                        @foreach($genres as $genre)
-                            <option value="{{ $genre->id }}" {{ request('genre') == $genre->id ? 'selected' : '' }}>
-                                {{ $genre->name }}
-                            </option>
-                        @endforeach
-                    </select>
+                <div class="grid grid-cols-2 gap-2">
+                  @foreach($genres as $genre)
+                      <label class="flex items-center gap-2 text-white text-sm">
+                          <input 
+                              type="checkbox"
+                              name="genres[]"
+                              value="{{ $genre->id }}"
+                              {{ in_array($genre->id, request('genres', [])) ? 'checked' : '' }}
+                          >
+                          {{ $genre->name }}
+                      </label>
+                  @endforeach
                 </div>
+
 
                 <!-- Rating Filter -->
                 <div>
@@ -66,6 +69,29 @@
                         <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Title</option>
                     </select>
                 </div>
+
+                <!-- Actor Filter -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                      Director
+                  </label>
+                  <select 
+                      name="directors[]" 
+                      multiple
+                      class="w-full px-3 py-2 border border-gray-300 text-white rounded-lg focus:ring-2 focus:ring-blue-500"
+                  >
+                      @foreach($directors as $director)
+                          <option 
+                              value="{{ $director->id }}" 
+                              class="text-white bg-gray-800"
+                              {{ collect(request('directors'))->contains($director->id) ? 'selected' : '' }}
+                          >
+                              {{ $director->first_name }} {{ $director->last_name }}
+                          </option>
+                      @endforeach
+                  </select>
+              </div>
+
             </div>
 
             <div class="flex gap-3 pt-2">
@@ -79,15 +105,15 @@
         </form>
     </div>
 
-    @if(request()->hasAny(['genre', 'min_rating', 'year']))
+    @if(request('genres') || request('min_rating') || request('year') || request('directors'))
         <div class="mb-4 flex flex-wrap gap-2">
             <span class="text-sm text-white ">Active filters:</span>
-            @if(request('genre'))
-                <span class="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
-                    {{ $genres->find(request('genre'))->name }}
-                    <a href="{{ route('movies.index', array_filter(request()->except('genre'))) }}" class="hover:text-blue-600">×</a>
-                </span>
-            @endif
+           @foreach($genres->whereIn('id', request('genres', [])) as $genre)
+              <span class="inline-flex items-center gap-1 px-3 py-1 bg-blue-900 text-blue-200 rounded-full text-sm">
+                  {{ $genre->name }}
+                  <a href="{{ route('movies.index', request()->except('genres')) }}">×</a>
+              </span>
+          @endforeach
             @if(request('min_rating'))
                 <span class="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
                     Rating {{ request('min_rating') }}+
@@ -100,13 +126,22 @@
                     <a href="{{ route('movies.index', array_filter(request()->except('year'))) }}" class="hover:text-blue-600">×</a>
                 </span>
             @endif
+            @if(request('directors'))
+              @foreach($directors->whereIn('id', request('directors')) as $director)
+                  <span class="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
+                      Director: {{ $director->first_name }} {{ $director->last_name }}
+                      <a href="{{ route('movies.index', array_merge(request()->except('directors'), ['directors' => collect(request('directors'))->reject(fn($id) => $id == $director->id)->toArray()])) }}" 
+                        class="hover:text-blue-600">×</a>
+                  </span>
+              @endforeach
+            @endif
         </div>
     @endif
   
 
 
   <!-- Movie Grid -->
- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-3">
+ <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 mt-3">
   
     @foreach($movies as $movie)
     <div class="group bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600 overflow-hidden">

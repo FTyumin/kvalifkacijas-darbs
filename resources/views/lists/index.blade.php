@@ -9,9 +9,6 @@
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div>
                     <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 flex items-center gap-3">
-                        <!-- <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
-                        </svg> -->
                         @svg('heroicon-o-list-bullet', 'h-8')
                         Movie Lists
                     </h1>
@@ -72,6 +69,31 @@
                                     {{ $list->movies->count() ?? 0 }} movies
                                 </div>
                             </div>
+
+                            {{-- Movie Posters Preview --}}
+                            @if($list->movies->count() > 0)
+                                <div class="mb-4 flex gap-2 overflow-hidden">
+                                    @foreach($list->movies->take(3) as $movie)
+                                        <div class="flex-1 aspect-[2/3] rounded-lg overflow-hidden bg-gray-700 relative group/poster">
+                                            <img 
+                                                src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"
+                                                alt="{{ $movie->title }}"
+                                                class="w-full h-full object-cover transition-transform duration-300 group-hover/poster:scale-110"
+                                            >
+                                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300"></div>
+                                        </div>
+                                    @endforeach
+                                    
+                                    @if($list->movies->count() > 3)
+                                        <div class="flex-1 aspect-[2/3] rounded-lg bg-gray-700/50 border-2 border-dashed border-gray-600 flex items-center justify-center">
+                                            <div class="text-center">
+                                                <p class="text-2xl font-bold text-gray-400">+{{ $list->movies->count() - 3 }}</p>
+                                                <p class="text-xs text-gray-500 mt-1">more</p>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
 
                             {{-- List Title --}}
                             <h3 class="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors line-clamp-2">

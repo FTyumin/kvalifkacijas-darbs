@@ -1,4 +1,4 @@
-<header class="sticky top-0 w-full py-4 px-4 sm:px-6 z-50 bg-black/95 backdrop-blur-md border-b border-gray-800">
+<header class="sticky top-0 w-full py-4 px-4 sm:px-6 z-50 bg-gradient-to-b from-neutral-800 to-neutral-900 backdrop-blur-md border-b border-gray-800">
   <nav class="relative w-full flex justify-between items-center gap-4">
     
     <!-- Left Section: Logo + Desktop Navigation -->
@@ -30,9 +30,7 @@
           </div>
           
           <input 
-            type="search" 
-            id="search" 
-            name="search"
+            type="search" id="search" name="search"
             class="block w-full pl-12 pr-24 py-3 text-sm text-white placeholder-gray-400 bg-gray-800/50 border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
             placeholder="Search movies, TV shows, actors..." 
             autocomplete="off"
@@ -40,7 +38,7 @@
           
           <button 
             type="submit" 
-            class="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="absolute right-2 top-1/2 -translate-y-1/2 bg-yellow-600 hover:bg-yellow-700 text-white font-medium rounded-lg text-sm px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             Search
           </button>

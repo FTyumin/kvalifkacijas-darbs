@@ -180,41 +180,42 @@
             @endif
         </div>
     </div>
-    <div class="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+    
     {{-- Similar Movies Section --}}
     @if(count($similarMovies) > 0)
-    <div class="mt-12 pt-8">
-        <h2 class="text-2xl font-bold text-white mb-6">You May Also Like</h2>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            @foreach($similarMovies as $recommendation)
-                <a href="{{ route('movies.show', $recommendation['movie']->slug) }}" 
-                class="group">
-                    <div class="relative overflow-hidden rounded-lg shadow-lg aspect-[2/3]">
-                        <img src="https://image.tmdb.org/t/p/w500/{{ $recommendation['movie']->poster_url }}" 
-                            alt="{{ $recommendation['movie']->name }}" 
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <div class="absolute bottom-0 left-0 right-0 p-3">
-                                <div class="flex items-center gap-1 mb-1">
+        <div class="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+        <div class="mt-12 pt-8">
+            <h2 class="text-2xl font-bold text-white mb-6">You May Also Like</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                @foreach($similarMovies as $recommendation)
+                    <a href="{{ route('movies.show', $recommendation['movie']->slug) }}" 
+                    class="group">
+                        <div class="relative overflow-hidden rounded-lg shadow-lg aspect-[2/3]">
+                            <img src="https://image.tmdb.org/t/p/w500/{{ $recommendation['movie']->poster_url }}" 
+                                alt="{{ $recommendation['movie']->name }}" 
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div class="absolute bottom-0 left-0 right-0 p-3">
+                                    <div class="flex items-center gap-1 mb-1">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <h3 class="mt-2 text-sm font-medium text-white group-hover:text-yellow-400 transition-colors line-clamp-2">
-                        {{ $recommendation['movie']->name }}
-                    </h3>
-                    <p class="text-xs text-gray-400"></p>
-                </a>
-            @endforeach
+                        <h3 class="mt-2 text-sm font-medium text-white group-hover:text-yellow-400 transition-colors line-clamp-2">
+                            {{ $recommendation['movie']->name }}
+                        </h3>
+                        <p class="text-xs text-gray-400"></p>
+                    </a>
+                @endforeach
+            </div>
         </div>
-    </div>
     @endif
-    <div class=" mt-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
     {{-- Write Review Section --}}
     @if(Auth::check())
-    <div class="mt-12 pt-8">
-         <livewire:create-review :movie="$movie" />
-    </div>
+        <div class="mt-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+        <div class="mt-12 pt-8">
+            <livewire:create-review :movie="$movie" />
+        </div>
     @endif
 
     

@@ -29,6 +29,5 @@
     ])
     @stack('scripts')
     @livewireScripts
-    {!! ToastMagic::scripts() !!}
 </body>
 </html>

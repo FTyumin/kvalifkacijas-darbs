@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Review;
 use App\Models\Activity;
 
 class FeedController extends Controller

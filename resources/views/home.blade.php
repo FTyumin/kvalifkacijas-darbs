@@ -41,9 +41,7 @@
         </div>
     </div>
 
-    <div>
-      <!-- <p>How are recommendations created?</p> -->
-    </div>
+
 </section>
 
 
@@ -228,61 +226,86 @@
 </div>
 
 <!-- Popular Lists -->
- <div class="my-16 mx-10 sm:px-8 lg:px-28">
-    <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-white md:text-5xl lg:text-6xl">Lists</h1>
+ @if($lists->isNotEmpty())
+  <div class="my-16 mx-10 sm:px-8 lg:px-28">
+      <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-white md:text-5xl lg:text-6xl">Lists</h1>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-16 gap-y-10">
-        @foreach($lists as $list)
-          <a href="{{ route('lists.show', $list) }}" class="group">
-            <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 hover:bg-gray-800/70 hover:border-gray-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/10 h-full flex flex-col">
-                {{-- List Header --}}
-                <div class="flex items-start justify-between mb-4">
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                        </svg>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-16 gap-y-10">
+      @foreach($lists as $list)
+    <a href="{{ route('lists.show', $list) }}" class="group">
+      <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 hover:bg-gray-800/70 hover:border-gray-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/10 h-full flex flex-col">
+          {{-- List Header --}}
+          <div class="flex items-start justify-between mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                  </svg>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-gray-400 bg-gray-700/50 px-3 py-1 rounded-full">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
+                  </svg>
+                  {{ $list->movies->count() ?? 0 }} movies
+              </div>
+          </div>
+
+          {{-- Movie Posters Preview --}}
+          @if($list->movies->count() > 0)
+            <div class="mb-4 flex gap-2 overflow-hidden">
+                @foreach($list->movies->take(3) as $movie)
+                    <div class="flex-1 aspect-[2/3] rounded-lg overflow-hidden bg-gray-700 relative group/poster">
+                        <img 
+                            src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"
+                            alt="{{ $movie->title }}"
+                            class="w-full h-full object-cover transition-transform duration-300 group-hover/poster:scale-110"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300"></div>
                     </div>
-                    
-                    <div class="flex items-center gap-2 text-xs text-gray-400 bg-gray-700/50 px-3 py-1 rounded-full">
-                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
-                        </svg>
-                        {{ $list->movies->count() ?? 0 }} movies
-                    </div>
-                </div>
-
-                {{-- List Title --}}
-                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors line-clamp-2">
-                    {{ $list->name }}
-                </h3>
-
-                {{-- List Description --}}
-                <p class="text-gray-400 text-sm mb-4 flex-grow line-clamp-3 leading-relaxed">
-                    {{ $list->description ?? 'No description provided' }}
-                </p>
-
-                {{-- List Footer --}}
-                <div class="flex items-center justify-between pt-4 border-t border-gray-700">
-                    <div class="flex items-center gap-2">
-                        <div class="w-10 h-10 rounded-full overflow-hidden">
-                            <!-- {{ substr($list->user->name, 0, 2) }} -->
-                              <img src="{{ $list->user->image ? asset('storage/' . $list->user->image) : asset('images/person-placeholder.png') }}" alt="" class="h-8 w-8 object-cover">
+                @endforeach
+                
+                @if($list->movies->count() > 3)
+                    <div class="flex-1 aspect-[2/3] rounded-lg bg-gray-700/50 border-2 border-dashed border-gray-600 flex items-center justify-center">
+                        <div class="text-center">
+                            <p class="text-2xl font-bold text-gray-400">+{{ $list->movies->count() - 3 }}</p>
+                            <p class="text-xs text-gray-500 mt-1">more</p>
                         </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-300">{{ $list->user->name }}</p>
-                            <p class="text-xs text-gray-500">{{ $list->created_at->diffForHumans() }}</p>
-                        </div>
                     </div>
-
-                    <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                    </svg>
-                </div>
+                @endif
             </div>
-        </a>
-        @endforeach
-    </div>
-</div>
+          @endif
+
+          {{-- List Title --}}
+          <h3 class="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors line-clamp-2">
+              {{ $list->name }}
+          </h3>
+
+          {{-- List Description --}}
+          <p class="text-gray-400 text-sm mb-4 flex-grow line-clamp-3 leading-relaxed">
+              {{ $list->description ?? 'No description provided' }}
+          </p>
+
+          {{-- List Footer --}}
+          <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+              <div class="flex items-center gap-2">
+                  <div class="w-10 h-10 rounded-full overflow-hidden">
+                      <img src="{{ $list->user->image ? asset('storage/' . $list->user->image) : asset('images/person-placeholder.png') }}" alt="" class="h-full w-full object-cover">
+                  </div>
+                  <div>
+                      <p class="text-sm font-medium text-gray-300">{{ $list->user->name }}</p>
+                      <p class="text-xs text-gray-500">{{ $list->created_at->diffForHumans() }}</p>
+                  </div>
+              </div>
+              <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+          </div>
+      </div>
+  </a>
+  @endforeach
+      </div>
+  </div>
+
+@endif
 
 <!-- Reviews -->
  <div class="my-16 mx-10 sm:px-8 lg:px-28">
