@@ -49,4 +49,8 @@ class AdminController extends Controller
     public function rejectSuggestion(Suggestion $suggestion) {
 
     }
+
+    public function loadMovies() {
+        
+    }
 }

@@ -11,10 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class ContentBasedRecommender
 {
-    private $documentFrequency = []; // IDF values
-    private $allMoviesKeywords = [];
-    private $totalDocuments;
-
     function findSimilarMovies($movieId, $limit = 5) {    
 
         $allMovies = Movie::where('id', '!=', $movieId)->get();
@@ -75,12 +71,9 @@ class ContentBasedRecommender
         $genreJaccard = $this->jaccardIndex($genres1, $genres2);
         $actorJaccard = $this->jaccardIndex($actors1, $actors2);
         $directorJaccard = $this->jaccardIndex($director1, $director2);
-        $descriptionSimilarity = $this->calculateDescriptionSimilarity($movie1, $movie2);
+
         // Weighted combination
-        $similarity = (0.25 * $genreJaccard) + 
-                      (0.2 * $directorJaccard) + 
-                      (0.25 * $actorJaccard); 
-                    //   (0.3 * $descriptionSimilarity);
+        $similarity = (0.3 * $genreJaccard) + (0.4 * $directorJaccard) + (0.3 * $actorJaccard); 
         
         return $similarity;
     }
@@ -100,157 +93,19 @@ class ContentBasedRecommender
         return $union > 0 ? $intersection / $union : 0;
     }
 
-    function calculateDescriptionSimilarity($movie1, $movie2) {
-        $text1 = $this->getTfIdfVector($movie1->description);
-        $text2 = $this->getTfIdfVector($movie2->description);
 
-        $textSimilarity = $this->calculateCosineSimilarity($text1, $text2);
-        return $textSimilarity;
-    }
+    private function collectSimilarMovies(array $ids, float $weight): array
+    {
+        $result = [];
 
-    function getTfIdfVector($description) {
-        $keywords = $this->extractKeyWords($description);
-        
-        if(empty($keywords)) {
-            return [];
-        }
-        $termFrequency = array_count_values($keywords);
-        $totalTerms = count($keywords);
-
-        if (empty($this->documentFrequency)) {
-            $this->calculateDocumentFrequencies();
-        }
-
-        $tfidfVector = [];
-        // $totalDocuments = Cache::get('tfidf_movie_count', 0);
-
-        foreach ($termFrequency as $term => $frequency) {
-            // Calculate TF (Term Frequency)
-            $tf = $frequency / $totalTerms;
-            
-            $idf = $this->documentFrequency[$term] ?? 0;
-            
-            // TF-IDF = TF × IDF
-            $tfidfVector[$term] = $tf * $idf;
-        }
-        return $tfidfVector;
-    }
-
-    function calculateDocumentFrequencies() {
-        // Check cache first
-        $cached = Cache::get('tfidf_document_frequencies');
-        if ($cached) {
-            $this->documentFrequency = $cached;
-            return;
-        }
-        
-        // only load needed columns
-        $allMovies = Movie::whereNotNull('description')
-            ->select('id', 'description')
-            ->get();
-            
-        $totalDocuments = $allMovies->count();
-        $this->totalDocuments = $totalDocuments;
-        if ($totalDocuments == 0) {
-            return;
-        }
-        
-        $termDocumentCount = [];
-        
-        // Count documents containing each term
-         foreach ($allMovies as $movie) {
-            if (!$movie->description) {
-                continue;
-            }
-            
-            $keywords = $this->extractKeyWords($movie->description);
-            $uniqueKeywords = array_unique($keywords);
-            
-            foreach ($uniqueKeywords as $keyword) {
-                if (!isset($termDocumentCount[$keyword])) {
-                    $termDocumentCount[$keyword] = 0;
-                }
-                $termDocumentCount[$keyword]++;
+        foreach ($ids as $id) {
+            foreach ($this->findSimilarMovies($id, 5) as $movie) {
+                $movie['similarity'] *= $weight;
+                $result[] = $movie;
             }
         }
-        
-        // Calculate IDF for each term
-        foreach ($termDocumentCount as $term => $count) {
-            if ($count > 0) {  // Safety check
-                $this->documentFrequency[$term] = log($totalDocuments / $count);
-            }
-        }
-        
-        // Cache with expiration time (24 hours)
-        Cache::put('tfidf_document_frequencies', $this->documentFrequency, 86400);
-        Cache::put('tfidf_movie_count', $totalDocuments, 86400);
-        Cache::put('tfidf_last_calculated', now(), 86400);
-    }
 
-    function calculateCosineSimilarity($vector1, $vector2) {
-        // Get all unique terms from both vectors
-        $allTerms = array_unique(array_merge(array_keys($vector1), array_keys($vector2)));
-        
-        $dotProduct = 0;
-        $magnitude1 = 0;
-        $magnitude2 = 0;
-        
-        foreach ($allTerms as $term) {
-            $val1 = $vector1[$term] ?? 0;
-            $val2 = $vector2[$term] ?? 0;
-            
-            $dotProduct += $val1 * $val2;
-            $magnitude1 += $val1 * $val1;
-            $magnitude2 += $val2 * $val2;
-        }
-        
-        $magnitude1 = sqrt($magnitude1);
-        $magnitude2 = sqrt($magnitude2);
-        
-        if ($magnitude1 == 0 || $magnitude2 == 0) {
-            return 0;
-        }
-        
-        return round($dotProduct / ($magnitude1 * $magnitude2), 2);
-    }
-
-    function extractKeyWords($movieDescription) {
-        $text = strtolower($movieDescription);
-        $removedPunctuation = preg_replace('/[\p{P}]/u', '', $text);
-        $words = preg_split('/\s+/', $removedPunctuation);
-
-
-        $stopWords = $this->getStopWords();
-
-        $keywords = array_filter($words, function($word) use ($stopWords) {
-            return !in_array($word, $stopWords)
-                && strlen($word) > 2
-                && !ctype_digit($word);
-        });
-
-        return array_values($keywords);
-    }
-
-    function getStopWords() {
-        return [
-            'a', 'an', 'the', 'and', 'but', 'or', 'as', 'at', 'be', 'by',
-            'for', 'from', 'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on',
-            'that', 'to', 'was', 'will', 'with', 'they', 'their', 'this',
-            'have', 'had', 'what', 'when', 'where', 'who', 'which', 'why',
-            'how', 'all', 'are', 'been', 'can', 'could', 'do', 'does', 'did',
-            'his', 'her', 'his', 'him', 'she', 'them', 'there', 'these',
-            'those', 'would', 'should', 'into', 'through', 'about', 'after',
-            'before', 'between', 'under', 'over', 'up', 'down', 'out', 'off'
-        ];
-    }
-
-    function getIdfInfo() {
-         return [
-            'is_cached' => Cache::has('tfidf_document_frequencies'),
-            'movie_count' => Cache::get('tfidf_movie_count', 0),
-            'last_calculated' => Cache::get('tfidf_last_calculated'),
-            'terms_count' => count($this->documentFrequency),
-        ];
+        return $result;
     }
 
     function getRecommendationsForUser($userId, $limit) {
@@ -269,6 +124,7 @@ class ContentBasedRecommender
         $watchlistIds = $user->wantToWatch()->pluck('markable_id')->toArray();
         $favoriteIds = $user->favorites()->pluck('markable_id')->toArray();
         $excludeIds = array_merge($watchedIds, $watchlistIds, $favoriteIds);
+
         // get user's high ratings(4-5 stars)
         $reviews = $user->reviews()->where('rating', '>=', 4)->get();
         $allRecommendations = [];
@@ -282,39 +138,22 @@ class ContentBasedRecommender
 
         if (count($favoriteIds) > 0) {
             $userHasData = true;
+            $favoriteSimilar = $this->collectSimilarMovies($favoriteIds, 1.4);
+            
 
-            foreach ($favoriteIds as $id) {
-                $favoriteSimilar = array_merge($favoriteSimilar, $this->findSimilarMovies($id, 5));
-            }
-
-            foreach ($favoriteSimilar as &$movieData) {
-                $movieData['similarity'] *= 1.4;
-            }
         } 
 
         if ($reviews && $reviews->count() > 0) {
             $userHasData = true;
 
             $movieIds = $reviews->pluck('movie_id')->toArray();
-            foreach($movieIds as $id) {
-                $reviewSimilar = array_merge($reviewSimilar, $this->findSimilarMovies($id, 5));
-            }
-            
-            foreach ($reviewSimilar as &$movieData) {
-                $movieData['similarity'] *= 1.3;
-            }
-
+            $reviewSimilar = $this->collectSimilarMovies($movieIds, 1.3);
         } 
+
         if (count($watchedIds) > 0) {   
             $userHasData = true;
 
-            foreach($watchedIds as $id) {
-                $seenList = array_merge($seenList, $this->findSimilarMovies($id, 5));
-            }
-
-            foreach ($seenList as &$movieData) {
-                $movieData['similarity'] *= 1.05;
-            }
+            $seenList = $this->collectSimilarMovies($watchedIds, 1.05);
         }
         if ($favoriteGenres->count() > 0) {
             $userHasData = true;
