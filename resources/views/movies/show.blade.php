@@ -4,10 +4,15 @@
 
 @section('content')
 
+<a
+    href="{{ url()->previous() }}"
+    class=" left-4 top-4 inline-flex items-center gap-2 text-gray-300 text-white hover:text-white
+        transition text-sm">
+    ← Back
+</a>
 <div class="max-w-6xl mx-auto mt-8 px-4 py-8 ">
 
-<a href="{{ url()->previous() }}" class="text-white text-xl absolute left-0 ">Go back</a>
-    
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         
         {{-- Poster --}}

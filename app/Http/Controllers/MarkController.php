@@ -23,7 +23,10 @@ class MarkController extends Controller
             Favorite::remove($movie, $user);
         } else {
             Favorite::add($movie, $user);
+            //recs are based on favorites
             Cache::forget("user:{$user->id}:recs");
+            session()->flash('success', 'Movie added to favorites!');
+
         }
 
         return back();
@@ -38,8 +41,7 @@ class MarkController extends Controller
             WantToWatch::remove($movie, $user);
         } else {
             WantToWatch::add($movie, $user);
-            // ToastMagic::success('Movie added to watchlist!');
-
+            session()->flash('success', 'Movie added to watchlist!');
         }
 
         return back();
@@ -54,11 +56,12 @@ class MarkController extends Controller
             Seen::remove($movie, $user);
         } else {
             Seen::add($movie, $user);
+            //recommendations shouldn't consist of movies user has alredy seen
             Cache::forget("user:{$user->id}:recs");
+            session()->flash('success', 'Movie added to seen!');
+
         }
 
         return back();
     }
-
-
 }

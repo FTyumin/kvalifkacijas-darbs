@@ -27,7 +27,7 @@ class MovieController extends Controller
     }
 
     public function home() {
-        $movies = Movie::all()->take(4);
+        $movies = Movie::all()->take(5);
         $genres = Genre::inRandomOrder()->take(4)->withCount('movies')->get();
 
         $lists = MovieList::visibleTo(auth()->user())->with('user')->get();
@@ -166,7 +166,6 @@ class MovieController extends Controller
             $movie->trailer_url = $this->apiClient->trailerKey($movie->id);
             $movie->save();
 
-            // Data: [ ['id'=>28,'name'=>'Action'], ['id'=>12,'name'=>'Adventure'] ]
             $movieGenres = $movie_info['genres'] ?? [];
             foreach ($actor_info as $actor) {
                 $nameParts = explode(" ", $actor['name']);
@@ -216,7 +215,7 @@ class MovieController extends Controller
             'title' => $request->title,
         ]);
 
-        session()->flash('success', 'Suggestion has been sent to admin');
+        session()->flash('success', 'Your suggestion has been sent!');
         return redirect('');
     }
 

@@ -18,6 +18,12 @@
   @include('header')
 
   <main class="px-6 sm:px-4  py-8 flex-1 bg-gradient-to-b from-neutral-900 to-neutral-800">
+    @if (session('success'))
+      <div class="mb-6 rounded-lg bg-green-600/20 border border-green-500/30 px-4 py-3 text-green-400">
+          {{ session('success') }}
+      </div>
+    @endif
+
     @yield('content')
   </main>
 
