@@ -104,6 +104,17 @@
                         Approve
                     </button>
                 </form>
+
+                <form method="POST" action="{{ route('suggestions.reject', $sug) }}">
+                    @csrf
+                    <button
+                        type="submit"
+                        class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white text-sm transition"
+                    >
+                        Reject
+                    </button>
+                </form>
+
             </div>
         @empty
             <p class="text-gray-400">No pending suggestions 🎉</p>

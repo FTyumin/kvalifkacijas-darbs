@@ -6,32 +6,19 @@
         </div>
     @endif
     
-    @if (session()->has('warning'))
-        <div class="alert alert-warning bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
-            {{ session('warning') }}
-        </div>
-    @endif
-    
-    @if (session()->has('status'))
-        <div class="alert alert-success bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-            {{ session('status') }}
-        </div>
-    @endif
-
     <form wire:submit.prevent="save" class="mt-16 mx-auto space-y-6 mb-12">
 
         <div>
             <label for="title" class="block text-sm font-medium text-white mb-1">
                 Title of your review
             </label>
-            <input type="text" id="title" name="title" required class="px-4 py-2 border border-gray-300 rounded-lg 
-                        focus:ring-blue-500 focus:border-blue-500 transition
-                        disabled:opacity-50 disabled:pointer-events-none"
-                    wire:model="title"
-                    autocomplete="off">
+            <input type="text" id="title" name="title" required class="w-full rounded-lg bg-gray-900 border border-gray-700 px-4 py-2 text-white
+                placeholder-gray-500 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/50 transition"
+                wire:model="title"
+                autocomplete="off">
         </div>
 
-        <h3 class="text-3xl text-white font-semibold">Write a Review for <span class="text-green-600">{{ $movie->name }}</span></h3>
+        <h3 class="text-3xl text-white font-semibold">Write a Review for <span class="text-yellow-600">{{ $movie->name }}</span></h3>
         <input type="hidden" name="movie_id" value="{{ $movie->id }}" wire:model="movieId" autocomplete="off" >
         {{-- Star Rating --}}
         <fieldset class="flex items-center space-x-1" wire:model="rating" autocomplete="off">
@@ -122,7 +109,8 @@
         <div class="flex gap-4">
                 <button type="submit" 
                         wire:loading.attr="disabled"
-                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded">
+                        class="rounded-lg bg-yellow-500 px-6 py-2 font-medium text-gray-900
+                        hover:bg-yellow-400 transition disabled:opacity-60">
                     <span wire:loading.remove wire:target="save">
                         {{ $isEditing ? 'Update Review' : 'Submit Review' }}
                     </span>
@@ -134,14 +122,16 @@
                 @if($isEditing)
                     <button type="button" 
                             wire:click="cancelEdit"
-                            class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded">
+                            class="rounded-lg border border-gray-600 px-6 py-2 text-gray-300
+                        hover:bg-gray-800 transition">
                         Cancel
                     </button>
                     
                     <button type="button" 
                             wire:click="delete"
                             wire:confirm="Are you sure you want to delete this review?"
-                            class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded">
+                            class="rounded-lg border border-red-500/40 bg-red-500/10 px-6 py-2 text-red-400
+           hover:bg-red-500/20 transition">
                         <span wire:loading.remove wire:target="delete">Delete Review</span>
                         <span wire:loading wire:target="delete">Deleting...</span>
                     </button>
@@ -152,9 +142,7 @@
     {{-- Reviews Section --}}
     <div class="mt-12 pt-8 border-t border-gray-700">
         <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-blue-500">
-                <path fill-rule="evenodd" d="M4.848 2.771A49.144 49.144 0 0 1 12 2.25c2.43 0 4.817.178 7.152.52 1.978.292 3.348 2.024 3.348 3.97v6.02c0 1.946-1.37 3.678-3.348 3.97a48.901 48.901 0 0 1-3.476.383.39.39 0 0 0-.297.17l-2.755 4.133a.75.75 0 0 1-1.248 0l-2.755-4.133a.39.39 0 0 0-.297-.17 48.9 48.9 0 0 1-3.476-.384c-1.978-.29-3.348-2.024-3.348-3.97V6.741c0-1.946 1.37-3.68 3.348-3.97Z" clip-rule="evenodd" />
-            </svg>
+
             Reviews
             <span class="text-base font-normal text-gray-400">({{ $reviews->count() }})</span>
         </h2>
@@ -167,7 +155,7 @@
                             <div class="flex items-center gap-3">
                                 <a href="{{ route('profile.show', $review->user) }}" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
                                     <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
-                                      <img src="{{ $review->user->image ? asset('storage/' . $post->user->image) : asset('images/person-placeholder.png') }}" alt="" class="w-full h-full object-cover">
+                                      <img src="{{ $review->user->image ? asset('storage/' . $review->user->image) : asset('images/person-placeholder.png') }}" alt="" class="w-full h-full object-cover">
 
                                     </div>
                                     <div>
@@ -187,40 +175,43 @@
                             </div>
                         </div>
 
-                        @if($review->spoilers)
-                            <div class="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-                                <div class="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-yellow-500 flex-shrink-0">
-                                        <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
-                                    </svg>
-                                    <span class="text-sm text-yellow-500 font-medium">This review contains spoilers</span>
-                                    <button 
-                                        onclick="toggleSpoiler({{ $review->id }})" 
-                                        class="ml-auto px-3 py-1 bg-yellow-500 text-gray-900 text-xs font-medium rounded hover:bg-yellow-400 transition-colors"
-                                    >
-                                        Show
-                                    </button>
-                                </div>
-                                
-                                <div id="spoiler-content-{{ $review->id }}" class="hidden mt-3 pt-3 border-t border-yellow-500/20">
-                                    <p class="text-gray-300 leading-relaxed">{{ $review->description }}</p>
-                                    <button 
-                                        onclick="toggleSpoiler({{ $review->id }})" 
-                                        class="mt-2 text-sm text-yellow-500 hover:text-yellow-400 font-medium"
-                                    >
-                                        Hide
-                                    </button>
-                                </div>
-                            </div>
-                        @else
-                            <p class="text-gray-300 leading-relaxed">{{ $review->description }}</p>
-                        @endif
+        @if($review->spoilers)
+                    <div class="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg" x-data="{ open: false }">
+                        <div class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-yellow-500 flex-shrink-0"> 
+                                <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /> </svg>
+                            <span class="text-sm text-yellow-500 font-medium">
+                                This review contains spoilers
+                            </span>
+
+                            <button
+                                class="ml-auto px-3 py-1 bg-yellow-500 text-gray-900 text-xs font-medium rounded hover:bg-yellow-400"
+                                @click="open = !open"
+                            >
+                                <span x-text="open ? 'Hide' : 'Show'"></span>
+                            </button>
+                        </div>
+
+                        <div x-show="open" x-transition
+                            class="mt-3 pt-3 border-t border-yellow-500/20">
+                            <p class="text-gray-300 leading-relaxed">
+                                {{ $review->description }}
+                            </p>
+                        </div>
                     </div>
+                @else
+                    <p class="text-gray-300 leading-relaxed">
+                        {{ $review->description }}
+                    </p>
+                @endif
+
+    </div>
                     
                     <div class="bg-gray-900/50 px-6 py-3 border-t border-gray-700 flex items-center justify-between">
-                        <a href="{{ route('reviews.show', $review) }}" class="text-sm text-blue-400 hover:text-blue-300 font-medium">
+                       <a href="{{ route('reviews.show', $review) }}" class="text-sm text-yellow-400 hover:text-yellow-300 font-medium transition">
                             View full review and comments
                         </a>
+
                         <span class="text-xs text-gray-400">{{ $review->comments->count() }} {{ Str::plural('comment', $review->comments->count()) }}</span>
                     </div>
                 </article>
@@ -237,3 +228,6 @@
 
     </div>
 </div>
+@push('scripts')
+
+@endpush

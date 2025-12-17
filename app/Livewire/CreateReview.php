@@ -19,6 +19,8 @@ class CreateReview extends Component
     public $isEditing = false;
     public $reviewId;
 
+    public array $showSpoilers = [];
+
     protected $rules = [
         'title' => 'required|string|max:30',
         'rating' => 'required|numeric|min:1|max:5',
@@ -99,6 +101,11 @@ class CreateReview extends Component
         Cache::forget("user:" . auth()->id() . ":recs");
     }
 
+    public function toggleSpoilers(int $reviewId)
+    {
+        $this->showSpoilers[$reviewId] = !($this->showSpoilers[$reviewId] ?? false);
+    }
+
     public function cancelEdit()
     {
         $this->resetValidation();
@@ -130,7 +137,6 @@ class CreateReview extends Component
 
     public function edit() {
         $this->validate();
-        
     }
 
     public function render()

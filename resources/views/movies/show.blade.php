@@ -227,23 +227,3 @@
 </div>
 @endsection
 
-@once('scripts')
-<script>
-
-    function toggleSpoiler(reviewId) {
-        const warning = document.querySelector(`.spoiler-warning-${reviewId}`);
-        const content = document.querySelector(`.spoiler-content-${reviewId}`);
-        
-        if (content.classList.contains('hidden')) {
-            // Show spoiler content
-            warning.classList.add('hidden');
-            content.classList.remove('hidden');
-        } else {
-            // Hide spoiler content
-            warning.classList.remove('hidden');
-            content.classList.add('hidden');
-        }
-    }
-
-</script>
-@endonce

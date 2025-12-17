@@ -163,8 +163,6 @@
                         </div>
                     </article>
 
-
-
                 @elseif($post->activityable_type == 'App\Models\userRelationship')
                     <article class="bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                         <div class="block">

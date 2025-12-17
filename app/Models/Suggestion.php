@@ -10,6 +10,7 @@ class Suggestion extends Model
         'user_id',
         'title',
         'accepted',
+        'rejected',
     ];
 
     public function user() {

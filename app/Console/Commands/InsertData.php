@@ -17,7 +17,7 @@ class InsertData extends Command
      *
      * @var string
      */
-    protected $signature = 'app:insert-data';
+    protected $signature = 'app:insert-data {count=200}';
 
     /**
      * The console command description.
@@ -31,6 +31,7 @@ class InsertData extends Command
      */
     public function handle()
     {
+        $count = $this->argument('count');
         $api = new TmdbApiClient;
         $genres = Genre::all()->keyBy('name');
 

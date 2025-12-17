@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Person;
 use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\User;
@@ -92,7 +91,6 @@ class ContentBasedRecommender
         // Jaccard = |A ∩ B| / |A ∪ B|
         return $union > 0 ? $intersection / $union : 0;
     }
-
 
     private function collectSimilarMovies(array $ids, float $weight): array
     {

@@ -8,6 +8,7 @@ use App\Models\Movie;
 use App\Models\Suggestion;
 use App\Models\User;
 use App\Notifications\SuggestionAccepted;
+use Illuminate\Support\Facades\Artisan;
 
 class AdminController extends Controller
 {
@@ -47,10 +48,16 @@ class AdminController extends Controller
     }
 
     public function rejectSuggestion(Suggestion $suggestion) {
-
+        $suggestion->update(['rejected' => 1]);
+        $user = $suggestion->user;
+        $user->notify(new SuggestionAccepted());
+        return back();
     }
 
     public function loadMovies() {
-        
+        $count = 100;
+        Artisan::call('app:insert-data ', [
+            'count' => $count,
+        ]);
     }
 }
