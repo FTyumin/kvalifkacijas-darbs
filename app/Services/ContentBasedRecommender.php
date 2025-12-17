@@ -269,7 +269,6 @@ class ContentBasedRecommender
         $watchlistIds = $user->wantToWatch()->pluck('markable_id')->toArray();
         $favoriteIds = $user->favorites()->pluck('markable_id')->toArray();
         $excludeIds = array_merge($watchedIds, $watchlistIds, $favoriteIds);
-
         // get user's high ratings(4-5 stars)
         $reviews = $user->reviews()->where('rating', '>=', 4)->get();
         $allRecommendations = [];
@@ -281,63 +280,62 @@ class ContentBasedRecommender
 
         $userHasData = false;
 
-    if (count($favoriteIds) > 0) {
-        $userHasData = true;
+        if (count($favoriteIds) > 0) {
+            $userHasData = true;
 
-        foreach ($favoriteIds as $id) {
-            $favoriteSimilar = array_merge($favoriteSimilar, $this->findSimilarMovies($id, 5));
-        }
+            foreach ($favoriteIds as $id) {
+                $favoriteSimilar = array_merge($favoriteSimilar, $this->findSimilarMovies($id, 5));
+            }
 
-        foreach ($favoriteSimilar as &$movieData) {
-            $movieData['similarity'] *= 1.4;
-        }
-    } 
+            foreach ($favoriteSimilar as &$movieData) {
+                $movieData['similarity'] *= 1.4;
+            }
+        } 
 
-    if ($reviews && $reviews->count() > 0) {
-        $userHasData = true;
+        if ($reviews && $reviews->count() > 0) {
+            $userHasData = true;
 
-        $movieIds = $reviews->pluck('movie_id')->toArray();
-        foreach($movieIds as $id) {
-            $reviewSimilar = array_merge($reviewSimilar, $this->findSimilarMovies($id, 5));
-        }
-        
-        foreach ($reviewSimilar as &$movieData) {
-            $movieData['similarity'] *= 1.3;
-        }
+            $movieIds = $reviews->pluck('movie_id')->toArray();
+            foreach($movieIds as $id) {
+                $reviewSimilar = array_merge($reviewSimilar, $this->findSimilarMovies($id, 5));
+            }
+            
+            foreach ($reviewSimilar as &$movieData) {
+                $movieData['similarity'] *= 1.3;
+            }
 
-    } 
-    if (count($watchedIds) > 0) {   
-        $userHasData = true;
+        } 
+        if (count($watchedIds) > 0) {   
+            $userHasData = true;
 
-        foreach($watchedIds as $id) {
-            $seenList = array_merge($seenList, $this->findSimilarMovies($id, 5));
-        }
+            foreach($watchedIds as $id) {
+                $seenList = array_merge($seenList, $this->findSimilarMovies($id, 5));
+            }
 
-        foreach ($seenList as &$movieData) {
-            $movieData['similarity'] *= 1.05;
+            foreach ($seenList as &$movieData) {
+                $movieData['similarity'] *= 1.05;
+            }
         }
-    }
-    if ($favoriteGenres->count() > 0) {
-        $userHasData = true;
-        
-        $count = $favoriteGenres->count();
-        $perGenre = floor($limit / $count);
-        
-        foreach($favoriteGenres as $genre) {
-            $genreList = array_merge($genreList, $this->getGenreMovies($genre, $perGenre));
-        }
+        if ($favoriteGenres->count() > 0) {
+            $userHasData = true;
+            
+            $count = $favoriteGenres->count();
+            $perGenre = floor($limit / $count);
+            
+            foreach($favoriteGenres as $genre) {
+                $genreList = array_merge($genreList, $this->getGenreMovies($genre, $perGenre));
+            }
 
-        foreach($genreList as &$movieData) {
-            $movieData['similarity'] *= 1.2;
+            foreach($genreList as &$movieData) {
+                $movieData['similarity'] *= 1.2;
+            }
+        } 
+        if(!$userHasData) {
+            return $this->getRecommendationsForNewUser($user, $limit);
         }
-    } 
-    if(!$userHasData) {
-        return $this->getRecommendationsForNewUser($user, $limit);
-    }
 
         $allRecommendations = array_merge($favoriteSimilar, $reviewSimilar, $seenList, $genreList);
-        // TODO:
-        // add description comparison(or remove that functionality)
+
 
         $unique = [];
         foreach ($allRecommendations as $rec) {
@@ -355,13 +353,21 @@ class ContentBasedRecommender
         });
         $result = $noDuplicates;
 
-        //exclude seen, favorites
-        if ($watchedIds) {
+        if ($excludeIds) {
             $result = array_filter($result, function ($rec) use ($excludeIds) {
                 return !in_array($rec['movie']->id, $excludeIds);
             });
         }
-        
+
+        $result = array_slice($result, 0, $limit);
+        if (count($result) < $limit) {
+            $missing = $limit - count($result);
+
+            $extra = $this->getPopularMovies($missing, $excludeIds);
+            $result = array_merge($extra, $result);
+        }
+
+    
         $result = array_slice($result, 0, $limit);
         return $result;
     }
@@ -370,7 +376,6 @@ class ContentBasedRecommender
         if (count($user->favoriteGenres) == 0) {
             return $this->getPopularMovies($limit);
         }
-         dd("new user recs");
         $favoriteGenres = $user->favoriteGenres;
         $count = $favoriteGenres->count();
         $perGenre = floor($limit / $count);
@@ -407,15 +412,16 @@ class ContentBasedRecommender
         ])->toArray();
     }
 
-
-    function getPopularMovies($limit) {
-        // dd("popular movies");
-        $popularMovies = Movie::where('tmdb_rating', '>', 4)->limit($limit)->get();
-
-        return $popularMovies->map(fn($movie) => [
+    function getPopularMovies($limit, $excludeIds = []) {
+        $popularMovies = Movie::where('tmdb_rating', '>', 4)->whereNotIn('id', $excludeIds)->limit($limit)->get();
+        //exclude seen, favorites
+      
+        $popularMovies = $popularMovies->map(fn($movie) => [
             'movie' => $movie,
             'similarity' => 0.2,
         ])->toArray();
+
+
         return $popularMovies;
     }
 }

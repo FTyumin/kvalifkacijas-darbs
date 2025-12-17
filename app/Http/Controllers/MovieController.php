@@ -30,15 +30,17 @@ class MovieController extends Controller
         $movies = Movie::all()->take(5);
         $genres = Genre::inRandomOrder()->take(4)->withCount('movies')->get();
 
+        // selecting public lists
         $lists = MovieList::visibleTo(auth()->user())->with('user')->get();
 
         $id = auth()->id();
         $userRecommendations = [];
 
+        // display recs for logged in user
         if($id) {
-            $userRecommendations = $this->contentRecommender->getRecommendationsForUser($id, 8);
+            $userRecommendations = $this->contentRecommender->getRecommendationsForUser($id, 10);
             Cache::remember("user:{$id}:recs", 3600, function () use ($id) {
-                return $this->contentRecommender->getRecommendationsForUser($id, 8);
+                return $this->contentRecommender->getRecommendationsForUser($id, 10);
             });
 
         } 
@@ -49,37 +51,37 @@ class MovieController extends Controller
         $directors = Person::where('type', 'director')->get();
         $genres = Genre::all();
         $years = ['1970', '1971'];
-       $query = Movie::query()->with(['genres', 'actors']);
+        $query = Movie::query()->with(['genres', 'actors']);
 
-    if ($request->filled('genres')) {
-        $query->whereHas('genres', function ($q) use ($request) {
-            $q->whereIn('genres.id', $request->genres);
-        });
-    }
+        if ($request->filled('genres')) {
+            $query->whereHas('genres', function ($q) use ($request) {
+                $q->whereIn('genres.id', $request->genres);
+            });
+        }
 
-    if ($request->filled('directors')) {
-        $query->whereHas('director', function ($q) use ($request) {
-            $q->whereIn('persons.id', $request->directors);
-        });
-    }
+        if ($request->filled('directors')) {
+            $query->whereHas('director', function ($q) use ($request) {
+                $q->whereIn('persons.id', $request->directors);
+            });
+        }
 
-    if ($request->filled('min_rating')) {
-        $query->where('rating', '>=', $request->min_rating);
-    }
+        if ($request->filled('min_rating')) {
+            $query->where('rating', '>=', $request->min_rating);
+        }
 
-    if ($request->filled('year')) {
-        $query->where('year', '>=' , $request->year);
-    }
+        if ($request->filled('year')) {
+            $query->where('year', '>=' , $request->year);
+        }
 
-    switch ($request->sort) {
-        case 'year':
-            $query->orderBy('year', 'desc');
-            break;
-        case 'name':
-            $query->orderBy('title');
-            break;
-        default:
-            $query->orderBy('rating', 'desc');
+        switch ($request->sort) {
+            case 'year':
+                $query->orderBy('year', 'desc');
+                break;
+            case 'name':
+                $query->orderBy('title');
+                break;
+            default:
+                $query->orderBy('rating', 'desc');
     }
 
     $movies = $query->paginate(20)->withQueryString();

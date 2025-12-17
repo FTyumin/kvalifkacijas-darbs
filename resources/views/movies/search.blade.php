@@ -4,7 +4,7 @@
 
 <div class="py-4 px-28 flex flex-col gap-3">
   @if (count($movies) > 0)
-    <h1 class="text-3xl text-white">Results for <span class="text-green-500">"{{ $search }}"</span></h1>
+    <h1 class="text-3xl text-white">Results for <span class="text-yellow-500">"{{ $search }}"</span></h1>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ">
         @foreach($movies as $movie)
         <div class="group bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600 overflow-hidden">

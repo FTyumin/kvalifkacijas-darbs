@@ -26,7 +26,6 @@ class MarkController extends Controller
             //recs are based on favorites
             Cache::forget("user:{$user->id}:recs");
             session()->flash('success', 'Movie added to favorites!');
-
         }
 
         return back();
@@ -41,6 +40,7 @@ class MarkController extends Controller
             WantToWatch::remove($movie, $user);
         } else {
             WantToWatch::add($movie, $user);
+            Cache::forget("user:{$user->id}:recs");
             session()->flash('success', 'Movie added to watchlist!');
         }
 
@@ -56,7 +56,7 @@ class MarkController extends Controller
             Seen::remove($movie, $user);
         } else {
             Seen::add($movie, $user);
-            //recommendations shouldn't consist of movies user has alredy seen
+            //recommendations don't include movies user has alredy seen
             Cache::forget("user:{$user->id}:recs");
             session()->flash('success', 'Movie added to seen!');
 
