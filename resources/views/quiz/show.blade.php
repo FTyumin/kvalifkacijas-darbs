@@ -3,11 +3,13 @@
 @section('title', 'Preference quiz')
 
 @section('content')
-<div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-    <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
-    <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
-    <div class="absolute top-1/3 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-gradient-to-br from-pink-600/10 to-blue-600/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 4s;"></div>
-</div>
+
+@php
+$genreIcons = [
+   
+];
+@endphp
+
 
 <div class="relative z-10 min-h-screen flex items-center justify-center py-12 px-6 bg-black">
     <div class="w-full max-w-4xl">
@@ -65,7 +67,7 @@
 
         {{-- Form Card --}}
         <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 md:p-10 hover:bg-gray-800/60 transition-colors">
-            <form method="POST" action="{{ route('quiz.store') }}">
+            <form method="POST" action="{{ route('quiz.store') }}" x-data="{ selected: [] }">
                 @csrf
 
                 {{-- Instructions --}}
@@ -100,21 +102,23 @@
                             type="checkbox" 
                             name="genres[]" 
                             value="{{ $genre->id }}" 
-                            class="peer"
+                            {{ in_array($genre->id, old('genres', [])) ? 'checked' : '' }}
+                            class="peer hidden"
+                            @change="$event.target.checked ? selected.push({{ $genre->id }}) 
+                                : selected = selected.filter(id => id !== {{ $genre->id }})"
                         >
                         
                         {{-- Genre Card --}}
-                        <div class="h-full p-4 x rounded-xl transition-all duration-300 
-                                    hover:border-gray-500 hover:bg-gray-700/50
-                                    peer-checked:border-blue-500 peer-checked:bg-blue-500/10">
+                        <div class="h-full p-4 rounded-xl border border-gray-700
+                            transition-all duration-300
+                            peer-checked:border-blue-500
+                            peer-checked:ring-2 peer-checked:ring-blue-500/40
+                            peer-checked:scale-[1.03]
+                        ">
                             
-                            {{-- Genre Icon (based on genre name) --}}
+                            {{-- Genre Icon --}}
                             <div class="flex flex-col items-center text-center">
-                                <div class="w-12 h-12 mb-3 rounded-lg flex items-center justify-center opacity-70 peer-checked:opacity-100 transition-opacity">
-                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
-                                    </svg>
-                                </div>
+                                
                                 
                                 <span class="text-sm font-semibold text-gray-300 peer-checked:text-white transition-colors">
                                     {{ $genre->name }}
@@ -147,21 +151,25 @@
                             </div>
                         </div>
                         <div class="text-right">
-                            <p class="text-2xl font-bold text-white" id="selectedCount">0</p>
+                            <p class="text-2xl font-bold text-white" x-text="selected.length"></p>
                             <p class="text-xs text-gray-500">genres</p>
                         </div>
                     </div>
                 </div>
 
                 @error('genres')
-                <p class="mb-4 text-sm text-red-400">{{ $message }}</p>
+                    <p class="mb-4 text-sm text-red-400">{{ $message }}</p>
                 @enderror
 
                 {{-- Action Buttons --}}
                 <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-700">
                     <button 
                         type="submit" 
-                        class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transform hover:scale-105 inline-flex items-center justify-center gap-3 text-lg"
+                        :disabled="selected.length < 3"
+                        :class="selected.length < 3 
+                            ? 'opacity-50 cursor-not-allowed' 
+                            : 'hover:scale-105'"
+                        class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transform inline-flex items-center justify-center gap-3 text-lg"
                     >
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -171,8 +179,7 @@
                     
                     <a 
                         href="{{ route('profile.show', auth()->user()->id) }}" 
-                        class="sm:w-auto bg-gray-700/50 hover:bg-gray-700 text-white font-semibold py-4 px-8 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 inline-flex items-center justify-center gap-2"
-                    >
+                        class="sm:w-auto bg-gray-700/50 hover:bg-gray-700 text-white font-semibold py-4 px-8 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 inline-flex items-center justify-center gap-2">
                         Skip for Now
                     </a>
                 </div>
@@ -189,46 +196,6 @@
     </div>
 </div>
 
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // console.log('cyka blyat')
-    const checkboxes = document.querySelectorAll('input[name="genres[]"]');
-    const countDisplay = document.getElementById('selectedCount');
-    
-    function updateCount() {
-        const checkedCount = document.querySelectorAll('input[name="genres[]"]:checked').length;
-        countDisplay.textContent = checkedCount;
-        
-        // Add animation
-        countDisplay.classList.add('scale-125');
-        setTimeout(() => {
-            countDisplay.classList.remove('scale-125');
-        }, 200);
-    }
-    
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateCount);
-    });
-    console.log(checkboxes);
-    // checkboxes.forEach(checkbox => {
-    //     checkbox.addEventListener('change', () => {
-    //         // Find the parent label and then the visual card div
-    //         const card = checkbox.parentElement.querySelector('div');
-            
-    //         if (checkbox.checked) {
-    //             card.classList.add('bg-green-500/20', 'border-green-500');
-    //             card.classList.remove('border-blue-500', 'bg-blue-500/10');
-    //         } else {
-    //             card.classList.remove('bg-green-500/20', 'border-green-500');
-    //         }
-    //     });
-    // });
-    
-    // Initial count
-    updateCount();
-});
-</script>
-@endpush
+
 
 @endsection

@@ -15,6 +15,9 @@ class QuizController extends Controller
 
     public function store(Request $request) {
         $user = Auth::user();
+        
+        //avoid duplicates
+        $user->favoriteGenres()->detach();
 
         $user->quiz_completed = true;
         $user->save();
