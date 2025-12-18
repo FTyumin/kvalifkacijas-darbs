@@ -66,7 +66,7 @@ class MovieController extends Controller
         }
 
         if ($request->filled('min_rating')) {
-            $query->where('rating', '>=', $request->min_rating);
+            $query->where('tmdb_rating', '>=', $request->min_rating);
         }
 
         if ($request->filled('year')) {
@@ -81,7 +81,7 @@ class MovieController extends Controller
                 $query->orderBy('title');
                 break;
             default:
-                $query->orderBy('rating', 'desc');
+                $query->orderBy('tmdb_rating', 'desc');
     }
 
     $movies = $query->paginate(20)->withQueryString();
