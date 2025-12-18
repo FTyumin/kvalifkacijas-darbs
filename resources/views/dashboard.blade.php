@@ -133,7 +133,7 @@
                         <h3 class="mt-2 text-sm font-medium text-white line-clamp-2">
                             {{ $movie->movie->name }}
                         </h3>
-                        <p class="text-xs text-gray-400">Watched {{$movie->created_at->diffForHumans()}}</p>
+                        <p class="text-xs text-gray-400">Added {{$movie->created_at->diffForHumans()}}</p>
                         
                         </div>
                             @endforeach

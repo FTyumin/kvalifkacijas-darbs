@@ -70,9 +70,11 @@ class MarkController extends Controller
         //separating actors and directors
         if($person->type == 'actor') {
             $user->favoriteActors()->toggle($Id);
+            session()->flash('success', 'Actor marked as favorite!');
 
         } else {
             $user->favoriteDirectors()->toggle($Id);
+            session()->flash('success', 'Director marked as favorite!');
         }   
         return redirect()->back();
     }

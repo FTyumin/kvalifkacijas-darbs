@@ -30,13 +30,9 @@ class Person extends Model
 
     protected $table = 'persons';
 
-    public function movies() {
-        return $this->BelongsToMany(Movie::class, 'actor_movie', 'actor_id', 'movie_id');
-    }
-
     public function moviesAsActor()
     {
-        return $this->belongsToMany(Movie::class,'actor_movie', 'actor_id', 'movie_id')->withTimestamps();
+        return $this->belongsToMany(Movie::class, 'actor_movie', 'actor_id', 'movie_id')->withTimestamps();
     }
 
     public function moviesAsDirector()

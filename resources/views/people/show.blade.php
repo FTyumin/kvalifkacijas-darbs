@@ -30,11 +30,8 @@
 
     <div>
         <form action="{{ route('person.favorite', $person->id) }}" method="POST">
-        @csrf
-
-            <input type="text" class="hidden">
-
-            <button type="submit" class="white">Favorite</button>
+            @csrf
+            <button type="submit" class="text-white">Favorite</button>
         </form>
     </div>
 

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Genre;
 use App\Models\Movie;
+use App\Models\Person;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -106,6 +107,51 @@ class ContentBasedRecommender
         return $result;
     }
 
+    public function getPersonMovies(array $ids) : array {
+        $result = [];
+
+        foreach($ids as $id) {
+            $person = Person::find($id);
+            if($person->type == 'actor') {
+
+                $movies = $person->moviesAsActor->toArray();
+            } else {
+                $movies = $person->moviesAsDirector->toArray();
+            }
+            $result = array_merge($result, $movies);
+        }
+
+        $correctResult = [];
+
+        // build correct format
+        foreach($movies as $movie) {
+            $correctResult[] = [
+                'movie' => $movie,
+                'similarity' => 0.2,
+            ];
+        }
+        return $correctResult;
+    }
+
+    private function checkUserFavorites(array $recs, User $user) {
+        // check if recs have user's favorite actors, directors
+        // if yes, increase similarity
+        $favoriteActorIds = $user->favoriteActors->pluck('id')->toArray();
+        $favoriteDirectorIds = $user->favoriteDirectors->pluck('id')->toArray();
+
+        foreach($recs as $rec) {
+            $actors = $rec['movie']->actors->pluck('id')->toArray();
+
+            if(in_array($rec['movie']->director_id, $favoriteDirectorIds)) {
+                $rec['similarity'] *= 1.2;
+            }
+            if(array_intersect($actors, $favoriteActorIds)) {
+                $rec['similarity'] *= 1.2;
+            }
+        }
+        return $recs;
+    }
+
     function getRecommendationsForUser($userId, $limit) {
         $user = User::find($userId);
         if(!$user) {
@@ -114,8 +160,8 @@ class ContentBasedRecommender
         
         // retrieve user's favorite genres
         $favoriteGenres = $user->favoriteGenres;
-        // $favoriteActorIds = $user->favoriteActors->pluck('id')->toArray();
-        // $favoriteDirectorIds = $user->favoriteDirectors->pluck('id')->toArray();
+        $favoriteActorIds = $user->favoriteActors->pluck('id')->toArray();
+        $favoriteDirectorIds = $user->favoriteDirectors->pluck('id')->toArray();
 
         //movies that user shouldn't get as recommendations
         $watchedIds = $user->seenMovies()->pluck('markable_id')->toArray();
@@ -137,8 +183,6 @@ class ContentBasedRecommender
         if (count($favoriteIds) > 0) {
             $userHasData = true;
             $favoriteSimilar = $this->collectSimilarMovies($favoriteIds, 1.4);
-            
-
         } 
 
         if ($reviews && $reviews->count() > 0) {
@@ -204,7 +248,8 @@ class ContentBasedRecommender
             $result = array_merge($extra, $result);
         }
 
-    
+        $result = $this->checkUserFavorites($result, $user);
+
         $result = array_slice($result, 0, $limit);
         return $result;
     }
