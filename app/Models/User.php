@@ -84,8 +84,13 @@ class User extends Authenticatable
     }
 
     public function favoriteActors() {
-        return $this->belongsToMany(Person::class, 'user_favorite_actors')
-            ->withTimestamps();
+        return $this->belongsToMany(Person::class, 'user_favorite_actors',
+         'user_id', 'actor_id')->withTimestamps();
+    }
+
+    public function favoriteDirectors() {
+        return $this->belongsToMany(Person::class, 'user_favorite_directors',
+        'user_id', 'director_id')->withTimestamps();
     }
 
     public function getRedirectRoute()

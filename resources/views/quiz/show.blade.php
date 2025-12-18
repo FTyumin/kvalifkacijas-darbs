@@ -4,13 +4,6 @@
 
 @section('content')
 
-@php
-$genreIcons = [
-   
-];
-@endphp
-
-
 <div class="relative z-10 min-h-screen flex items-center justify-center py-12 px-6 bg-black">
     <div class="w-full max-w-4xl">
         
@@ -118,7 +111,6 @@ $genreIcons = [
                             
                             {{-- Genre Icon --}}
                             <div class="flex flex-col items-center text-center">
-                                
                                 
                                 <span class="text-sm font-semibold text-gray-300 peer-checked:text-white transition-colors">
                                     {{ $genre->name }}

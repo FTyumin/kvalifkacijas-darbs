@@ -54,6 +54,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/quiz', [QuizController::class, 'show'])->name('quiz.show');
     Route::post('/quiz', [QuizController::class, 'store'])->name('quiz.store');
 
+    Route::post('/people/{person}', [MarkController::class, 'favoritePersonToggle'])->name('person.favorite');
+    // Route::post('/people/{person}', [MarkController::class, 'favoriteDirectorToggle'])->name('director.favorite');
+
     Route::get('/feed', [FeedController::class, 'index'])->name('feed.index');
 });
 

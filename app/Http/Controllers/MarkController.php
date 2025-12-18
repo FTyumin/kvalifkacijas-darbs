@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Models\Favorite;
-use App\Models\WatchHistory;
 use App\Models\Movie;
 use App\Models\Seen;
+use App\Models\Person;
 use App\Models\WantToWatch;
-use Redirect;
-use Devrabiul\ToastMagic\Facades\ToastMagic;
+use Illuminate\Support\Facades\Auth;
 
 class MarkController extends Controller
 {
@@ -63,5 +61,19 @@ class MarkController extends Controller
         }
 
         return back();
+    }
+
+    public function favoritePersonToggle($Id) {
+        $user = Auth::user();
+        $person = Person::find($Id);
+
+        //separating actors and directors
+        if($person->type == 'actor') {
+            $user->favoriteActors()->toggle($Id);
+
+        } else {
+            $user->favoriteDirectors()->toggle($Id);
+        }   
+        return redirect()->back();
     }
 }

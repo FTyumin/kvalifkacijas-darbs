@@ -28,6 +28,16 @@
         </div>
     </div>
 
+    <div>
+        <form action="{{ route('person.favorite', $person->id) }}" method="POST">
+        @csrf
+
+            <input type="text" class="hidden">
+
+            <button type="submit" class="white">Favorite</button>
+        </form>
+    </div>
+
     {{-- Directed Movies --}}
     <section class="mt-12">
         
