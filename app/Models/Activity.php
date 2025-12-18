@@ -16,8 +16,9 @@ class Activity extends Model
         return $this->belongsTo(User::class);
     }
 
-   public function activityable()
-    {
+    public function activityable() {
         return $this->morphTo();
     }
+
+    protected $table = 'activities';
 }

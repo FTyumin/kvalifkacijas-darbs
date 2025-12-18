@@ -21,7 +21,7 @@ class FeedController extends Controller
             ->with('user')
             ->latest()
             ->paginate(20);
-
+        // dd($activities[3]->user);
         return view('feed.index', compact('activities'));
     }
 }

@@ -205,7 +205,7 @@
                     </p>
                 @endif
 
-    </div>
+            </div>
                     
                     <div class="bg-gray-900/50 px-6 py-3 border-t border-gray-700 flex items-center justify-between">
                        <a href="{{ route('reviews.show', $review) }}" class="text-sm text-yellow-400 hover:text-yellow-300 font-medium transition">

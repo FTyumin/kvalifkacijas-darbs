@@ -22,7 +22,6 @@
                             </h2>
                             <div class="flex items-center gap-3">
                                 <a href="{{ route('profile.show', $review->user) }}" 
-                                   onclick="event.stopPropagation()"
                                    class="flex items-center gap-2 hover:opacity-80 transition-opacity">
                                     <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                                         <span class="text-white text-sm font-semibold">{{ substr($review->user->name, 0, 1) }}</span>
@@ -51,29 +50,25 @@
                     {{-- Review Content --}}
                     @if($review->spoilers)
                         {{-- Spoiler Warning --}}
-                        <div class="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                        <div class="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg" x-data="{ open: false }">
                             <div class="flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-yellow-500 flex-shrink-0">
                                     <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
                                 </svg>
                                 <span class="text-sm text-yellow-500 font-medium">This review contains spoilers</span>
                                 <button 
-                                    onclick="event.preventDefault(); event.stopPropagation(); toggleSpoiler({{ $review->id }})" 
-                                    class="ml-auto px-3 py-1 bg-yellow-500 text-gray-900 text-xs font-medium rounded hover:bg-yellow-400 transition-colors"
-                                >
+                                    @click="open = !open"
+                                    class="ml-auto px-3 py-1 bg-yellow-500 text-gray-900 text-xs font-medium rounded hover:bg-yellow-400 transition-colors">
                                     Show
                                 </button>
                             </div>
                             
                             {{-- Hidden Content --}}
-                            <div id="spoiler-content-{{ $review->id }}" class="hidden mt-3 pt-3 border-t border-yellow-500/20">
-                                <p class="text-gray-300 leading-relaxed line-clamp-3">{{ $review->description }}</p>
-                                <button 
-                                    onclick="event.preventDefault(); event.stopPropagation(); toggleSpoiler({{ $review->id }})" 
-                                    class="mt-2 text-sm text-yellow-500 hover:text-yellow-400 font-medium"
-                                >
-                                    Hide
-                                </button>
+                            <div x-show="open" x-transition
+                                class="mt-3 pt-3 border-t border-yellow-500/20">
+                                <p class="text-gray-300 leading-relaxed">
+                                    {{ $review->description }}
+                                </p>
                             </div>
                         </div>
                     @else
@@ -108,12 +103,4 @@
     {{-- Pagination --}}
     
 </div>
-
-<script>
-function toggleSpoiler(reviewId) {
-    const content = document.getElementById(`spoiler-content-${reviewId}`);
-    content.classList.toggle('hidden');
-}
-</script>
-
 @endsection
