@@ -102,9 +102,9 @@
             {{-- Actions --}}
             @if(Auth::check())
                 @php
-                    $isSeen = Auth::user()->seenMovies->contains($movie->id);
-                    $isWatchList = Auth::user()->wantToWatch->contains($movie->id);
-                    $isFavorite = Auth::user()->favorites->contains($movie->id);
+                    $isSeen = Auth::user()->seenMovies->pluck('markable_id')->contains($movie->id);
+                    $isWatchList = Auth::user()->wantToWatch->pluck('markable_id')->contains($movie->id);
+                    $isFavorite = Auth::user()->favorites->pluck('markable_id')->contains($movie->id);
                 @endphp
                 <div class="flex gap-3 mt-6">
                     <form action="{{ route('seen.toggle', $movie->id) }}" method="POST">
@@ -133,7 +133,6 @@
                             <span class="text-xs {{ $isFavorite ? 'text-red-500' : 'text-gray-400' }} group-hover:text-white transition-colors">Add to Favorites</span>
                         </button>
                     </form>
-
                     <form action="{{ route('watchlist.toggle', $movie->id) }}" method="POST">
                         @csrf
                         <button type="submit"
@@ -188,7 +187,7 @@
     
     {{-- Similar Movies Section --}}
     @if(count($similarMovies) > 0)
-        <div class="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+        <div class="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mt-8"></div>
         <div class="mt-12 pt-8">
             <h2 class="text-2xl font-bold text-white mb-6">You May Also Like</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -223,7 +222,6 @@
         </div>
     @endif
 
-    
 </div>
 @endsection
 

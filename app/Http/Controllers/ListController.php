@@ -44,8 +44,13 @@ class ListController extends Controller
 
     public function add(Request $request, $movieId) {
         $list = MovieList::find($request->listId);
-        $list->addMovie($movieId);
+        if($list->movies->contains($movieId)) {
+            return back()->with('warning', 'Movie is already in list');
+        } else {
+            $list->addMovie($movieId);
 
+        }
+        
         return back()->with('success', 'Movie added to list');
     }
 

@@ -54,15 +54,15 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
-    public function wantToWatch()
-    {
-        return $this->hasMany(WantToWatch::class);
-    }
-
     public function ratedMovies()
     {
         return $this->belongsToMany(Movie::class, 'reviews')
             ->withPivot('rating', 'created_at');
+    }
+
+    public function wantToWatch()
+    {
+        return $this->hasMany(WantToWatch::class);
     }
 
     public function seenMovies() {

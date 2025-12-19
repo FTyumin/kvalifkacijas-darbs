@@ -23,6 +23,11 @@
           {{ session('success') }}
       </div>
     @endif
+    @if (session('warning'))
+      <div class="mb-6 rounded-lg bg-red-600/20 border border-red-500/30 px-4 py-3 text-red-400">
+          {{ session('warning') }}
+      </div>
+    @endif
 
     @yield('content')
   </main>
