@@ -54,10 +54,9 @@ class ListController extends Controller
         return back()->with('success', 'Movie added to list');
     }
 
-    public function remove(Request $request, $movieId) {
-        $list = MovieList::find($request->list_id);
-        $list->removeMovie($movieId);
+    public function remove(MovieList $list, $movieId) {
 
+        $list->removeMovie($movieId);
         return back()->with('message','Movie removed!');
     }
 }

@@ -110,7 +110,7 @@
                 <div class="group relative">
                     <a href="{{ route('movies.show', $movie->slug) }}" class="block">
                         <div class="aspect-[2/3] bg-gray-700/50 rounded-lg overflow-hidden border border-gray-600/50 hover:border-gray-500 transition-all group-hover:shadow-lg group-hover:shadow-blue-500/20">
-                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                            <img class="w-full h-full object-cover  transition-transform duration-300" 
                                  src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"  
                                  alt="{{ $movie->title }}" 
                                  loading="lazy" />
@@ -136,16 +136,35 @@
                     {{-- Remove Button (only for list owner) --}}
                     @auth
                        @if(Auth::id() === $list->user_id)
-                        <form action="{{ route('lists.remove', $movie->id) }}" method="POST" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <!-- <form  class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                             @csrf
                             @method('DELETE')
                             <input type="hidden" name="list_id" value="{{ $list->id }}">
-                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white p-1.5 rounded-full transition-colors" onclick="return confirm('Remove this movie from the list?');">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                            </button>
-                        </form>
+                            
+                            
+                        </form> -->
+                        <div 
+                           class="absolute mt-6 top-6 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <x-confirm-modal
+                                title="Remove movie?"
+                                message="This movie will be removed from your list. This action cannot be undone."
+                                :action="route('lists.remove', [$list->id, $movie->id])"
+                                method="DELETE"
+                            >
+                                <x-slot name="trigger">
+                                    <button
+                                        class="bg-red-600 hover:bg-red-700 text-white p-1.5 rounded-full transition"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </x-slot>
+                            </x-confirm-modal>
+                        </div>
+                        
                         @endif
 
                         @endauth
