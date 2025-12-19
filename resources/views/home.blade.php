@@ -127,11 +127,11 @@
       </svg>
     </a>
   </div>
-
-  <h1 class="mb-3 mt-10 text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-      Our picks <span class="text-yellow-600">For You</span>
-  </h1>
-
+    @auth
+        <h1 class="mb-3 mt-10 text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+            Our picks <span class="text-yellow-600">For You</span>
+        </h1>
+    @endauth
 
 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
     @foreach($userRecommendations as $movie)
@@ -141,8 +141,7 @@
 
         {{-- Poster --}}
         <a href="{{ route('movies.show', $movie['movie']['slug']) }}" class="block relative">
-            <img
-                src="https://image.tmdb.org/t/p/w500/{{ $movie['movie']['poster_url'] }}"
+            <img src="https://image.tmdb.org/t/p/w500/{{ $movie['movie']['poster_url'] }}"
                 alt="{{ $movie['movie']['name'] }}"
                 class="aspect-[2/3] w-full object-cover
                       transition-transform duration-500 group-hover:scale-105"

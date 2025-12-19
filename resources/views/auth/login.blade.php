@@ -1,21 +1,25 @@
 @extends('layouts.app')
 
+@section('title', 'Login')
+
 @section('content')
 <div class="min-h-screen text-white overflow-x-hidden">
    
     
     <div class="relative z-10 min-h-screen flex">
         <!-- Left Side - Branding -->
-        <div class="hidden lg:flex lg:w-1/2   items-center justify-center p-12 relative overflow-hidden">
+        <div class="hidden lg:flex lg:w-1/2 items-center justify-center p-12 relative overflow-hidden">
             <!-- Background Pattern -->
-              <div class="absolute inset-0 z-0 opacity-8">
-                <img src="{{ asset('images/unsplash.jpg') }}" 
-                    class="w-full h-full object-contain" 
-                    alt="Movie theater">
-            </div>
+              
+            <img src="{{ asset('images/unsplash.jpg') }}"
+                class="absolute inset-0 w-full h-full object-cover will-change-transform"
+                alt="Movie theater"
+            />
+
+            <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/70 to-purple-900/50"></div>
 
             <!-- Dark Overlay for readability -->
-        <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-purple-900/50 z-0"></div>
+        <!-- <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-purple-900/50 z-0"></div> -->
             
             <div class="relative z-10 text-center">
                 <!-- Logo -->
@@ -36,24 +40,24 @@
                 <!-- Features -->
                 <div class="space-y-4 text-left max-w-md">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4" fill="green" viewBox="0 0 20 20">
+                        <div class="w-8 h-8 bg-yellow-400/20 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                         <span>Access your personal watchlist</span>
                     </div>
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4" fill="green" viewBox="0 0 20 20">
+                        <div class="w-8 h-8 bg-yellow-400/20 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                         <span>Rate and review movies</span>
                     </div>
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4" fill="green" viewBox="0 0 20 20">
+                        <div class="w-8 h-8 bg-yellow-400/20 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </div>
@@ -75,14 +79,14 @@
                                 <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
                             </svg>
                         </div>
-                        <span class="text-2xl font-bold text-white">MovieHub</span>
+                        <span class="text-2xl font-bold text-white">Movie Platform</span>
                     </div>
                     <h2 class="text-2xl font-bold text-white mb-2">Welcome Back</h2>
                     <p class="text-gray-400">Sign in to your account</p>
                 </div>
 
                 <!-- Login Form Card -->
-                <div class="bg-gray-800/50 glass border border-gray-700 rounded-2xl p-8 shadow-2xl">
+                <div class="bg-gray-800/50 border border-gray-700 rounded-2xl p-8 shadow-2xl">
                     <h3 class="text-2xl font-bold text-white mb-6 text-center hidden lg:block">Sign In</h3>
                     
                     <!-- Display Validation Errors -->
@@ -184,7 +188,7 @@
                         <!-- Submit Button -->
                         <button 
                             type="submit" 
-                            class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transform hover:scale-105"
+                            class="w-full  text-white font-semibold py-3 px-6 rounded-lg bg-yellow-500 hover:bg-yellow-400"
                         >
                             Sign In
                         </button>

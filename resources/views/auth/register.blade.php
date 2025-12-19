@@ -2,21 +2,18 @@
 
 @section('content')
 <div class="min-h-screen bg-black text-white overflow-x-hidden">
-    <!-- Background Elements -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 floating-element"></div>
-        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 floating-element"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-600 rounded-full mix-blend-multiply filter blur-xl opacity-10 floating-element"></div>
-    </div>
 
     <div class="relative z-10 min-h-screen flex">
         <!-- Left Side - Branding -->
-        <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-purple-600 via-pink-600 to-red-600 items-center justify-center p-12 relative overflow-hidden">
-            <div class="absolute inset-0 opacity-10">
-                <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="7" cy="7" r="5"/%3E%3Ccircle cx="53" cy="7" r="5"/%3E%3Ccircle cx="7" cy="53" r="5"/%3E%3Ccircle cx="53" cy="53" r="5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-            </div>
+        <div class="hidden lg:flex lg:w-1/2 items-center justify-center p-12 relative overflow-hidden">
+   
+                    <img src="{{ asset('images/unsplash.jpg') }}" 
+                        class="absolute inset-0 w-full h-full object-cover z-0" 
+                        alt="Movie theater">
+
+            <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-purple-900/50 z-0"></div>
             
-            <div class="relative z-10 text-center">
+            <div class="relative z-20 text-center">
                 <!-- Logo -->
                 <div class="flex items-center justify-center gap-3 mb-8">
                     <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
@@ -24,7 +21,7 @@
                             <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
                         </svg>
                     </div>
-                    <h1 class="text-4xl font-bold">MovieHub</h1>
+                    <h1 class="text-4xl font-bold">Movie Platform</h1>
                 </div>
                 
                 <h2 class="text-3xl font-bold mb-4">Join the Community!</h2>
@@ -69,8 +66,8 @@
                 <!-- Header -->
                 <div class="text-center mb-8 lg:hidden">
                     <div class="flex items-center justify-center gap-2 mb-4">
-                        <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
-                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <div class="w-8 h-8 bg-yellow-400/20 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-yellow-400" fill="currentColor">
                                 <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
                             </svg>
                         </div>
@@ -170,8 +167,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                     </svg>
                                 </div>
-                                <input 
-                                    type="password" 
+                                <input type="password" 
                                     id="password" 
                                     name="password" 
                                     required 
@@ -199,9 +195,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
                                 </div>
-                                <input 
-                                    type="password" 
-                                    id="password_confirmation" 
+                                <input  type="password" id="password_confirmation" 
                                     name="password_confirmation" 
                                     required 
                                     autocomplete="new-password"
@@ -234,9 +228,7 @@
 
                         <!-- Submit Button -->
                         <button 
-                            type="submit" 
-                            class="w-full  border border-white text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-800 transform hover:scale-105"
-                        >
+                            type="submit" class="w-full ">
                             Create Account
                         </button>
                     </form>
@@ -245,7 +237,7 @@
                 <!-- Sign In Link -->
                 <p class="mt-8 text-center text-gray-400">
                     Already have an account? 
-                    <a href="{{ route('login') }}" class="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+                    <a href="{{ route('login') }}" class="text-white  font-medium transition-colors">
                         Sign in here
                     </a>
                 </p>

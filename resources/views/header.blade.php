@@ -36,10 +36,8 @@
             autocomplete="off"
           />
           
-          <button 
-            type="submit" 
-            class="absolute right-2 top-1/2 -translate-y-1/2 bg-amber-500 hover:bg-yellow-700 text-white font-medium rounded-lg text-sm px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
+          <button type="submit" 
+            class="absolute right-2 top-1/2 -translate-y-1/2 bg-amber-600 hover:bg-yellow-700 text-white font-medium rounded-lg text-sm px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
             Search
           </button>
         </div>
