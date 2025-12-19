@@ -18,6 +18,7 @@ class CreateReview extends Component
     public $spoilers = false;
     public $isEditing = false;
     public $reviewId;
+    public $likeCount = 0;
 
     public array $showSpoilers = [];
 
@@ -58,7 +59,6 @@ class CreateReview extends Component
         if (!auth()->check()) {
             session()->flash('warning', 'You must be logged in to write a review');
         }
-
 
         $this->validate();
         if($this->isEditing) {

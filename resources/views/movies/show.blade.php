@@ -215,12 +215,12 @@
         </div>
     @endif
     {{-- Write Review Section --}}
-    @if(Auth::check())
+    
         <div class="mt-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
         <div class="mt-12 pt-8">
             <livewire:create-review :movie="$movie" />
         </div>
-    @endif
+    
 
 </div>
 @endsection

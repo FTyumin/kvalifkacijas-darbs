@@ -9,15 +9,15 @@ use App\Models\Review;
 
 class ReviewComponent extends Component
 {
-    /**
-     * Create a new component instance.
-     */
+   
     public Review $review;
 
     public function __construct(Review $review)
     {
         $this->review = $review;
     }
+
+    
 
     /**
      * Get the view / contents that represent the component.
