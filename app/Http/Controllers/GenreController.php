@@ -12,7 +12,6 @@ class GenreController extends Controller
         $genre = Genre::findOrFail($genreID);
         $movies = $genre->movies()->paginate(12);
         
-
         return view('genres.show', compact('genre', 'movies'));
     }
     

@@ -8,10 +8,8 @@ use Illuminate\Support\Facades\Cache;
 
 class ReviewController extends Controller
 {
-  
     public function index(Request $request) {
         $reviews = Review::with('user')->get();
-
         return view('reviews.index', compact('reviews'));
     }
 
@@ -30,7 +28,6 @@ class ReviewController extends Controller
             // Like
             $review->likedBy()->attach($user->id);
         }
-
         return back();
     }
 }

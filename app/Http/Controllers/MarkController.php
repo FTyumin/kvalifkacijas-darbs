@@ -63,6 +63,7 @@ class MarkController extends Controller
         return back();
     }
 
+    // marking favorite actor/director
     public function favoritePersonToggle($Id) {
         $user = Auth::user();
         $person = Person::find($Id);

@@ -23,7 +23,7 @@ class AdminController extends Controller
             ->orderBy('liked_by_count', 'desc')
             ->first();
 
-        // movies with most favorites, etc
+        // movies with most favorites, most watched
         $mostFavorites = Movie::withCount('favoriters')
             ->orderBy('favoriters_count', 'desc')
             ->take(5)
