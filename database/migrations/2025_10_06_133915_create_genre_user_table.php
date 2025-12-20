@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('genre_user');
+        Schema::dropIfExists('user_favorite_genres');
     }
 };

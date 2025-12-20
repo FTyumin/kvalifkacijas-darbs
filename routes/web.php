@@ -15,11 +15,15 @@ use App\Http\Controllers\FeedController;
 use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Route;
 
-
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'dashboard']);
+    Route::resource('movies', MovieController::class)->except(['index', 'show']);
+    Route::post('/suggestions/{suggestion}/approve', [AdminController::class, 'approveSuggestion'])->name('suggestions.approve');
+    Route::post('/suggestions/{suggestion}/reject', [AdminController::class, 'rejectSuggestion'])->name('suggestions.reject');
+});
 Route::get('/', [MovieController::class, 'home'])->name('home');
 
 Route::resource('movies', MovieController::class)->only(['index', 'show']);
-
 
 Route::get('/actors/search', [PeopleController::class, 'search'])->name('actors.search');
 Route::get('/directors/search', [PeopleController::class, 'directorSearch'])->name('directors.search');
@@ -64,13 +68,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/comments', [CommentController::class, 'create'])->name('comments.store');
 });
 
-Route::middleware('admin')->group(function () {
-    Route::get('admin', [AdminController::class, 'dashboard']);
-    Route::get('movies/add', [MovieController::class, 'add'])->name('movies.add');
-    Route::post('movies/store', [MovieController::class, 'store'])->name('movies.store');
 
-    Route::post('/suggestions/{suggestion}/approve', [AdminController::class, 'approveSuggestion'])->name('suggestions.approve');
-});
 
 Route::resource('lists', ListController::class)->only(['index', 'show', 'create', 'store']);
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');

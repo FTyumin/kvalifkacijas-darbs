@@ -1,18 +1,18 @@
 <article class="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
 
     <div class="p-6">
-        <h1>{{$review->movie->name}}</h1>
+        <h1 class="text-white">{{$review->movie->name}}</h1>
         <div class="flex items-start justify-between gap-4 mb-4">
             <div class="flex items-center gap-3">
                 <a href="{{ route('profile.show', $review->user) }}" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
                     <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
                         <img src="{{ $review->user->image ? asset('storage/' . $review->user->image) : asset('images/person-placeholder.png') }}" alt="" class="w-full h-full object-cover">
-                        <p class="font-medium text-gray-200">{{ $review->user->name }}</p>
+                        
                     </div>
                 </a>
                     <div>
                         <h1 class="font-medium text-xl text-white">{{ $review->title }}</h1>
-                        
+                        <p class="font-medium text-gray-200">{{ $review->user->name }}</p>
                         <time class="text-xs text-gray-400">{{ $review->created_at->diffForHumans() }}</time>
                     </div>
             </div>

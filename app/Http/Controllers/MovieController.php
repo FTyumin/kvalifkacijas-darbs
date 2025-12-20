@@ -114,7 +114,7 @@ class MovieController extends Controller
         return view('movies.search', compact('movies', 'search', 'people'));
     }
 
-    public function add() {
+    public function create() {
         $genres = Genre::all();
         return view('movies.add', compact('genres'));
     }

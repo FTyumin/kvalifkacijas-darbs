@@ -12,9 +12,8 @@ use Maize\Markable\Models\Favorite;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, Markable;
+    use HasFactory, Notifiable;
     protected static $markableTable = 'markables';
-
 
     protected $fillable = [
         'name',
@@ -31,6 +30,10 @@ class User extends Authenticatable
     protected static $marks = [
         Seen::class,
         WantToWatch::class,
+    ];
+
+    protected $casts = [
+        'is_admin' => 'boolean',
     ];
 
     /**
