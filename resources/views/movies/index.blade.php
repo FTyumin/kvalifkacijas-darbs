@@ -123,8 +123,7 @@
                     {{ $d }}s
                 </option>
               @endforeach
-                  <!-- <option value="1970" {{ request('decade') == '1970' ? 'selected' : '' }}>1970s</option>
-                  <option value="1980" {{ request('decade') == '1980' ? 'selected' : '' }}>1980s</option> -->
+                 
           </select>
       </div>
 

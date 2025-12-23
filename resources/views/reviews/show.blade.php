@@ -126,8 +126,43 @@
                             <time class="text-sm text-gray-400">{{ $comment->created_at->diffForHumans() }}</time>
                         </div>
                         <p class="text-gray-300 leading-relaxed">{{ $comment->description }}</p>
+                          @if(auth()->id() === $comment->user_id)
+                        <div class="mt-2 flex gap-3 text-sm">
+                        <button type="button"
+                                class="text-blue-400 hover:text-blue-300"
+                                onclick="document.getElementById('edit-comment-{{ $comment->id }}').classList.toggle('hidden')">
+                            Edit
+                        </button>
+
+                        <form action="{{ route('comments.destroy', $comment) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button class="text-red-400 hover:text-red-300">Delete</button>
+                        </form>
+                        </div>
+
+                        <form id="edit-comment-{{ $comment->id }}"
+                            action="{{ route('comments.update', $comment) }}"
+                            method="POST"
+                            class="mt-3 hidden">
+                        @csrf
+                        @method('PATCH')
+                        <textarea name="comment" rows="3"
+                                    class="w-full rounded-lg bg-gray-800 border-gray-700 text-white">{{ $comment->description }}</textarea>
+                        <div class="mt-2 flex gap-2">
+                            <button class="px-3 py-1 rounded bg-blue-600 text-white">Save</button>
+                            <button type="button"
+                                    class="px-3 py-1 rounded bg-gray-700 text-white"
+                                    onclick="document.getElementById('edit-comment-{{ $comment->id }}').classList.add('hidden')">
+                            Cancel
+                            </button>
+                        </div>
+                        </form>
                     </div>
+                        
+                    @endif
                 </div>
+
             </div>
             @endforeach
         </div>

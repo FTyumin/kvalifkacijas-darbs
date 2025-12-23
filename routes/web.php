@@ -70,6 +70,9 @@ Route::middleware('auth')->group(function () {
     Route::post('review/{review}/like', [ReviewController::class, 'toggleLike'])->name('reviews.like');
 
     Route::post('/comments', [CommentController::class, 'create'])->name('comments.store');
+    Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+Route::patch('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 

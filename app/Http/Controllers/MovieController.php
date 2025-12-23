@@ -76,7 +76,6 @@ class MovieController extends Controller
             $start = (int) $request->decade;
             $end = $start + 9;
             $query->whereBetween('year', [$start, $end]);
-            // $query->where('year', '>=' , $request->year);
         }
 
         switch ($request->sort) {
