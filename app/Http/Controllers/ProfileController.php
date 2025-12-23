@@ -53,9 +53,10 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
+        // $request->validateWithBag('userDeletion', [
+        //     'password' => ['required', 'current_password'],
+        // ]);
+        // dd("debug");
 
         $user = $request->user();
 
@@ -70,7 +71,10 @@ class ProfileController extends Controller
     }
 
     public function show(User $user) {
-        if($user->id == auth()->user()->id) {
+        if(!$user) {
+            abort(404);
+        }
+        if(auth()->check() && $user->id == auth()->user()->id) {
             $watchList = auth()->user()->wantToWatch;
             $seen = auth()->user()->seenMovies;
 

@@ -241,11 +241,26 @@
                                         </svg>
 
                                     </div>   
-                                    <span class="text-sm font-medium">{{ __('Log Out') }}</span>     
+                                    <span class="text-sm font-medium">Log Out</span>     
                                 </button>     
-                                  
                             </form>
 
+                            <x-confirm-modal
+                                title="Delete account?"
+                                message="Your account and all of its data will be deleted. This action cannot be undone."
+                                :action="route('profile.destroy') "
+                                method="DELETE">
+                                <x-slot name="trigger" class="w-max">
+                                    <button  class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors w-full">
+                                    @svg('monoicon-delete', 'h-4 text-red-400')
+
+
+
+                                    <span class="text-sm font-medium">Delete Account</span>     
+                                </button>     
+                                    </x-slot>
+                                </x-confirm-modal>
+                                
                         </div>
                     </div>
 

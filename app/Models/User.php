@@ -88,15 +88,16 @@ class User extends Authenticatable
 
     public function favoriteActors() {
         return $this->belongsToMany(Person::class, 'user_favorite_people',
-         'user_id', 'actor_id')
-         ->withPivot('type')
-         ->wherePivot('actor')
+         'user_id', 'person_id')
+         ->wherePivot('type', 'actor')
          ->withTimestamps();
     }
 
     public function favoriteDirectors() {
-        return $this->belongsToMany(Person::class, 'user_favorite_directors',
-        'user_id', 'director_id')->withTimestamps();
+        return $this->belongsToMany(Person::class, 'user_favorite_people',
+        'user_id', 'person_id')
+        ->wherePivot('type', 'actor')
+        ->withTimestamps();
     }
 
     public function getRedirectRoute()
