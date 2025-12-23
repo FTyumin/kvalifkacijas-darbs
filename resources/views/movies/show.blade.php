@@ -55,18 +55,20 @@
             <p class="text-gray-300 leading-relaxed">
                 {{ $movie->description }}
             </p>
-
             {{-- Director & Cast --}}
             <div class="space-y-4 py-4 border-t border-gray-700">
-                @if(isset($movie->director))
+                @if(isset($movie->director) && count($movie->director) > 0)
+
                     <div class="flex gap-3">
                         <span class="text-sm font-semibold text-gray-400 min-w-[80px]">Director</span>
-                        <div class="flex flex-wrap gap-2">
-                            <a href="{{ route('people.show', $movie->director) }}" 
-                               class="text-sm text-blue-400 hover:text-blue-300 hover:underline transition-colors">
-                                {{ $movie->director->first_name }} {{ $movie->director->last_name }}
-                            </a>
-                        </div>
+                        @foreach($movie->director as $person)
+                            <div class="flex flex-wrap gap-2">
+                                <a href="{{ route('people.show', $person) }}" 
+                                class="text-sm text-blue-400 hover:text-blue-300 hover:underline transition-colors">
+                                    {{ $person->first_name }} {{ $person->last_name }}
+                                </a>
+                            </div>
+                        @endforeach
                     </div>
                 @endif
 

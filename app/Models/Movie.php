@@ -67,12 +67,12 @@ class Movie extends Model
 
     public function director()
     {
-        return $this->people()->wherePivot('role', 'actor');
+        return $this->people()->wherePivot('role', 'director');
     }
 
     public function actors()
     {
-        return $this->people()->wherePivot('role', 'director');
+        return $this->people()->wherePivot('role', 'actor');
     }
 
     public function genres()

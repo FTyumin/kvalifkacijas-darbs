@@ -49,23 +49,19 @@ class ContentBasedRecommender
             ->get('genre_id');
         
         // Get actor IDs as arrays
-        $actors1 = DB::table('actor_movie')
-            ->where('movie_id', $movie1->id)
-            ->get('actor_id');
-
-        $actors2 = DB::table('actor_movie')
-            ->where('movie_id', $movie2->id)
-            ->get('actor_id');
+        $actors1 = $movie1->actors->pluck('id')->toArray();
+        $actors2 = $movie2->actors->pluck('id')->toArray();
         
-        // Get director IDs as sets
-        $director1 = [$movie1->director->id];
-        $director2 = [$movie2->director->id];
+        // Get director IDs as arrays
+        $director1 = $movie1->director->pluck('id')->toArray();
+        $director2 = $movie2->director->pluck('id')->toArray();
+
         
         $genres1 = $genres1->pluck('genre_id')->toArray();
         $genres2 = $genres2->pluck('genre_id')->toArray();
 
-        $actors1 = $actors1->pluck('actor_id')->toArray();
-        $actors2= $actors2->pluck('actor_id')->toArray();
+        // $actors1 = $actors1->pluck('id')->toArray();
+        // $actors2 = $actors2->pluck('id')->toArray();
 
         // Calculate Jaccard index for each component
         $genreJaccard = $this->jaccardIndex($genres1, $genres2);

@@ -48,7 +48,7 @@ class MovieController extends Controller
     }
 
     public function index(Request $request) {
-        $directors = Person::where('type', 'director')->get();
+        $directors = Person::whereHas('moviesAsDirector')->orderBy('last_name')->get();
         $genres = Genre::all();
         $years = ['1970', '1971'];
         $query = Movie::query()->with(['genres', 'actors']);
@@ -61,7 +61,7 @@ class MovieController extends Controller
 
         if ($request->filled('directors')) {
             $query->whereHas('director', function ($q) use ($request) {
-                $q->whereIn('persons.id', $request->directors);
+                $q->whereIn('people.id', $request->directors);
             });
         }
 
@@ -106,7 +106,7 @@ class MovieController extends Controller
             ->with('genres')
             ->get();
 
-        $people = DB::table('persons')
+        $people = DB::table('people')
             ->where('first_name', 'like', "%{$search}%")
             ->orWhere('last_name', 'like', "%{$search}%")
             ->get();
