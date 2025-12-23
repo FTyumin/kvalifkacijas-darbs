@@ -8,10 +8,12 @@ use App\Models\Movie;
 use App\Models\Suggestion;
 use App\Models\User;
 use App\Notifications\SuggestionAccepted;
+use App\Jobs\ImportMoviesJob;
 use Illuminate\Support\Facades\Artisan;
 
 class AdminController extends Controller
 {
+  
     public function dashboard() {
 
         // select top reviews, lists
@@ -64,9 +66,9 @@ class AdminController extends Controller
         ]);
 
         $count = $request->count;
-        
-        Artisan::call('app:insert-data ', [
-            'count' => $count,
-        ]);
+        $method = $request->method;
+        ImportMoviesJob::dispatch($count, $method);
+
+        return back()->with('success', 'Started loading movies');
     }
 }

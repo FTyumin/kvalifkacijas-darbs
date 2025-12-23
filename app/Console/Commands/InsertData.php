@@ -3,12 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use App\Services\TmdbApiClient;
 use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\Person;
-use Database\Seeders\GenreSeeder;
 
 class InsertData extends Command
 {

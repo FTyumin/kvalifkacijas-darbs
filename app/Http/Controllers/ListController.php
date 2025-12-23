@@ -59,4 +59,12 @@ class ListController extends Controller
         $list->removeMovie($movieId);
         return back()->with('message','Movie removed!');
     }
+
+    public function update() {
+
+    }
+
+    public function destroy() {
+        
+    }
 }

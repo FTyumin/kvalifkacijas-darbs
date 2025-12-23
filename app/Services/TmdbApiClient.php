@@ -135,7 +135,7 @@ class TmdbApiClient {
                 $endpoint = 'movie/popular';
             } else if($method === 'top-rated') {
                 $endpoint = 'movie/top_rated';
-            } else {
+            } else if($endpoint === 'discover'){
                 $endpoint = 'discover/movie';
                 $query = array_merge($query, array_filter($discoverDefaults, fn($v) => $v !== null));
                 
