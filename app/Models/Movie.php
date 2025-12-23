@@ -18,12 +18,10 @@ class Movie extends Model
 {
     use HasFactory, Markable, HasSlug;
 
-    public $incrementing = false;
-    protected $keyType = 'int';
-    protected static $markableTable = 'markables';
+    // protected static $markableTable = 'markables';
 
     protected $fillable = [
-        'id',
+        'tmdb_id',
         'name',
         'year',
         'description',
@@ -60,14 +58,21 @@ class Movie extends Model
         return 'slug';
     }
 
+    public function people()
+    {
+        return $this->belognstToMany(Person::class, 'person_movie', 'movie_id', 'person_id')
+            ->withPivot('role')
+            ->withTimeStamps();
+    }
+
     public function director()
     {
-        return $this->belongsTo(Person::class, 'director_id');
+        return $this->people()->wherePivot('role', 'actor');
     }
 
     public function actors()
     {
-        return $this->belongsToMany(Person::class, 'actor_movie', 'movie_id', 'actor_id')->withTimestamps();
+        return $this->people()->wherePivot('role', 'director');
     }
 
     public function genres()

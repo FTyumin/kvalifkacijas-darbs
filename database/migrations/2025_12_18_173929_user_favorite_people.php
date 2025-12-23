@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_favorite_directors', function (Blueprint $table) {
+        Schema::create('user_favorite_peop', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('director_id')->constrained('persons')->onDelete('cascade');
+            $table->foreignId('person_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained();
+            $table->enum('type', ['actor', 'director']);
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_favorite_directors');
+        Schema::dropIfExists('user_favorite_actors');
     }
 };

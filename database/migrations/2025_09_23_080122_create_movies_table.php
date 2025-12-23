@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('movies', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary(); //no auto-increment
+            $table->id();
+            $table->unsignedBigInteger('tmdb_id');
             $table->string('name');
             $table->string('slug')->nullable();
             $table->year('year'); 
@@ -23,9 +24,6 @@ return new class extends Migration
             $table->decimal('rating', 3, 1)->nullable(); 
             $table->string('poster_url')->nullable();
             $table->string('trailer_url')->nullable();
-            $table->foreignId('director_id')->nullable()->constrained(
-                table: 'persons'
-            );
             $table->timestamps();
         });
     }

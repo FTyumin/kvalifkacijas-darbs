@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('persons', function (Blueprint $table) {
+        Schema::create('people', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('tmdb_id');
             $table->string('first_name');
             $table->string('last_name');
             $table->string('slug')->nullable();
-            $table->enum('type', ['actor', 'director']);
             $table->string('profile_path')->nullable();
             $table->text('biography')->nullable();
             $table->string('nationality')->nullable();

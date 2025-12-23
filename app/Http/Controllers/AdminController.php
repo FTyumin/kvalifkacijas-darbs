@@ -54,8 +54,17 @@ class AdminController extends Controller
         return back();
     }
 
-    public function loadMovies() {
-        $count = 100;
+    public function load() {
+        return view('movies.load');
+    }
+
+    public function loadMovies(Request $request) {
+        $request->validate([
+            'count' => 'required|integer|min:1|max:1000',
+        ]);
+
+        $count = $request->count;
+        
         Artisan::call('app:insert-data ', [
             'count' => $count,
         ]);

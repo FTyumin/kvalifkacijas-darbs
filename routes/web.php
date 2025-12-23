@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'dashboard']);
+    Route::get('/load', [AdminController::class, 'load'])->name('movies.load');
+    Route::post('/load', [AdminController::class, 'loadMovies'])->name('movies.load.store');
     Route::resource('movies', MovieController::class)->except(['index', 'show']);
     Route::post('/suggestions/{suggestion}/approve', [AdminController::class, 'approveSuggestion'])->name('suggestions.approve');
     Route::post('/suggestions/{suggestion}/reject', [AdminController::class, 'rejectSuggestion'])->name('suggestions.reject');

@@ -12,7 +12,7 @@ class Person extends Model
     use HasSlug;
 
     protected $fillable = [
-        'id',
+        'tmdb_id',
         'first_name',
         'last_name',
         'type',
@@ -28,16 +28,17 @@ class Person extends Model
         'birth_date' => 'date',
     ];
 
-    protected $table = 'persons';
-
     public function moviesAsActor()
     {
-        return $this->belongsToMany(Movie::class, 'actor_movie', 'actor_id', 'movie_id')->withTimestamps();
+        return $this->belongsToMany(Movie::class, 'person_movie', 'person_id', 'movie_id')
+        ->wherePivot('role', 'actor')
+        ->withTimestamps();
     }
 
     public function moviesAsDirector()
     {
-        return $this->hasMany(Movie::class, 'director_id');
+        return $this->belongsToMany(Movie::class, 'person_movie', 'person_id', 'movie_id')
+        ->wherePivot('role', 'director');
     }
 
     public function getSlugOptions() : SlugOptions 
