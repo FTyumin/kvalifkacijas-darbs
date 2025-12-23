@@ -210,7 +210,7 @@
                     </a>
                     <div class="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-6"></div>
 
-                    <a href="{{ route('genres.show', $genre->id ) }}" class="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-yellow-500 to-yellow-600
+                    <a href="{{ route('movies.index', ['genres' => [$genre->id]] ) }}" class="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-yellow-500 to-yellow-600
                       hover:from-yellow-400 hover:to-yellow-500
                       shadow-lg shadow-yellow-500/20 ">
                         View Movies

@@ -29,10 +29,12 @@
     </div>
 
     <div>
-        <form action="{{ route('person.favorite', $person->id) }}" method="POST">
-            @csrf
-            <button type="submit" class="text-white">Favorite</button>
-        </form>
+        @auth
+            <form action="{{ route('person.favorite', $person->id) }}" method="POST">
+                @csrf
+                <button type="submit" class="text-white">Favorite</button>
+            </form>
+        @endauth
     </div>
 
     {{-- Directed Movies --}}

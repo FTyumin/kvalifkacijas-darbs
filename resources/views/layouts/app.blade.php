@@ -7,7 +7,6 @@
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   
   <title>Movie Platform</title>
-  {!! ToastMagic::styles() !!}
  
    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

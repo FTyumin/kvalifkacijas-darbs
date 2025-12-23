@@ -87,8 +87,11 @@ class User extends Authenticatable
     }
 
     public function favoriteActors() {
-        return $this->belongsToMany(Person::class, 'user_favorite_actors',
-         'user_id', 'actor_id')->withTimestamps();
+        return $this->belongsToMany(Person::class, 'user_favorite_people',
+         'user_id', 'actor_id')
+         ->withPivot('type')
+         ->wherePivot('actor')
+         ->withTimestamps();
     }
 
     public function favoriteDirectors() {

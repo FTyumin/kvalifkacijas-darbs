@@ -50,8 +50,11 @@ class MovieController extends Controller
     public function index(Request $request) {
         $directors = Person::whereHas('moviesAsDirector')->orderBy('last_name')->get();
         $genres = Genre::all();
-        $years = ['1970', '1971'];
+        $decades = [1970, 1980, 1990, 2000, 2010, 2020];
         $query = Movie::query()->with(['genres', 'actors']);
+
+        // remove empty filter parameters
+        $clean = array_filter($request->query(), fn($v) => $v !== null && $v !== '' && $v !== []);
 
         if ($request->filled('genres')) {
             $query->whereHas('genres', function ($q) use ($request) {
@@ -69,8 +72,11 @@ class MovieController extends Controller
             $query->where('tmdb_rating', '>=', $request->min_rating);
         }
 
-        if ($request->filled('year')) {
-            $query->where('year', '>=' , $request->year);
+        if (!empty($request->filled('decade'))) {
+            $start = (int) $request->decade;
+            $end = $start + 9;
+            $query->whereBetween('year', [$start, $end]);
+            // $query->where('year', '>=' , $request->year);
         }
 
         switch ($request->sort) {
@@ -82,11 +88,11 @@ class MovieController extends Controller
                 break;
             default:
                 $query->orderBy('tmdb_rating', 'desc');
-    }
+        }
 
-    $movies = $query->paginate(20)->withQueryString();
+        $movies = $query->paginate(20)->appends($clean);
 
-        return view('movies.index', compact('movies', 'genres', 'years', 'directors'));
+        return view('movies.index', compact('movies', 'genres', 'decades', 'directors'));
     }
 
     public function show(Movie $movie)

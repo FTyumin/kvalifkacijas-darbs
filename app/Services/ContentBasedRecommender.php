@@ -60,8 +60,6 @@ class ContentBasedRecommender
         $genres1 = $genres1->pluck('genre_id')->toArray();
         $genres2 = $genres2->pluck('genre_id')->toArray();
 
-        // $actors1 = $actors1->pluck('id')->toArray();
-        // $actors2 = $actors2->pluck('id')->toArray();
 
         // Calculate Jaccard index for each component
         $genreJaccard = $this->jaccardIndex($genres1, $genres2);

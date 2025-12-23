@@ -28,14 +28,10 @@
   <!-- Movie Grid -->
  <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8">
   <aside class="h-full">
-      <div 
-        x-data="{ open: false }"
-        @keydown.escape.window="open = false"
-        class="relative"
+      <div x-data="{ open: false }" @keydown.escape.window="open = false" class="relative"
       >
 
       <div class="flex items-center justify-between mb-6">
-      <!-- <h1 class="text-3xl font-bold text-white">Movies</h1> -->
 
       <!-- Mobile filter button -->
       <button
@@ -119,14 +115,16 @@
       <!-- Year -->
       <div>
           <label class="block text-sm text-gray-300 mb-2">Year</label>
-          <select name="year"
+          <select name="decade"
               class="w-full rounded-lg bg-gray-800 border-gray-700 text-white focus:ring-blue-500">
               <option value="">All</option>
-              @foreach($years as $year)
-                  <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>
-                      {{ $year }}
-                  </option>
+              @foreach($decades as $d)
+                  <option value="{{ $d }}" {{ request('decade') == (string)$d ? 'selected' : '' }}>
+                    {{ $d }}s
+                </option>
               @endforeach
+                  <!-- <option value="1970" {{ request('decade') == '1970' ? 'selected' : '' }}>1970s</option>
+                  <option value="1980" {{ request('decade') == '1980' ? 'selected' : '' }}>1980s</option> -->
           </select>
       </div>
 

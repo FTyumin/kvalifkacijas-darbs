@@ -30,7 +30,9 @@ Route::resource('movies', MovieController::class)->only(['index', 'show']);
 Route::get('/actors/search', [PeopleController::class, 'search'])->name('actors.search');
 Route::get('/directors/search', [PeopleController::class, 'directorSearch'])->name('directors.search');
 Route::resource('people', PeopleController::class)->only(['index', 'show']);
-Route::resource('genres', GenreController::class)->only(['index', 'show']);
+// Route::resource('genres', GenreController::class)->only(['index', 'show']);
+
+Route::get('genres/{genre}', [GenreController::class, 'show'])->name('genres.show');
 
 // profile functions
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
