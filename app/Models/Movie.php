@@ -60,7 +60,7 @@ class Movie extends Model
 
     public function people()
     {
-        return $this->belognstToMany(Person::class, 'person_movie', 'movie_id', 'person_id')
+        return $this->belongsToMany(Person::class, 'person_movie', 'movie_id', 'person_id')
             ->withPivot('role')
             ->withTimeStamps();
     }

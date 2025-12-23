@@ -35,13 +35,13 @@ class InsertData extends Command
         $api = new TmdbApiClient;
         $genres = Genre::all()->keyBy('name');
 
-        $n = 20;
+        $n = (int) $count;
         $data = $api->getTopMovies($n, ['method' => 'discover']);
 
         foreach($data as $tmdbMovie) {
-            Movie::Create(
+            Movie::updateOrCreate(
+                ['tmdb_id' => $tmdbMovie['id']],
                 [
-                    'tmdb_id' => $tmdbMovie['id'],
                     'name' => $tmdbMovie['title'],
                     'year' => !empty($tmdbMovie['release_date']) ? substr($tmdbMovie['release_date'],0,4) : null,
                     'description' => $tmdbMovie['overview'],
@@ -52,8 +52,6 @@ class InsertData extends Command
                 );
         }
 
-        $movieGenres = [];
-        // $existingGenres = Genre::whereIn('name', $genreNames)->get()->keyBy('name');
         foreach ($data as $tmdbMovie) {
             $movie_info = $api->getMovieWithExtras($tmdbMovie['id']);
 
@@ -62,32 +60,41 @@ class InsertData extends Command
             $crew = $movie_info['credits']['crew'];
             $directors = array_filter($crew, fn($p) => $p['job'] === 'Director');
 
+            $movie = Movie::where('tmdb_id', $tmdbMovie['id'])->first();
 
+            $directorIdsWithRole = [];
+
+            foreach($directors as $director) {
+                $director_data = $api->personData($director['id']);
+                $nameParts = explode(" ", $director['name']);
+                $director = Person::UpdateOrCreate(
+                    ['tmdb_id' => $director['id']],
+                    [
+                        'first_name' => array_shift($nameParts),
+                        'last_name' => implode(' ', $nameParts),
+                        'profile_path' => $director_data['profile_path'],
+                        'biography' => $director_data['biography'],
+                    ]
+                );
+                // add role
+                $directorIdsWithRole[$director->id] = ['role' => 'director'];
+            }
+
+            if (!empty($directorIdsWithRole)) {
+                $movie->people()->syncWithoutDetaching($directorIdsWithRole);
+            }
             
-            $director = reset($director);
-
-            $nameParts = explode(" ", $director['name']);
-            $director_data = $api->personData($director['id']);
-            $director = Person::UpdateOrCreate(
-                ['tmdb_id' => $director['id']],
-                [
-                    'first_name' => array_shift($nameParts),
-                    'last_name' => implode(' ', $nameParts),
-                    'profile_path' => $director_data['profile_path'],
-                    'biography' => $director_data['biography'],
-                ]
-            );
-            $movie = Movie::find($movie['id']);
             $movie->duration = $movie_info['runtime'];
-            $movie->trailer_url = $api->trailerKey($movie->id);
+            $movie->trailer_url = $api->trailerKey($movie->tmdb_id);
             $movie->save();
 
             // Data: [ ['id'=>28,'name'=>'Action'], ['id'=>12,'name'=>'Adventure'] ]
-            $movieGenres = $movie_info['genres'] ?? [];
+            $actorIdsWithRole = [];
+
             foreach ($actor_info as $actor) {
                 $nameParts = explode(" ", $actor['name']);
                 $actor_data = $api->personData($actor['id']);
-                Person::updateOrCreate(
+                $person = Person::updateOrCreate(
                     ['tmdb_id' => $actor['id']],
                     [
                         'first_name' => array_shift($nameParts),
@@ -96,14 +103,16 @@ class InsertData extends Command
                         'biography' => $actor_data['biography'],
                     ]
                 );
+                // add role
+                $actorIdsWithRole[$person->id] = ['role' => 'actor'];
             }
 
             // Sync all actors at once 
-            $movie = Movie::find($movie['id']);
-            $actorIds = collect($actor_info)->pluck('id');
-            // $movie->actors()->syncWithoutDetaching($actorIds);
-            $movie->people()->attach($personId, ['role' => 'actor']);
+            if (!empty($actorIdsWithRole)) {
+                $movie->people()->syncWithoutDetaching($actorIdsWithRole);
+            }
 
+            $movieGenres = $movie_info['genres'] ?? [];
             $genreIds = collect($movieGenres)->map(function($genreData) use (&$genres) {  
                 $genre = $genres->firstWhere('name', $genreData['name']);
                 

@@ -116,7 +116,6 @@ class TmdbApiClient {
     
     public function getTopMovies(int $limit = 50, array $opts = []): array {
         $method = $opts['method'] ?? 'discover';
-        $pageSize = $opts['page_size'] ?? 20;
         $collected = [];
         $page = 1;
         $maxPages = 1000;
