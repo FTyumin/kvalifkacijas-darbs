@@ -77,7 +77,7 @@
       @endguest
 
       @auth
-        <a href="{{ route('profile.show', auth()->user()->id) }}" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden ring-2 ring-gray-700 hover:ring-blue-500 transition-all">
+        <a href="{{ route('dashboard') }}" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden ring-2 ring-gray-700 hover:ring-blue-500 transition-all">
           @if(auth()->user()->image)
             <img src="{{ asset('storage/' . auth()->user()->image) }}"
                 alt="{{ auth()->user()->name}}"

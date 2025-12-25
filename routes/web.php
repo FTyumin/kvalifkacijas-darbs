@@ -37,6 +37,7 @@ Route::get('genres/{genre}', [GenreController::class, 'show'])->name('genres.sho
 // profile functions
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
 
+
 Route::get('users/{userId}/followers', [UserRelationshipController::class, 'followers']);
 Route::get('users/{userId}/followees', [UserRelationshipController::class, 'followees']);
 
@@ -44,7 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
+    Route::get('/dashboard', [ProfileController::class, 'dashboard'])->name('dashboard');
     Route::get('/quiz', [QuizController::class, 'show'])->name('quiz.show');
     Route::post('/quiz', [QuizController::class, 'store'])->name('quiz.store');
 
@@ -70,14 +71,13 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/comments', [CommentController::class, 'create'])->name('comments.store');
     Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
-Route::patch('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
-Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::patch('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 
-
 Route::resource('lists', ListController::class)->only(['index', 'show', 
-'create', 'store', 'update', 'destroy', 'edit']);
+    'create', 'store', 'update', 'destroy', 'edit']);
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');
 Route::get('/reviews/{review}', [ReviewController::class, 'show'])->name('reviews.show');
 

@@ -69,22 +69,38 @@ class ProfileController extends Controller
         if(!$user) {
             abort(404);
         }
-        if(auth()->check() && $user->id == auth()->user()->id) {
-            $watchList = auth()->user()->wantToWatch;
-            $seen = auth()->user()->seenMovies;
+        // if(auth()->check() && $user->id == auth()->user()->id) {
+        //     $watchList = auth()->user()->wantToWatch;
+        //     $seen = auth()->user()->seenMovies;
 
-            $reviews = Review::where('user_id', $user->id)->get();
-            $review_count = Review::where('user_id', $user->id)->count();
-            $average_review = round(Review::where('user_id', $user->id)->avg('rating'), 2) ?? 0;
+        //     $reviews = Review::where('user_id', $user->id)->get();
+        //     $review_count = Review::where('user_id', $user->id)->count();
+        //     $average_review = round(Review::where('user_id', $user->id)->avg('rating'), 2) ?? 0;
             
-            return view('dashboard', compact('reviews', 'user', 'watchList', 'average_review', 'seen'));
-        } else {
+        //     return view('dashboard', compact('reviews', 'user', 'watchList', 'average_review', 'seen'));
+        // } else {
             $movies = $user->movies;
             $reviews = $user->reviews;
             $review_count = Review::where('user_id', $user->id)->count();
             $average_review = round(Review::where('user_id', $user->id)->avg('rating'), 2) ?? 0;
             
             return view('profile.show', compact('user', 'movies', 'reviews', 'review_count', 'average_review'));
+        // }
+    }
+
+    public function dashboard(Request $request) {
+        $user = $request->user();
+        if (!$user) {
+            abort(404);
         }
+
+        $watchList = $user->wantToWatch;
+        $seen = $user->seenMovies;
+
+        $reviews = Review::where('user_id', $user->id)->get();
+        $review_count = Review::where('user_id', $user->id)->count();
+        $average_review = round(Review::where('user_id', $user->id)->avg('rating'), 2) ?? 0;
+
+        return view('dashboard', compact('reviews', 'user', 'watchList', 'average_review', 'seen'));
     }
 }
