@@ -228,4 +228,30 @@ class MovieController extends Controller
     public function sendSuggestion(Request $request) {
         return view('suggestion');
     }
+
+    public function edit(Movie $movie) {
+        return view('movies.edit', compact('movie'));
+    }
+
+    public function update(Movie $movie, Request $request) {
+        $request->validate([
+            'name' => 'required|string|min:3|max:50',
+            'description' => 'required|string|max:2000',
+        ]);
+
+        $movie->update([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+
+        session()->flash('success', 'Movie updated!');
+        return redirect('/movies');
+    }
+
+    public function destroy(Movie $movie) {
+        $movie->delete();
+
+        session()->flash('success', 'Movie deleted!');
+        return redirect('/movies');
+    }
 }

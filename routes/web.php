@@ -25,7 +25,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 Route::get('/', [MovieController::class, 'home'])->name('home');
 
-Route::resource('movies', MovieController::class)->only(['index', 'show']);
+Route::resource('movies', MovieController::class)->only(['index', 'show', 'edit', 'update']);
 
 Route::get('/actors/search', [PeopleController::class, 'search'])->name('actors.search');
 Route::get('/directors/search', [PeopleController::class, 'directorSearch'])->name('directors.search');
