@@ -17,6 +17,7 @@ class ImportMoviesJob implements ShouldQueue
     public function __construct(public int $count, public string $method)
     {
         $this->count = $count;
+        $this->method = $method;
     }
 
     /**

@@ -52,10 +52,12 @@
                         Recommended: 20–100 per load
                     </p>
 
-                    <select name="method" id="" class="bg-black">
+                    <select name="method" class="bg-black">
                         <option value="top-rated">Top rated</option>
                         <option value="popular">Popular</option>
                         <option value="discover">Discover(standard)</option>
+                        <option value="now-playing"></option>
+
                     </select>
                 </div>
 

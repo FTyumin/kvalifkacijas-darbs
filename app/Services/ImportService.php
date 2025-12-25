@@ -11,7 +11,7 @@ class ImportService
 {
     protected $api;
     public function __construct() {
-        $this->api = new tmdbApiClient();
+        $this->api = new TmdbApiClient();
     }
 
     public function importTopMovies(int $count = 200, string $method): void

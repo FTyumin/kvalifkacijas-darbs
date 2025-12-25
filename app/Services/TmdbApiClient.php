@@ -135,20 +135,24 @@ class TmdbApiClient {
                 $endpoint = 'movie/popular';
             } else if($method === 'top-rated') {
                 $endpoint = 'movie/top_rated';
-            } else if($endpoint === 'discover'){
+            } else if($method === 'now-playing') {
+                $endpoint = 'movie/now_playing';
+            }
+             else {
                 $endpoint = 'discover/movie';
-                $query = array_merge($query, array_filter($discoverDefaults, fn($v) => $v !== null));
-                
-                foreach ($opts as $k => $v) {
-                    if (!in_array($k, ['method', 'page_size'])) {
-                        $query[$k] = $v;
-                    }
+            }
+
+            $query = array_merge($query, array_filter($discoverDefaults, fn($v) => $v !== null));
+            
+            foreach ($opts as $k => $v) {
+                if (!in_array($k, ['method', 'page_size'])) {
+                    $query[$k] = $v;
                 }
             }
 
-            if ($this->apiKey && empty($this->bearer)) {
-                $query['api_key'] = $this->apiKey;
-            }
+            // if ($this->apiKey && empty($this->bearer)) {
+            //     $query['api_key'] = $this->apiKey;
+            // }
             
             $options = ['query' => $query];
             if($this->bearer) {

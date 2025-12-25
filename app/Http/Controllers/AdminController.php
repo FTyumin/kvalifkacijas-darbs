@@ -68,6 +68,7 @@ class AdminController extends Controller
 
         $count = $request->count;
         $method = $request->method;
+
         ImportMoviesJob::dispatch($count, $method);
 
         return back()->with('success', 'Started loading movies');
