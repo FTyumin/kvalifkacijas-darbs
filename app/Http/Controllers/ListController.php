@@ -11,13 +11,18 @@ class ListController extends Controller
         $data = $request->all();
         $userId = \Auth::id();
 
+        $request->validate([
+            'name' => 'required|string|max:30',
+            'description' => 'required|string|max:500'
+        ]);
+
         MovieList::create([
             'user_id' => $userId,
             'name' => $data['name'],
             'description' => $data['description'],
             'is_private' => $request->has('is_private'),
         ]);
-
+        session()->flash('success', 'List created!');
         return redirect()->route('lists.index');
     }
 
@@ -60,11 +65,26 @@ class ListController extends Controller
         return back()->with('message','Movie removed!');
     }
 
-    public function update() {
-
+    public function edit(MovieList $list) {
+        return view('lists.edit', compact('list'));
     }
 
-    public function destroy() {
-        
+    public function update(Request $request, MovieList $list) {
+        // $request->validate(['comment' => 'required|string|max:1000']);
+        $list->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'is_private' => $request->boolean('is_private'),
+        ]);
+
+        session()->flash('success', 'List updated!');
+        return redirect()->route('lists.show', compact('list'));
+    }
+
+    public function destroy(MovieList $list) {
+        $list->delete();
+
+        session()->flash('success', 'List deleted!');
+        return redirect('lists');
     }
 }

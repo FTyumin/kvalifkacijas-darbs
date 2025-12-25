@@ -11,89 +11,81 @@
             </svg>
             Back to Lists
         </a>
-    </div>
 
     {{-- List Header --}}
-    <div class="px-6 lg:px-28 pb-12">
-        <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 md:p-10 mb-8">
-            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-                <div class="flex-1">
-                    {{-- List Title --}}
-                    <div class="flex items-start gap-4 mb-4">
-                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">
-                                {{ $list->name }}
-                            </h1>
-                            <div class="flex items-center gap-4 flex-wrap">
-                                <div class="flex items-center gap-2">
-                                    
-                                    <img src="{{ $list->user->image ? asset('storage/' . $list->user->image) : asset('images/person-placeholder.png') }}" alt="" class="h-8 w-8 object-cover rounded-xl">
-                                    <span class="text-gray-300 text-sm">by <span class="font-medium">{{ $list->user->name }}</span></span>
-                                </div>
-                                <span class="text-gray-500 text-sm">•</span>
-                                <span class="text-gray-400 text-sm">{{ $list->created_at->format('M d, Y') }}</span>
-                            </div>
-                        </div>
-                    </div>
+    <div class="flex items-start gap-4 mb-4">
+        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+        </div>
 
-                    {{-- List Description --}}
-                    @if($list->description)
-                    <p class="text-gray-300 leading-relaxed mb-6">
-                        {{ $list->description }}
-                    </p>
+        <div class="flex-1 min-w-0">
+            <div class="flex items-start gap-3 flex-wrap">
+                <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">
+                    {{ $list->name }}
+                </h1>
+                
+                @auth
+                    @if(Auth::id() === $list->user_id)
+                        {{-- Inline edit button --}}
+                        <a href="{{ route('lists.edit', $list) }}"
+                        class="mt-1 inline-flex items-center gap-2 rounded-lg border border-white/10
+                                bg-white/5 px-3 py-1.5 text-sm text-gray-200
+                                hover:bg-white/10 hover:text-white transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5h2m-1 0v14m7-7H5"/>
+                            </svg>
+                            Edit
+                        </a>
+
+                        {{-- Delete button --}}
+                        <x-confirm-modal
+                            title="Delete list?"
+                            message="This will permanently delete the list and remove all movies from it. This action cannot be undone."
+                            :action="route('lists.destroy', $list)"
+                            method="DELETE"
+                        >
+                            <x-slot name="trigger">
+                                <button
+                                    class="mt-1 inline-flex items-center gap-2 rounded-lg
+                                        bg-red-600/10 border border-red-500/30
+                                        px-3 py-1.5 text-sm text-red-300
+                                        hover:bg-red-600/20 transition">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m-7 0l1-2h6l1 2"/>
+                                    </svg>
+                                    Delete
+                                </button>
+                            </x-slot>
+                        </x-confirm-modal>
                     @endif
+                @endauth
+            </div>
 
-                    {{-- List Stats --}}
-                    <div class="flex items-center gap-6 flex-wrap">
-                        <div class="flex items-center gap-2">
-                            <div class="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                                <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-2xl font-bold text-white">{{ $list->movies->count() }}</p>
-                                <p class="text-xs text-gray-400">Movies</p>
-                            </div>
-                        </div>
+            @if($list->description)
+                <p class="mt-2 text-gray-300 leading-relaxed">
+                    {{ $list->description }}
+                </p>
+            @endif
 
-                        <div class="flex items-center gap-2">
-                            <div class="w-10 h-10 bg-green-600/20 rounded-lg flex items-center justify-center">
-                                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-2xl font-bold text-white">{{ number_format($list->movies->avg('tmdb_rating') ?? 0, 1) }}</p>
-                                <p class="text-xs text-gray-400">Avg Rating</p>
-                            </div>
-                        </div>
-                    </div>
+            <div class="flex items-center gap-4 flex-wrap">
+                <div class="flex items-center gap-2">
+                    <img src="{{ $list->user->image ? asset('storage/' . $list->user->image) : asset('images/person-placeholder.png') }}"
+                        alt=""
+                        class="h-8 w-8 object-cover rounded-xl">
+                    <span class="text-gray-300 text-sm">
+                        by <span class="font-medium">{{ $list->user->name }}</span>
+                    </span>
                 </div>
-
-                {{-- Action Buttons --}}
-                <div class="flex flex-col gap-3">
-                    @auth
-                        @if(Auth::id() === $list->user_id)
-                       
-                        @else
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors inline-flex items-center justify-center gap-2">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
-                            </svg>
-                            Save List
-                        </button>
-                        @endif
-                    @endauth
-
-                </div>
+                <span class="text-gray-500 text-sm">•</span>
+                <span class="text-gray-400 text-sm">{{ $list->created_at->format('M d, Y') }}</span>
             </div>
         </div>
+    </div>
+
 
         {{-- Movies Grid --}}
         @if($list->movies->count() > 0)
@@ -136,13 +128,13 @@
                     {{-- Remove Button (only for list owner) --}}
                     @auth
                        @if(Auth::id() === $list->user_id)
-                        <!-- <form  class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <form  class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                             @csrf
                             @method('DELETE')
                             <input type="hidden" name="list_id" value="{{ $list->id }}">
                             
                             
-                        </form> -->
+                        </form>
                         <div 
                            class="absolute mt-6 top-6 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
                         >
@@ -168,13 +160,15 @@
                         @endif
 
                         @endauth
-                        @if (session('message'))
-                            <div class="alert alert-success">
-                                {{ session('message') }}
-                            </div>
-                        @endif
+                       
                 </div>
                 @endforeach
+
+                 @if (session('message'))
+                    <div class="alert alert-success">
+                        {{ session('message') }}
+                    </div>
+                @endif
             </div>
         </div>
         @else

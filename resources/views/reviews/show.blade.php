@@ -141,22 +141,21 @@
                         </form>
                         </div>
 
-                        <form id="edit-comment-{{ $comment->id }}"
-                            action="{{ route('comments.update', $comment) }}"
+                        <form id="edit-comment-{{ $comment->id }}" action="{{ route('comments.update', $comment) }}"
                             method="POST"
                             class="mt-3 hidden">
-                        @csrf
-                        @method('PATCH')
-                        <textarea name="comment" rows="3"
-                                    class="w-full rounded-lg bg-gray-800 border-gray-700 text-white">{{ $comment->description }}</textarea>
-                        <div class="mt-2 flex gap-2">
-                            <button class="px-3 py-1 rounded bg-blue-600 text-white">Save</button>
-                            <button type="button"
-                                    class="px-3 py-1 rounded bg-gray-700 text-white"
-                                    onclick="document.getElementById('edit-comment-{{ $comment->id }}').classList.add('hidden')">
-                            Cancel
-                            </button>
-                        </div>
+                            @csrf
+                            @method('PATCH')
+                            <textarea name="comment" rows="3"
+                                        class="w-full rounded-lg bg-gray-800 border-gray-700 text-white">{{ $comment->description }}</textarea>
+                            <div class="mt-2 flex gap-2">
+                                <button class="px-3 py-1 rounded bg-blue-600 text-white">Save</button>
+                                <button type="button"
+                                        class="px-3 py-1 rounded bg-gray-700 text-white"
+                                        onclick="document.getElementById('edit-comment-{{ $comment->id }}').classList.add('hidden')">
+                                Cancel
+                                </button>
+                            </div>
                         </form>
                     </div>
                         

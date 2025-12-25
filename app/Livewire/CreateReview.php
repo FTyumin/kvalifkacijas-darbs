@@ -83,7 +83,6 @@ class CreateReview extends Component
                 session()->flash('error', 'You have already reviewed this movie.');
                 return;
             }
-            $request->validate(['comment' => 'required|string|max:1000']);
             // Create new review
             Review::create([
                 'user_id' => auth()->id(),

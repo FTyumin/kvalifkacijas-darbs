@@ -1,21 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-black text-white flex justify-center px-6 py-20">
+    <div class="min-h-screen bg-black text-white flex justify-center px-6 py-20">
     <div class="w-full max-w-xl">
 
         {{-- Header --}}
         <div class="mb-10">
-            <h1 class="text-3xl font-bold text-white mb-2">Create Movie List</h1>
-            <p class="text-gray-400">
-                Create a custom list to organize and share your favorite movies.
-            </p>
+            <h1 class="text-3xl font-bold text-white mb-2">Edit <span class="text-yellow-500">{{ $list->name }}</span></h1>
         </div>
 
         {{-- Card --}}
         <div class="bg-gray-900/70 backdrop-blur border border-gray-700 rounded-2xl p-8 shadow-xl">
 
-            <form action="{{ route('lists.store') }}" method="POST" class="space-y-6">
+            <form action="{{ route('lists.update', $list) }}" method="POST" class="space-y-6">
+                @method('PATCH')
                 @csrf
 
                 {{-- Name --}}
@@ -27,7 +25,7 @@
                         type="text"
                         id="name"
                         name="name"
-                        value="{{ old('name') }}"
+                        value="{{ $list->name }}"
                         required
                         class="w-full px-4 py-3 rounded-lg bg-gray-800/60 border border-gray-600
                                text-white placeholder-gray-400
@@ -52,7 +50,7 @@
                                text-white placeholder-gray-400
                                focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                         placeholder="What is this list about?"
-                    >{{ old('description') }}</textarea>
+                    >{{ $list->description }}</textarea>
 
                     @error('description')
                         <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
@@ -92,7 +90,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M12 4v16m8-8H4"/>
                         </svg>
-                        Create List
+                        Edit List
                     </button>
                 </div>
 
@@ -100,6 +98,5 @@
         </div>
     </div>
 </div>
-
 
 @endsection
