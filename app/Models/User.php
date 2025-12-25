@@ -86,18 +86,24 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-    public function favoriteActors() {
-        return $this->belongsToMany(Person::class, 'user_favorite_people',
-         'user_id', 'person_id')
-         ->wherePivot('type', 'actor')
-         ->withTimestamps();
-    }
+    // public function favoriteActors() {
+    //     return $this->belongsToMany(Person::class, 'user_favorite_people',
+    //      'user_id', 'person_id')
+    //      ->wherePivot('type', 'actor')
+    //      ->withTimestamps();
+    // }
 
-    public function favoriteDirectors() {
-        return $this->belongsToMany(Person::class, 'user_favorite_people',
-        'user_id', 'person_id')
-        ->wherePivot('type', 'actor')
-        ->withTimestamps();
+    // public function favoriteDirectors() {
+    //     return $this->belongsToMany(Person::class, 'user_favorite_people',
+    //     'user_id', 'person_id')
+    //     ->wherePivot('type', 'actor')
+    //     ->withTimestamps();
+    // }
+
+    public function favoritePeople() {
+        return $this->belongsToMany(Person::class, 'user_favorite_people', 
+            'user_id', 'person_id')
+            ->withTimestamps();
     }
 
     public function getRedirectRoute()

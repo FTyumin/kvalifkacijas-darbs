@@ -130,16 +130,16 @@ class ContentBasedRecommender
     private function checkUserFavorites(array $recs, User $user) {
         // check if recs have user's favorite actors, directors
         // if yes, increase similarity
-        $favoriteActorIds = $user->favoriteActors->pluck('id')->toArray();
-        $favoriteDirectorIds = $user->favoriteDirectors->pluck('id')->toArray();
+        // $favoriteActorIds = $user->favoriteActors->pluck('id')->toArray();
+        $favoriteIds = $user->favoritePeople->pluck('id')->toArray();
 
         foreach($recs as $rec) {
             $actors = $rec['movie']->actors->pluck('id')->toArray();
 
-            if(in_array($rec['movie']->director_id, $favoriteDirectorIds)) {
+            if(in_array($rec['movie']->director_id, $favoriteIds)) {
                 $rec['similarity'] *= 1.2;
             }
-            if(array_intersect($actors, $favoriteActorIds)) {
+            if(array_intersect($actors, $favoriteIds)) {
                 $rec['similarity'] *= 1.2;
             }
         }
@@ -154,8 +154,7 @@ class ContentBasedRecommender
         
         // retrieve user's favorite genres
         $favoriteGenres = $user->favoriteGenres;
-        $favoriteActorIds = $user->favoriteActors->pluck('id')->toArray();
-        $favoriteDirectorIds = $user->favoriteDirectors->pluck('id')->toArray();
+        $favoriteIds = $user->favoritePeople->pluck('id')->toArray();
 
         //movies that user shouldn't get as recommendations
         $watchedIds = $user->seenMovies()->pluck('markable_id')->toArray();

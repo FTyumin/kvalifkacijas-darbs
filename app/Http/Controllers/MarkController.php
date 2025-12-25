@@ -66,17 +66,11 @@ class MarkController extends Controller
     // marking favorite actor/director
     public function favoritePersonToggle($Id) {
         $user = Auth::user();
-        $person = Person::find($Id);
+        $user->favoritePeople()->toggle($Id);
 
-        //separating actors and directors
-        if($person->type == 'actor') {
-            $user->favoriteActors()->toggle($Id);
-            session()->flash('success', 'Actor marked as favorite!');
-
-        } else {
-            $user->favoriteDirectors()->toggle($Id);
-            session()->flash('success', 'Director marked as favorite!');
-        }   
+        $exists = in_array($Id, $user->favoritePeople->pluck('id')->toArray());
+        session()->flash('success', $exists ? 'Person marked as favorite!' : 'Person removed from favorites.');
+        
         return redirect()->back();
     }
 }
