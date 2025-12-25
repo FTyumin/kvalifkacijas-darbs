@@ -15,15 +15,32 @@
 
                 <!-- Followers / Following -->
                 <p class="text-lg text-gray-300 mb-2 flex items-center gap-4">
-                    <span class="flex items-center gap-1">
-                        <x-heroicon-o-user-group class="w-5 h-5 text-gray-400" />
-                        {{ count($user->followers) }} Followers
-                    </span>
+                    <x-user-list-modal
+                        title="Followers"
+                        :users="$user->followers->map->follower->filter()"
+                        empty-message="No followers yet."
+                    >
+                        <x-slot name="trigger">
+                            <span class="flex items-center gap-1 cursor-pointer hover:text-white transition">
+                                <x-heroicon-o-user-group class="w-5 h-5 text-gray-400" />
+                                {{ count($user->followers) }} Followers
+                            </span>
+                        </x-slot>
+                    </x-user-list-modal>
 
-                    <span class="flex items-center gap-1">
-                        <x-heroicon-o-user-plus class="w-5 h-5 text-gray-400" />
-                        {{ count($user->followees) }} Following
-                    </span>
+                <x-user-list-modal
+                    title="Following"
+                    :users="$user->followees->map->followee->filter()"
+                    empty-message="Not following anyone yet."
+                >
+                    <x-slot name="trigger">
+                        <span class="flex items-center gap-1 cursor-pointer hover:text-white transition">
+                            <x-heroicon-o-user-plus class="w-5 h-5 text-gray-400" />
+                            {{ count($user->followees) }} Following
+                        </span>
+                    </x-slot>
+                </x-user-list-modal>
+
                 </p>
 
                 <p class="text-xl text-gray-400">

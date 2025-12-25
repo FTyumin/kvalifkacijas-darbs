@@ -69,6 +69,11 @@ class ProfileController extends Controller
         if(!$user) {
             abort(404);
         }
+
+        if($user->id == auth()->user()->id) {
+            return redirect('dashboard');
+        }
+        
         $movies = $user->movies;
         $reviews = $user->reviews;
         $review_count = Review::where('user_id', $user->id)->count();
