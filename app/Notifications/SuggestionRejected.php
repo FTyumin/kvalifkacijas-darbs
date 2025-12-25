@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class SuggestionAccepted extends Notification
+class SuggestionRejected extends Notification
 {
     use Queueable;
 
@@ -24,18 +24,18 @@ class SuggestionAccepted extends Notification
      *
      * @return array<int, string>
      */
-    public function via($notifiable)
+    public function via(object $notifiable): array
     {
         return ['database'];
     }
 
-    public function toDatabase($notifiable)
-    {
+    public function toDatabase($notifiable) {
         return [
-            'title' => 'Suggestion accepted',
-            'message' => 'Your movie suggestion was approved and added.',
+            'title' => 'Suggestion rejected',
+            'message' => 'Your movie suggestion was not  approved.',
         ];
     }
+
 
     /**
      * Get the array representation of the notification.

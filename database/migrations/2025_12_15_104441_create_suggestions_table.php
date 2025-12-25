@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->boolean('accepted')->default('0');
-            $table->boolean('rejected')->default('0');
+            $table->boolean('accepted')->nullable();
             $table->timestamps();
         });
     }

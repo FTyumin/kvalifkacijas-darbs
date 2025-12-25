@@ -9,6 +9,7 @@ use App\Models\Suggestion;
 use App\Models\User;
 use App\Notifications\SuggestionAccepted;
 use App\Jobs\ImportMoviesJob;
+use App\Notifications\SuggestionRejected;
 use Illuminate\Support\Facades\Artisan;
 
 class AdminController extends Controller
@@ -36,7 +37,7 @@ class AdminController extends Controller
             ->take(5)
             ->get();
 
-        $suggestions = Suggestion::where('accepted', '0')->get();
+        $suggestions = Suggestion::whereNull('accepted')->get();
 
         return view('admin', compact('suggestions', 'userWithMostFollowers', 'topReview', 
             'mostFavorites', 'mostWatched'));
@@ -50,9 +51,9 @@ class AdminController extends Controller
     }
 
     public function rejectSuggestion(Suggestion $suggestion) {
-        $suggestion->update(['rejected' => 1]);
+        $suggestion->update(['accepted' => 0]);
         $user = $suggestion->user;
-        $user->notify(new SuggestionAccepted());
+        $user->notify(new SuggestionRejected());
         return back();
     }
 

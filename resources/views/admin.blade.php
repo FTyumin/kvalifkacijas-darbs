@@ -81,11 +81,8 @@
                 @endforeach
             </ul>
         </div>
-
-    </div>
-
-    {{-- Suggestions --}}
-    <div class="rounded-xl bg-neutral-900/80 border border-white/5 p-6">
+        {{-- Suggestions --}}
+    <div class="rounded-xl bg-neutral-900/80 border border-white/5 p-6 w-xl">
         <h2 class="text-lg font-semibold text-white mb-4">Pending Suggestions</h2>
 
         @forelse($suggestions as $sug)
@@ -120,6 +117,9 @@
             <p class="text-gray-400">No pending suggestions 🎉</p>
         @endforelse
     </div>
+    </div>
+
+
 
 </div>
 @endsection
