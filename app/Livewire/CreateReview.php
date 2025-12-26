@@ -76,8 +76,10 @@ class CreateReview extends Component
                 'description' => $this->comment,
                 'spoilers' => $this->spoilers,
             ]);
+            $this->reset(['rating', 'title', 'comment', 'spoilers', 'isEditing', 'reviewId']);
+            $this->resetValidation();
 
-            session()->flash('status', 'Review successfully updated.');
+            session()->flash('success', 'Review added.');
         } else {
             if (Review::where('user_id', auth()->id())->where('movie_id', $this->movieId)->exists()) {
                 session()->flash('error', 'You have already reviewed this movie.');
@@ -93,7 +95,7 @@ class CreateReview extends Component
                 'spoilers' => $this->spoilers,
             ]);
             
-            session()->flash('status', 'Review successfully posted.');
+            session()->flash('success', 'Review successfully posted.');
         }
         $this->resetValidation();
 

@@ -16,7 +16,7 @@ class CommentController extends Controller
         }
 
         $request->validate([
-            'comment' => 'required|string|max:1000'
+            'comment' => 'required|string|max:300'
         ]);
 
         Comment::create([

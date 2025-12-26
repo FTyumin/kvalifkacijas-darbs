@@ -19,8 +19,6 @@ return new class extends Migration
             $table->string('slug')->nullable();
             $table->string('profile_path')->nullable();
             $table->text('biography')->nullable();
-            $table->string('nationality')->nullable();
-            $table->string('birth_year')->nullable();
             $table->timestamps();
         });
     }

@@ -214,5 +214,5 @@ function previewImage(input) {
     }
 }
 </script>
-        @endsection
+@endsection
         

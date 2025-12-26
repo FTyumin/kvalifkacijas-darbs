@@ -29,10 +29,10 @@
     </div>
 
     <div>
-        @php
-            $isFavorite = Auth::user()->favoritePeople->pluck('id')->contains($person->id);
-        @endphp
         @auth
+            @php
+                $isFavorite = Auth::user()->favoritePeople->pluck('id')->contains($person->id);
+            @endphp
             <form action="{{ route('person.favorite', $person->id) }}" method="POST">
                 @csrf
                 <button type="submit" 

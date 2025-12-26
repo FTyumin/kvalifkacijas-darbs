@@ -128,14 +128,17 @@
       </div>
 
       <!-- Director -->
-      <div>
+      <div x-data="{ q: ''}">
           <label class="block text-sm text-gray-300 mb-2">Director</label>
+          <input type="text" x-model="q" placeholder="Search directors"
+          class="w-full mb-3 rounded-lg bg-gray-800 border border-gray-700 text-white px-3 py-2 focus:ring-blue-500">
           <select name="directors[]" multiple
               class="w-full h-40 rounded-lg bg-gray-800 border-gray-700 text-white focus:ring-blue-500">
               @foreach($directors as $director)
                   <option value="{{ $director->id }}"
-                      {{ collect(request('directors'))->contains($director->id) ? 'selected' : '' }}>
-                      {{ $director->first_name }} {{ $director->last_name }}
+                    x-show="q === '' || ('{{ $director->first_name }} {{ $director->last_name }}').toLowerCase().includes(q.toLowerCase())"
+                    {{ collect(request('directors'))->contains($director->id) ? 'selected' : '' }}>
+                    {{ $director->first_name }} {{ $director->last_name }}
                   </option>
               @endforeach
           </select>
