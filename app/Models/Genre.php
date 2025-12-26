@@ -17,12 +17,6 @@ class Genre extends Model
         return $this->belongsToMany(Movie::class)->withTimestamps();
     }
 
-    // Accessor for movies count
-    public function getMoviesCountAttribute()
-    {
-        return $this->movies()->count();
-    }
-
     public function users() 
     {
         return $this->hasMany(User::class);

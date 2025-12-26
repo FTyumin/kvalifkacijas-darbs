@@ -18,8 +18,6 @@ class Movie extends Model
 {
     use HasFactory, Markable, HasSlug;
 
-    // protected static $markableTable = 'markables';
-
     protected $fillable = [
         'tmdb_id',
         'name',
@@ -87,19 +85,7 @@ class Movie extends Model
 
     public function lists()
     {
-        return $this->belongsToMany(MovieList::class, 'movie_lists')
-                    ->withTimestamps()
-                    ->withPivot('position');
-    }
-
-    public function scopeByYear($query, $year)
-    {
-        return $query->where('year', $year);
-    }
-
-    public function scopeByRating($query, $minRating)
-    {
-        return $query->where('rating', '>=', $minRating);
+        return $this->belongsToMany(MovieList::class, 'movie_lists')->withTimestamps();
     }
 
     public function updateRating() {

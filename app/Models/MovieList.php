@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Movie;
 
 class MovieList extends Model
 {
@@ -20,14 +21,8 @@ class MovieList extends Model
     }
 
     public function movies() {
-        return $this->belongsToMany(
-            \App\Models\Movie::class, 
-            'movie_lists',           
-            'list_id',                
-            'movie_id'                
-        )
-        ->withTimestamps()
-        ->withPivot('position');
+        return $this->belongsToMany(Movie::class, 'movie_lists', 'list_id', 'movie_id')
+        ->withTimestamps();
     }
     
     public function addMovie(int $movieId, ?int $position = null) {

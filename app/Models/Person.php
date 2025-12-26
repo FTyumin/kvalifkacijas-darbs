@@ -41,6 +41,7 @@ class Person extends Model
         ->wherePivot('role', 'director');
     }
 
+    // generate url from first_name + last_name
     public function getSlugOptions() : SlugOptions 
     {
         return SlugOptions::create()

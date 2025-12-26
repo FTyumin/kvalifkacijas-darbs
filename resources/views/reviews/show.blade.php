@@ -42,36 +42,36 @@
         {{-- Review Content --}}
         <div class="px-6 py-6">
             @if($review->spoilers)
-                {{-- Spoiler Warning --}}
-                <div id="spoiler-warning-{{ $review->id }}" class="p-4 bg-yellow-500/10 border-2 border-yellow-500/30 rounded-lg">
-                    <div class="flex items-start gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-yellow-500 flex-shrink-0 mt-0.5">
-                            <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
-                        </svg>
-                        <div class="flex-1">
-                            <h3 class="font-semibold text-yellow-500 mb-1">Spoiler Warning</h3>
-                            <p class="text-sm text-gray-300 mb-3">This review contains spoilers that may reveal important plot points.</p>
-                            <button 
-                                onclick="toggleSpoiler({{ $review->id }})" 
-                                class="px-4 py-2 bg-yellow-500 text-gray-900 text-sm font-medium rounded-lg hover:bg-yellow-400 transition-colors"
-                            >
-                                Show Review
-                            </button>
+                <div x-data="{ showSpoiler: false }">
+                    {{-- Spoiler Warning --}}
+                    <div x-show="!showSpoiler" class="p-4 bg-yellow-500/10 border-2 border-yellow-500/30 rounded-lg">
+                        <div class="flex items-start gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-yellow-500 flex-shrink-0 mt-0.5">
+                                <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+                            </svg>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-yellow-500 mb-1">Spoiler Warning</h3>
+                                <p class="text-sm text-gray-300 mb-3">This review contains spoilers that may reveal important plot points.</p>
+                                <button type="button" @click="showSpoiler = true"
+                                    class="px-4 py-2 bg-yellow-500 text-gray-900 text-sm font-medium rounded-lg hover:bg-yellow-400 transition-colors"
+                                >
+                                    Show Review
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                {{-- Hidden Spoiler Content --}}
-                <div id="spoiler-content-{{ $review->id }}" class="hidden">
-                    <div class="prose prose-invert max-w-none">
-                        <p class="text-gray-300 leading-relaxed whitespace-pre-line">{{ $review->description }}</p>
+
+                    {{-- Hidden Spoiler Content --}}
+                    <div x-show="showSpoiler">
+                        <div class="prose prose-invert max-w-none">
+                            <p class="text-gray-300 leading-relaxed whitespace-pre-line">{{ $review->description }}</p>
+                        </div>
+                        <button type="button" @click="showSpoiler = false"
+                            class="mt-4 px-4 py-2 bg-gray-700 text-white text-sm font-medium rounded-lg hover:bg-gray-600 transition-colors"
+                        >
+                            Hide Review
+                        </button>
                     </div>
-                    <button 
-                        onclick="toggleSpoiler({{ $review->id }})" 
-                        class="mt-4 px-4 py-2 bg-gray-700 text-white text-sm font-medium rounded-lg hover:bg-gray-600 transition-colors"
-                    >
-                        Hide Review
-                    </button>
                 </div>
             @else
                 <div class="prose prose-invert max-w-none">
@@ -231,15 +231,5 @@
         @endauth
     </div>
 </div>
-
-<script>
-function toggleSpoiler(reviewId) {
-    const warning = document.getElementById(`spoiler-warning-${reviewId}`);
-    const content = document.getElementById(`spoiler-content-${reviewId}`);
-    
-    warning.classList.toggle('hidden');
-    content.classList.toggle('hidden');
-}
-</script>
 
 @endsection

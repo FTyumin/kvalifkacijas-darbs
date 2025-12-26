@@ -7,10 +7,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Maize\Markable\Markable;
 use Maize\Markable\Models\Favorite;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
     protected static $markableTable = 'markables';
@@ -86,20 +85,6 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-    // public function favoriteActors() {
-    //     return $this->belongsToMany(Person::class, 'user_favorite_people',
-    //      'user_id', 'person_id')
-    //      ->wherePivot('type', 'actor')
-    //      ->withTimestamps();
-    // }
-
-    // public function favoriteDirectors() {
-    //     return $this->belongsToMany(Person::class, 'user_favorite_people',
-    //     'user_id', 'person_id')
-    //     ->wherePivot('type', 'actor')
-    //     ->withTimestamps();
-    // }
-
     public function favoritePeople() {
         return $this->belongsToMany(Person::class, 'user_favorite_people', 
             'user_id', 'person_id')
@@ -132,5 +117,4 @@ class User extends Authenticatable
     public function likedReviews() {
         return $this->belongsToMany(Review::class, 'review_likes');
     }
-
 }
