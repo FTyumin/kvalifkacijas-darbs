@@ -67,9 +67,9 @@ class TmdbApiClient {
         if ($this->apiKey && empty($this->bearer)) {
             $query['api_key'] = $this->apiKey;
         }
-        if (!empty($append)) {
-            $query['append_to_response'] = implode(',', $append);
-        }
+        // if (!empty($append)) {
+        //     $query['append_to_response'] = implode(',', $append);
+        // }
 
         $options = [
             'query' => $query
@@ -107,9 +107,9 @@ class TmdbApiClient {
 
     public function personData(int $id) {
         $query['api_key'] = $this->apiKey;
-        $options = ['query' => $query];
+        // $options = ['query' => $query];
         
-        $res = $this->http->get("person/{$id}", $options);
+        $res = $this->http->get("person/{$id}", $this->buildOptions());
         $data = json_decode((string) $res->getBody(), true);
         return $data;
     }
@@ -184,5 +184,23 @@ class TmdbApiClient {
             $page++;
         }
         return array_slice($collected, 0, $limit);
+    }
+
+    protected function buildOptions(array $query = []): array
+    {
+        if ($this->apiKey && empty($this->bearer)) {
+            $query['api_key'] = $this->apiKey;
+        }
+
+        $options = ['query' => $query];
+
+        if ($this->bearer) {
+            $options['headers'] = [
+                'Authorization' => 'Bearer ' . $this->bearer,
+                'Accept' => 'application/json',
+            ];
+        }
+
+        return $options;
     }
 }

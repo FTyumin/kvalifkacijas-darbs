@@ -83,7 +83,7 @@ class MovieController extends Controller
                 $query->orderBy('year', 'desc');
                 break;
             case 'name':
-                $query->orderBy('title');
+                $query->orderBy('name');
                 break;
             default:
                 $query->orderBy('tmdb_rating', 'desc');
@@ -132,9 +132,9 @@ class MovieController extends Controller
         $movie_info = $this->apiClient->getMovieWithExtras($request->movie_id);
         
         Movie::updateOrCreate(
-                ['id' => $movie_info['id']],
+                ['tmdb_id' => $movie_info['id']],
                 [
-                    'id' => $movie_info['id'],
+                    'tmdb_id' => $movie_info['id'],
                     'name' => $movie_info['title'],
                     'year' => !empty($movie_info['release_date']) ? substr($movie_info['release_date'],0,4) : null,
                     'description' => $movie_info['overview'],
