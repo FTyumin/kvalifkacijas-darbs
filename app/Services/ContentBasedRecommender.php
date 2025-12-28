@@ -13,7 +13,7 @@ class ContentBasedRecommender
 {
     function findSimilarMovies($movieId, $limit = 5)
     {
-        $target = Movie::with(['genres:id', 'people:id'])->find($movieId);
+        $target = Movie::with(['genres:id,name', 'people:id'])->find($movieId);
         if (!$target) return [];
 
         // Precompute target sets once
@@ -24,7 +24,7 @@ class ContentBasedRecommender
         $similarities = [];
 
         Movie::where('id', '!=', $movieId)
-            ->with(['genres:id', 'people:id'])
+            ->with(['genres:id,name', 'people:id'])
             ->chunkById(500, function ($movies) use (
                 $targetGenres, $targetActors, $targetDirectors, $limit, &$similarities
             ) {
@@ -140,7 +140,7 @@ class ContentBasedRecommender
         // $favoriteActorIds = $user->favoriteActors->pluck('id')->toArray();
         $favoriteIds = $user->favoritePeople->pluck('id')->toArray();
 
-        foreach($recs as $rec) {
+        foreach($recs as &$rec) {
             $actors = $rec['movie']->actors->pluck('id')->toArray();
 
             if(in_array($rec['movie']->director_id, $favoriteIds)) {
@@ -161,7 +161,6 @@ class ContentBasedRecommender
         
         // retrieve user's favorite genres
         $favoriteGenres = $user->favoriteGenres;
-        $favoriteIds = $user->favoritePeople->pluck('id')->toArray();
 
         //movies that user shouldn't get as recommendations
         $watchedIds = $user->seenMovies()->pluck('markable_id')->toArray();
@@ -217,6 +216,11 @@ class ContentBasedRecommender
 
         $allRecommendations = array_merge($favoriteSimilar, $reviewSimilar, $seenList, $genreList);
 
+        if ($excludeIds) {
+            $allRecommendations = array_filter($allRecommendations, function ($rec) use ($excludeIds) {
+                return !in_array($rec['movie']->id, $excludeIds);
+            });
+        }
 
         $unique = [];
         foreach ($allRecommendations as $rec) {
@@ -227,30 +231,41 @@ class ContentBasedRecommender
             }
         }
 
-        $noDuplicates = array_values($unique);
+        $result = array_values($unique);
 
-        usort($noDuplicates, function($a, $b) {
+        usort($result, function($a, $b) {
             return $b['similarity'] <=> $a['similarity'];
         });
-        $result = $noDuplicates;
-
-        if ($excludeIds) {
-            $result = array_filter($result, function ($rec) use ($excludeIds) {
-                return !in_array($rec['movie']->id, $excludeIds);
-            });
-        }
 
         $result = array_slice($result, 0, $limit);
         if (count($result) < $limit) {
             $missing = $limit - count($result);
 
-            $extra = $this->getPopularMovies($missing, $excludeIds);
+            $existingIds = array_map(fn ($rec) => $rec['movie']->id, $result);
+            $extraExclude = array_merge($excludeIds, $existingIds);
+            $extra = $this->getPopularMovies($missing, $extraExclude);
             $result = array_merge($extra, $result);
+
+            $unique = [];
+            foreach ($result as $rec) {
+                $movieId = $rec['movie']->id;
+
+                if (!isset($unique[$movieId])) {
+                    $unique[$movieId] = $rec;
+                }
+            }
+
+            $result = array_values($unique);
+
+            usort($result, function($a, $b) {
+                return $b['similarity'] <=> $a['similarity'];
+            });
+
+            $result = array_slice($result, 0, $limit);
         }
 
         $result = $this->checkUserFavorites($result, $user);
 
-        $result = array_slice($result, 0, $limit);
         return $result;
     }
 
@@ -302,7 +317,6 @@ class ContentBasedRecommender
             'movie' => $movie,
             'similarity' => 0.2,
         ])->toArray();
-
 
         return $popularMovies;
     }
