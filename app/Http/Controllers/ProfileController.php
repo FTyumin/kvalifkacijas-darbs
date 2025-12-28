@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
 use App\Models\Movie;
 use App\Models\Review;
+use Maize\Markable\Models\Favorite;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -90,11 +91,15 @@ class ProfileController extends Controller
 
         $watchList = $user->wantToWatch;
         $seen = $user->seenMovies;
+        $favorites = $user->favorites->take(8);
 
         $reviews = Review::where('user_id', $user->id)->get();
         $review_count = Review::where('user_id', $user->id)->count();
         $average_review = round(Review::where('user_id', $user->id)->avg('rating'), 2) ?? 0;
 
-        return view('dashboard', compact('reviews', 'user', 'watchList', 'average_review', 'seen'));
+
+        $lists = $user->lists()->withCount('movies')->latest()->limit(5)->get();
+
+        return view('dashboard', compact('reviews', 'user', 'watchList', 'average_review', 'seen', 'favorites', 'lists'));
     }
 }
