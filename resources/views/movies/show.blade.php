@@ -21,7 +21,6 @@
                  alt="{{ $movie->name }} poster" 
                  class="rounded-xl shadow-md w-full top-4">
         </div>
-
         {{-- Details --}}
         <div class="md:col-span-2 space-y-6">
             <h1 class="text-3xl text-white font-bold">{{ $movie->name }}</h1>

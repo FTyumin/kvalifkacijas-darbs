@@ -20,17 +20,21 @@ class ImportService
         $data = $this->api->getTopMovies($count, ['method' => $method]);
 
         foreach ($data as $tmdbMovie) {
-            Movie::updateOrCreate(
-                ['tmdb_id' => $tmdbMovie['id']],
-                [
-                    'name' => $tmdbMovie['title'],
-                    'year' => !empty($tmdbMovie['release_date']) ? substr($tmdbMovie['release_date'],0,4) : null,
-                    'description' => $tmdbMovie['overview'],
-                    'language' => $tmdbMovie['original_language'],
-                    'tmdb_rating' => $tmdbMovie['vote_average'],
-                    'poster_url' => $tmdbMovie['poster_path'],
-                ]
-            );
+            $exists = Movie::where('tmdb_id', $tmdbMovie['id'])->exists();
+            if(!$exists) {
+                Movie::updateOrCreate(
+                    ['tmdb_id' => $tmdbMovie['id']],
+                    [
+                        'name' => $tmdbMovie['title'],
+                        'year' => !empty($tmdbMovie['release_date']) ? substr($tmdbMovie['release_date'],0,4) : null,
+                        'description' => $tmdbMovie['overview'],
+                        'language' => $tmdbMovie['original_language'],
+                        'tmdb_rating' => $tmdbMovie['vote_average'],
+                        'poster_url' => $tmdbMovie['poster_path'],
+                    ]
+                );
+
+            }
         }
 
         foreach ($data as $tmdbMovie) {
@@ -41,42 +45,54 @@ class ImportService
             $directorIdsWithRole = [];
             $directors = array_filter($movieInfo['credits']['crew'], fn($p) => $p['job'] === 'Director');
             foreach ($directors as $director) {
-                $directorData = $this->api->personData($director['id']);
-                $nameParts = explode(' ', $director['name']);
-                $person = Person::updateOrCreate(
-                    ['tmdb_id' => $director['id']],
-                    [
-                        'first_name' => array_shift($nameParts),
-                        'last_name' => implode(' ', $nameParts),
-                        'profile_path' => $directorData['profile_path'],
-                        'biography' => $directorData['biography'],
-                    ]
-                );
+                $person = Person::firstWhere('tmdb_id', $director['id']);
+                if(!$person) {
+                    $directorData = $this->api->personData($director['id']);
+                    $nameParts = explode(' ', $director['name']);
+    
+                    $person = Person::updateOrCreate(
+                        ['tmdb_id' => $director['id']],
+                        [
+                            'first_name' => array_shift($nameParts),
+                            'last_name' => implode(' ', $nameParts),
+                            'profile_path' => $directorData['profile_path'],
+                            'biography' => $directorData['biography'],
+                        ]
+                    );
+
+                }
                 $directorIdsWithRole[$person->id] = ['role' => 'director'];
             }
-            if ($directorIdsWithRole) {
-                $movie->people()->syncWithoutDetaching($directorIdsWithRole);
+            foreach ($directorIdsWithRole as $personId => $pivot) {
+                $movie->people()->attach($personId, $pivot);
             }
 
             // actors
             $actorIdsWithRole = [];
+            // selecting 5 actors
             $actorInfo = array_slice($movieInfo['credits']['cast'], 0, 5);
+
             foreach ($actorInfo as $actor) {
-                $actorData = $this->api->personData($actor['id']);
-                $nameParts = explode(' ', $actor['name']);
-                $person = Person::updateOrCreate(
-                    ['tmdb_id' => $actor['id']],
-                    [
-                        'first_name' => array_shift($nameParts),
-                        'last_name' => implode(' ', $nameParts),
-                        'profile_path' => $actorData['profile_path'],
-                        'biography' => $actorData['biography'],
-                    ]
-                );
+                $person = Person::firstWhere('tmdb_id', $actor['id']);
+                if(!$person) {
+                    $actorData = $this->api->personData($actor['id']);
+                    $nameParts = explode(' ', $actor['name']);
+                    $person = Person::updateOrCreate(
+                        ['tmdb_id' => $actor['id']],
+                        [
+                            'first_name' => array_shift($nameParts),
+                            'last_name' => implode(' ', $nameParts),
+                            'profile_path' => $actorData['profile_path'],
+                            'biography' => $actorData['biography'],
+                        ]
+                    );
+                }
                 $actorIdsWithRole[$person->id] = ['role' => 'actor'];
             }
-            if ($actorIdsWithRole) {
-                $movie->people()->syncWithoutDetaching($actorIdsWithRole);
+            
+            // prevents overwrites
+            foreach ($actorIdsWithRole as $personId => $pivot) {
+                $movie->people()->attach($personId, $pivot);
             }
 
             // extras

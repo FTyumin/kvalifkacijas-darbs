@@ -11,55 +11,62 @@ use Illuminate\Support\Facades\DB;
 
 class ContentBasedRecommender
 {
-    function findSimilarMovies($movieId, $limit = 5) {    
+    function findSimilarMovies($movieId, $limit = 5)
+    {
+        $target = Movie::with(['genres:id', 'people:id'])->find($movieId);
+        if (!$target) return [];
 
-        $allMovies = Movie::where('id', '!=', $movieId)->get();
+        // Precompute target sets once
+        $targetGenres = $target->genres->pluck('id')->all();
+        $targetActors = $target->people->where('pivot.role', 'actor')->pluck('id')->all();
+        $targetDirectors = $target->people->where('pivot.role', 'director')->pluck('id')->all();
+
         $similarities = [];
+
+        Movie::where('id', '!=', $movieId)
+            ->with(['genres:id', 'people:id'])
+            ->chunkById(500, function ($movies) use (
+                $targetGenres, $targetActors, $targetDirectors, $limit, &$similarities
+            ) {
+                foreach ($movies as $movie) {
+                    $genres2 = $movie->genres->pluck('id')->all();
+                    $actors2 = $movie->people->where('pivot.role', 'actor')->pluck('id')->all();
+                    $directors2 = $movie->people->where('pivot.role', 'director')->pluck('id')->all();
+
+                    $genreJ = $this->jaccardIndex($targetGenres, $genres2);
+                    $actorJ = $this->jaccardIndex($targetActors, $actors2);
+                    $directorJ = $this->jaccardIndex($targetDirectors, $directors2);
+
+                    $sim = (0.3 * $genreJ) + (0.4 * $directorJ) + (0.3 * $actorJ);
+
+                    if ($sim > 0.1) {
+                        $similarities[] = ['movie' => $movie, 'similarity' => $sim];
+                    }
+                }
+            });
+
+        usort($similarities, fn ($a, $b) => $b['similarity'] <=> $a['similarity']);
         
-        foreach($allMovies as $movie) {
-            $similarity = $this->calculateMovieSimilarity($movieId, $movie->id);
-    
-            if($similarity > 0.1) {
-                $similarities[] = [
-                    'movie' => $movie,
-                    'similarity' => $similarity,
-                ];
-            }
-        }
-        usort($similarities, function($a, $b) {
-            return $b['similarity'] <=> $a['similarity'];
-        });
-    
         return array_slice($similarities, 0, $limit);
     }
 
-    function calculateMovieSimilarity($movie1, $movie2) {
+
+    function calculateMovieSimilarity(Movie $movie1, Movie $movie2) {
         if((!$movie1) or (!$movie2)) {
             return;
         }
-        $movie1 = Movie::find($movie1);
-        $movie2 = Movie::find($movie2);
         
         // Get genre IDs as arrays
-        $genres1 = DB::table('genre_movie')
-            ->where('movie_id', $movie1->id)
-            ->get('genre_id');
-        $genres2 = DB::table('genre_movie')
-            ->where('movie_id', $movie2->id)
-            ->get('genre_id');
+        $genres1 = $movie1->genres->pluck('id')->all();
+        $genres2 = $movie2->genres->pluck('id')->all();
         
         // Get actor IDs as arrays
-        $actors1 = $movie1->actors->pluck('id')->toArray();
-        $actors2 = $movie2->actors->pluck('id')->toArray();
+        $actors1 = $movie1->actors->pluck('id')->all();
+        $actors2 = $movie2->actors->pluck('id')->all();
         
         // Get director IDs as arrays
-        $director1 = $movie1->director->pluck('id')->toArray();
-        $director2 = $movie2->director->pluck('id')->toArray();
-
-        
-        $genres1 = $genres1->pluck('genre_id')->toArray();
-        $genres2 = $genres2->pluck('genre_id')->toArray();
-
+        $director1 = $movie1->director->pluck('id')->all();
+        $director2 = $movie2->director->pluck('id')->all();
 
         // Calculate Jaccard index for each component
         $genreJaccard = $this->jaccardIndex($genres1, $genres2);

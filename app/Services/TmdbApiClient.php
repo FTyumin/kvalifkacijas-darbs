@@ -23,14 +23,6 @@ class TmdbApiClient {
         ]);
     }
 
-    /**
-     * Get movie details with extras (credits, images, etc).
-     *
-     * append_to_response supports: credits,images,external_ids,releases,...
-     * see TMDb docs for available append_to_response values. :contentReference[oaicite:2]{index=2}
-     *
-     * @return array|null
-     */
 
     public function getMovieWithExtras(int $movieId, array $append = ['credits', 'images']) {
         $query = [];
@@ -67,9 +59,6 @@ class TmdbApiClient {
         if ($this->apiKey && empty($this->bearer)) {
             $query['api_key'] = $this->apiKey;
         }
-        // if (!empty($append)) {
-        //     $query['append_to_response'] = implode(',', $append);
-        // }
 
         $options = [
             'query' => $query
