@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Activity;
 
 class UserRelationship extends Model
 {
@@ -24,8 +25,8 @@ class UserRelationship extends Model
     protected static function booted() {
         static::created(function ($userRelationship) {
             Activity::create([
-                'user_id' => $userRelationship->followee_id,
-                'activityable_type' => userRelationship::class,
+                'user_id' => $userRelationship->follower_id,
+                'activityable_type' => UserRelationship::class,
                 'activityable_id' => $userRelationship->id,
             ]);
         });

@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="max-w-2xl mx-auto py-8 min-h-screen">
+    <div class="max-w-6xl mx-auto px-4 py-8">
         <h1 class="text-2xl text-white font-bold mb-6">Your Feed</h1>
         
         <div class="space-y-6">
             @forelse($activities as $post)
-                @if($post->activityable_type == 'App\Models\Review')
+                @if($post->activityable_type == 'App\Models\Review' && $post->activityable)
 
                     <livewire:reviewComponent :review="$post->activityable" />
 
@@ -147,6 +147,11 @@
                     <p class="text-white">You don't follow anyone, yet.</p>
                 </div>
             @endforelse
+        </div>
+
+        {{-- Pagination --}}
+        <div class="mt-8">
+            {{ $activities->links() }}
         </div>
     </div>
 @endsection

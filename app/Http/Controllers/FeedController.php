@@ -20,8 +20,9 @@ class FeedController extends Controller
         $activities = Activity::whereIn('user_id', $followingIds)
             ->with('user')
             ->latest()
-            ->paginate(20);
-        // dd($activities[3]->user);
+            ->paginate(20)
+            ->withQueryString();
+        
         return view('feed.index', compact('activities'));
     }
 }

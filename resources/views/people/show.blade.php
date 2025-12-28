@@ -53,22 +53,22 @@
         
         @if($person->moviesAsDirector && $person->moviesAsDirector->count())
             <h2 class="text-2xl text-white font-semibold mb-4">Directed Movies</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @foreach($person->moviesAsDirector as $movie)
-                        <a href="{{ route('movies.show', $movie->slug) }}"
-                        class="group rounded-xl shadow hover:shadow-md transition overflow-hidden">
-                            <div class="group relative">
-                                    <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden relative">
-                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                                    src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"  
-                                    alt="Movie poster" />
-                                
-                                
-                            </div>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach($person->moviesAsDirector as $movie)
+                    <a href="{{ route('movies.show', $movie->slug) }}"
+                    class="group rounded-xl shadow hover:shadow-md transition overflow-hidden">
+                        <div class="group relative">
+                                <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden relative">
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                                src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"  
+                                alt="Movie poster" />
+                            
+                            
+                        </div>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
         @else
             
         @endif
@@ -77,22 +77,22 @@
     <section class="mt-12">
         @if($person->moviesAsActor && $person->moviesAsActor->count())
             <h2 class="text-2xl text-white font-semibold mb-4">Movies</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @foreach($person->moviesAsActor as $movie)
-                        <a href="{{ route('movies.show', $movie->slug) }}"
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach($person->moviesAsActor as $movie)
+                    <a href="{{ route('movies.show', $movie->slug) }}"
                         class="group rounded-xl shadow hover:shadow-md transition overflow-hidden">
-                            <div class="group relative">
-                                    <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden relative">
+                        <div class="group relative">
+                            <div class="aspect-[2/3] bg-gray-700 rounded-lg overflow-hidden relative">
                                 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
                                     src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"  
                                     alt="Movie poster" />
-                                
-                                
+                            
+                            
                             </div>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
         @endif
     </section>
 </div>
