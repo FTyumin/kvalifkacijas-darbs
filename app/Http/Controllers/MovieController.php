@@ -101,7 +101,15 @@ class MovieController extends Controller
         Cache::remember("movie:{$id}:recs", 3600, function () use ($id) {
                 return $this->contentRecommender->findSimilarMovies($id, 8);
             });
-        return view('movies.show', compact('movie', 'similarMovies'));
+        $reviews = $movie->reviews()
+            ->with(['user', 'likedBy', 'comments'])
+            ->latest()
+            ->get();
+        $userReview = null;
+        if (auth()->check()) {
+            $userReview = $reviews->firstWhere('user_id', auth()->id());
+        }
+        return view('movies.show', compact('movie', 'similarMovies', 'reviews', 'userReview'));
     }
 
     public function search(Request $request) {

@@ -137,7 +137,6 @@ class ContentBasedRecommender
     private function checkUserFavorites(array $recs, User $user) {
         // check if recs have user's favorite actors, directors
         // if yes, increase similarity
-        // $favoriteActorIds = $user->favoriteActors->pluck('id')->toArray();
         $favoriteIds = $user->favoritePeople->pluck('id')->toArray();
 
         foreach($recs as &$rec) {

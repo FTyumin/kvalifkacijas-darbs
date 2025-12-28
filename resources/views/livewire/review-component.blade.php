@@ -35,39 +35,41 @@
                         <span class="text-lg font-bold text-yellow-500">{{ $review->rating }}</span>
                         <span class="text-xs text-gray-400">/5</span>
                     </div>
+
+
                 </div>
             </div>
         </div>
-
-    @if($review->spoilers)
-    <div class="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg" x-data="{ open: false }">
-        <div class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-yellow-500 flex-shrink-0"> 
-                <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /> </svg>
-            <span class="text-sm text-yellow-500 font-medium">
-                This review contains spoilers
-            </span>
-
-            <button
-                class="ml-auto px-3 py-1 bg-yellow-500 text-gray-900 text-xs font-medium rounded hover:bg-yellow-400"
-                @click="open = !open"
-            >
-                <span x-text="open ? 'Hide' : 'Show'"></span>
-            </button>
+        @if($review->spoilers)
+        <div class="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg" x-data="{ open: false }">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-yellow-500 flex-shrink-0"> 
+                    <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /> </svg>
+                <span class="text-sm text-yellow-500 font-medium">
+                    This review contains spoilers
+                </span>
+    
+                <button
+                    class="ml-auto px-3 py-1 bg-yellow-500 text-gray-900 text-xs font-medium rounded hover:bg-yellow-400"
+                    @click="open = !open"
+                >
+                    <span x-text="open ? 'Hide' : 'Show'"></span>
+                </button>
+            </div>
+    
+            <div x-show="open" x-transition
+                class="mt-3 pt-3 border-t border-yellow-500/20">
+                <p class="text-gray-300 leading-relaxed">
+                    {{ \Illuminate\Support\Str::limit($review->description, 100) }}
+                </p>
+            </div>
         </div>
-
-        <div x-show="open" x-transition
-            class="mt-3 pt-3 border-t border-yellow-500/20">
+        @else
             <p class="text-gray-300 leading-relaxed">
                 {{ $review->description }}
             </p>
-        </div>
-    </div>
-    @else
-    <p class="text-gray-300 leading-relaxed">
-        {{ $review->description }}
-    </p>
-    @endif
+        @endif
+
 
     <button wire:click="toggleLike"  class="flex items-center gap-1">
         @if($review->likedBy->contains(auth()->id()))

@@ -172,7 +172,7 @@
                             </a>
                         </div>
 
-                        <div class="space-y-4">
+                        <div class="space-y-4 flex flex-col gap-4">
                             @foreach($reviews as $review)
                             <a href="{{ route('reviews.show', $review) }}">
                                 <div class="border border-gray-700 rounded-lg p-4 hover:border-gray-600 transition-colors">
@@ -276,7 +276,7 @@
                                     <span class="text-sm font-medium">Delete Account</span>     
                                 </button>     
                                     </x-slot>
-                                </x-confirm-modal>
+                            </x-confirm-modal>
                                 
                         </div>
                     </div>

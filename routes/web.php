@@ -66,6 +66,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('lists/{movie}/add', [ListController::class, 'add'])->name('lists.add');
     Route::delete('/lists/{list}/movies/{movie}', [ListController::class, 'remove'])->name('lists.remove');
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::patch('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
     Route::post('review/{review}/like', [ReviewController::class, 'toggleLike'])->name('reviews.like');
 
     Route::post('/comments', [CommentController::class, 'create'])->name('comments.store');

@@ -239,13 +239,11 @@
         </div>
     @endif
     {{-- Write Review Section --}}
-    
-        <div class="mt-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-        <div class="mt-12 pt-8">
-            <livewire:create-review :movie="$movie" />
-        </div>
+    <div class="mt-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+    <div class="mt-12 pt-8">
+        <x-create-review :movie="$movie" :reviews="$reviews" :user-review="$userReview" />
+    </div>
     
 
 </div>
 @endsection
-

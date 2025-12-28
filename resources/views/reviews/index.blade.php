@@ -27,6 +27,8 @@
     </div>
 
     {{-- Pagination --}}
-    
+    <div class="mt-8">
+        {{ $reviews->links() }}
+    </div>
 </div>
 @endsection
