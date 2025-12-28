@@ -167,7 +167,7 @@
                                 </svg>
                                 Recent Reviews
                             </h2>
-                            <a href="/my-reviews" class="text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors">
+                            <a href="{{ route('profile.reviews', $user) }}" class="text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors">
                                 View All →
                             </a>
                         </div>

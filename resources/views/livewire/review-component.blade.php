@@ -1,28 +1,41 @@
 <article class="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
 
     <div class="p-6">
-        <h1 class="text-white">{{$review->movie->name}}</h1>
-        <div class="flex items-start justify-between gap-4 mb-4">
-            <div class="flex items-center gap-3">
-                <a href="{{ route('profile.show', $review->user) }}" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
-                        <img src="{{ $review->user->image ? asset('storage/' . $review->user->image) : asset('images/person-placeholder.png') }}" alt="" class="w-full h-full object-cover">
-                        
-                    </div>
+        <div class="flex gap-4 mb-4">
+            <div class="w-20 flex-shrink-0">
+                <a href="{{ route('movies.show', $review->movie) }}" class="block aspect-[2/3] rounded-lg overflow-hidden bg-gray-700">
+                    <img
+                        src="https://image.tmdb.org/t/p/w200/{{ $review->movie->poster_url }}"
+                        alt="{{ $review->movie->name }} poster"
+                        class="w-full h-full object-cover"
+                    >
                 </a>
-                    <div>
-                        <h1 class="font-medium text-xl text-white">{{ $review->title }}</h1>
-                        <p class="font-medium text-gray-200">{{ $review->user->name }}</p>
-                        <time class="text-xs text-gray-400">{{ $review->created_at->diffForHumans() }}</time>
-                    </div>
             </div>
-            
-            <div class="flex items-center gap-1 bg-yellow-500/10 border border-yellow-500/30 rounded-lg px-3 py-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-yellow-500">
-                    <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
-                </svg>
-                <span class="text-lg font-bold text-yellow-500">{{ $review->rating }}</span>
-                <span class="text-xs text-gray-400">/5</span>
+
+            <div class="flex-1 min-w-0">
+                <h1 class="text-white">{{ $review->movie->name }}</h1>
+                <div class="flex items-start justify-between gap-4 mt-2">
+                    <div class="flex items-center gap-3">
+                        <a href="{{ route('profile.show', $review->user) }}" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
+                                <img src="{{ $review->user->image ? asset('storage/' . $review->user->image) : asset('images/person-placeholder.png') }}" alt="" class="w-full h-full object-cover">
+                            </div>
+                        </a>
+                        <div>
+                            <h1 class="font-medium text-xl text-white">{{ $review->title }}</h1>
+                            <p class="font-medium text-gray-200">{{ $review->user->name }}</p>
+                            <time class="text-xs text-gray-400">{{ $review->created_at->diffForHumans() }}</time>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-1 bg-yellow-500/10 border border-yellow-500/30 rounded-lg px-3 py-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-yellow-500">
+                            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-lg font-bold text-yellow-500">{{ $review->rating }}</span>
+                        <span class="text-xs text-gray-400">/5</span>
+                    </div>
+                </div>
             </div>
         </div>
 

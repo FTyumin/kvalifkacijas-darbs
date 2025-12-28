@@ -26,26 +26,13 @@ class TmdbApiClient {
 
     public function getMovieWithExtras(int $movieId, array $append = ['credits', 'images']) {
         $query = [];
-        if ($this->apiKey && empty($this->bearer)) {
-            $query['api_key'] = $this->apiKey;
-        }
+
         if (!empty($append)) {
             $query['append_to_response'] = implode(',', $append);
         }
 
-        $options = [
-            'query' => $query
-        ];
-
-        if ($this->bearer) {
-            $options['headers'] = [
-                'Authorization' => 'Bearer ' . $this->bearer,
-                'Accept'        => 'application/json',
-            ];
-        }
-
         try {
-            $res = $this->http->get("movie/{$movieId}", $options);
+            $res = $this->http->get("movie/{$movieId}", $this->buildOptions($query));
             $data = json_decode((string) $res->getBody(), true);
             return $data;
         } catch (GuzzleException $e) {
@@ -55,24 +42,9 @@ class TmdbApiClient {
     }
 
     public function trailerKey(int $movieId) {
-        $query = [];
-        if ($this->apiKey && empty($this->bearer)) {
-            $query['api_key'] = $this->apiKey;
-        }
-
-        $options = [
-            'query' => $query
-        ];
-
-        if ($this->bearer) {
-            $options['headers'] = [
-                'Authorization' => 'Bearer ' . $this->bearer,
-                'Accept'        => 'application/json',
-            ];
-        }
 
         try {
-            $res = $this->http->get("movie/{$movieId}/videos", $options);
+            $res = $this->http->get("movie/{$movieId}/videos", $this->buildOptions());
             $data = json_decode($res->getBody(), true);
 
             $videos = $data['results'] ?? [];
@@ -95,9 +67,7 @@ class TmdbApiClient {
     }
 
     public function personData(int $id) {
-        $query['api_key'] = $this->apiKey;
-        // $options = ['query' => $query];
-        
+
         $res = $this->http->get("person/{$id}", $this->buildOptions());
         $data = json_decode((string) $res->getBody(), true);
         return $data;
@@ -111,7 +81,7 @@ class TmdbApiClient {
         
         $discoverDefaults = [
             'sort_by' =>  'vote_average.desc',
-            'vote_count.gte' => $opts['vote_count.gte'] ?? 1000,
+            'vote_count.gte' => 1000,
             'language' => 'en-US',
             'include_adult' => true,
             'without_genres' => '10402, 10749, 99, 16'
@@ -120,16 +90,17 @@ class TmdbApiClient {
         while(count($collected) < $limit && $page <=$maxPages) {
             $query = ['page' => $page];
             
-            if($method === 'popular') {
-                $endpoint = 'movie/popular';
-            } else if($method === 'top-rated') {
-                $endpoint = 'movie/top_rated';
-            } else if($method === 'now-playing') {
-                $endpoint = 'movie/now_playing';
-            }
-             else {
-                $endpoint = 'discover/movie';
-            }
+            // if($method === 'popular') {
+            //     $endpoint = 'movie/popular';
+            // } else if($method === 'top-rated') {
+            //     $endpoint = 'movie/top_rated';
+            // } else if($method === 'now-playing') {
+            //     $endpoint = 'movie/now_playing';
+            // }
+            //  else {
+            //     $endpoint = 'discover/movie';
+            // }
+            $endpoint = $method;
 
             $query = array_merge($query, array_filter($discoverDefaults, fn($v) => $v !== null));
             
@@ -139,18 +110,8 @@ class TmdbApiClient {
                 }
             }
 
-            // if ($this->apiKey && empty($this->bearer)) {
-            //     $query['api_key'] = $this->apiKey;
-            // }
-            
-            $options = ['query' => $query];
-            if($this->bearer) {
-                $options['headers'] = [
-                    'Authorization' => 'Bearer ' . $this->bearer,
-                    'Accept' => 'application/json',
-                ];
-            }
-            
+            $options = $this->buildOptions($query);
+
             try {
                 $res = $this->http->get($endpoint, $options);
                 $data = json_decode((string) $res->getBody(), true);
@@ -158,7 +119,9 @@ class TmdbApiClient {
                 \Log::error("TMDb getTopMovies failed on page {$page}: " . $e->getMessage());
                 break;
             }
+
             $results = $data['results'] ?? [];
+
             if (empty($results)) break;
             
             foreach ($results as $r) {

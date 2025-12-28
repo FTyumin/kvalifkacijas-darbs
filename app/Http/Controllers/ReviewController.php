@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 
 class ReviewController extends Controller
@@ -16,6 +17,11 @@ class ReviewController extends Controller
     public function show(Review $review) {
         $review->load('comments');
         return view('reviews.show', compact('review'));
+    }
+
+    public function showUserReviews(User $user) {
+        $reviews = Review::where('user_id', $user->id)->get();
+        return view('reviews.user', compact('reviews', 'user'));
     }
 
     public function toggleLike(Review $review)
