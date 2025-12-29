@@ -155,7 +155,7 @@
                         </button>
                     </form>
 
-                    @if(Auth::check() && !(Auth::user()->lists->isEmpty()))
+                    @if(!Auth::user()->lists->isEmpty())
                         <div class="relative w-24">
                             <button type="button" onclick="this.nextElementSibling.classList.toggle('hidden')"
                                     class="group flex flex-col items-center gap-2 w-full py-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
@@ -238,6 +238,7 @@
             </div>
         </div>
     @endif
+    
     {{-- Write Review Section --}}
     <div class="mt-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
     <div class="mt-12 pt-8">

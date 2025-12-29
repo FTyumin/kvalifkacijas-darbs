@@ -4,27 +4,15 @@
 
 @section('content')
 <div class="relative mx-6 lg:mx-16 py-10 mb-10">
-  <div class="flex items-center justify-between mb-6">
     <h1 class="text-3xl font-bold text-white">
         Movies
     </h1>
 
-    
-
-         
-
-
-  </div>
-
-
-
-        </div>
+</div>
   <div>
     
   </div>
     
-
-  
   <!-- Movie Grid -->
  <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8">
   <aside class="h-full">
@@ -48,10 +36,7 @@
       </button>
 
       <!-- Backdrop -->
-          <div
-              x-show="open"
-              x-transition.opacity
-              @click="open = false"
+          <div x-show="open" x-transition.opacity @click="open = false"
               class="fixed inset-0 bg-black/60 z-40 lg:hidden"
           ></div>
 
@@ -85,10 +70,7 @@
           <div class="grid grid-cols-2 gap-2">
               @foreach($genres as $genre)
                   <label class="flex items-center gap-2 text-sm text-gray-200">
-                      <input
-                          type="checkbox"
-                          name="genres[]"
-                          value="{{ $genre->id }}"
+                      <input type="checkbox" name="genres[]" value="{{ $genre->id }}"
                           class="rounded border-gray-600 bg-gray-800 text-blue-500 focus:ring-blue-500"
                           {{ in_array($genre->id, request('genres', [])) ? 'checked' : '' }}
                       >
@@ -124,6 +106,18 @@
                 </option>
               @endforeach
                  
+          </select>
+      </div>
+
+      <!-- Sort -->
+      <div>
+          <label class="block text-sm text-gray-300 mb-2">Sort By</label>
+          <select name="sort"
+              class="w-full rounded-lg bg-gray-800 border-gray-700 text-white focus:ring-blue-500">
+              <option value="">Top Rated</option>
+              <option value="year" {{ request('sort') == 'year' ? 'selected' : '' }}>Newest</option>
+              <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Name (A–Z)</option>
+              <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>TMDB Rating</option>
           </select>
       </div>
 
@@ -170,8 +164,7 @@
 
         {{-- Poster --}}
         <a href="{{ route('movies.show', $movie->slug) }}" class="block relative">
-            <img
-                src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"
+            <img src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"
                 alt="{{ $movie->name }}"
                 class="aspect-[2/3] w-full object-cover
                       transition-transform duration-500 group-hover:scale-105"

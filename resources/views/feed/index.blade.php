@@ -27,7 +27,8 @@
                                             <div class="flex-1">
                                                 <h2 class="text-lg font-semibold text-gray-900 mb-2">
                                                     <span class="text-yellow-400 cursor-pointer">
-                                                        
+                                                        {{$post->user->name}}
+
                                                     </span>
                                                     <span class="text-white font-normal">created a list</span>
                                                     <span class="text-yellow-400"><a href="{{ route('lists.show', $post->activityable->id) }}">{{ $post->activityable->name }}</a></span>
