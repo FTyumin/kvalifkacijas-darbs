@@ -131,11 +131,11 @@ class MovieController extends Controller
     public function store(Request $request) {
         $movie = Movie::find($request->movie_id);
         if($movie) {
-            return redirect()->back()->with('error', 'Movie already exists');
+            return redirect()->back()->with('error', 'Movie already exists in database');
         }
         $movie = $this->apiClient->importMovie($request->movie_id);
         if (!$movie) {
-            return redirect()->back()->with('error', 'Movie import failed');
+            return redirect()->back()->with('error', 'Movie TMDB ID was not found.');
         }
 
         return redirect()->route('movies.show', $movie);
