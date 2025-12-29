@@ -7,9 +7,9 @@
         <!-- Left Side - Branding -->
         <div class="hidden lg:flex lg:w-1/2 items-center justify-center p-12 relative overflow-hidden">
    
-                    <img src="{{ asset('images/unsplash.jpg') }}" 
-                        class="absolute inset-0 w-full h-full object-cover z-0" 
-                        alt="Movie theater">
+            <img src="{{ asset('images/unsplash.jpg') }}" 
+                class="absolute inset-0 w-full h-full object-cover z-0" 
+                alt="Movie theater">
 
             <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-purple-900/50 z-0"></div>
             
@@ -112,15 +112,11 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
                                 </div>
-                                <input 
-                                    type="text" 
-                                    id="name" 
-                                    name="name" 
-                                    value="{{ old('name') }}"
+                                <input type="text" id="name"  name="name" value="{{ old('name') }}"
                                     required 
                                     autocomplete="name" 
                                     autofocus
-                                    class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all @error('name') border-red-500 focus:ring-red-500 @enderror"
+                                    class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     placeholder="Enter your username"
                                 >
                             </div>
@@ -140,14 +136,10 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
                                     </svg>
                                 </div>
-                                <input 
-                                    type="email" 
-                                    id="email" 
-                                    name="email" 
-                                    value="{{ old('email') }}"
+                                <input  type="email" id="email" name="email" value="{{ old('email') }}"
                                     required 
                                     autocomplete="email"
-                                    class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all @error('email') border-red-500 focus:ring-red-500 @enderror"
+                                    class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     placeholder="Enter your email"
                                 >
                             </div>
@@ -166,7 +158,7 @@
                                 id="image"
                                 name="image"
                                 accept="image/*"
-                                class="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-700 file:text-gray-200 hover:file:bg-gray-600 file:transition-colors @error('image') border border-red-500 rounded-lg @enderror"
+                                class="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-700 file:text-gray-200 hover:file:bg-gray-600 file:transition-colors"
                             >
                             @error('image')
                                 <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
@@ -189,7 +181,7 @@
                                     name="password" 
                                     required 
                                     autocomplete="new-password"
-                                    class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all @error('password') border-red-500 focus:ring-red-500 @enderror"
+                                    class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     placeholder="Create a strong password"
                                 >
                             </div>

@@ -17,11 +17,8 @@ class MovieController extends Controller
 {
     protected $contentRecommender;
     protected $apiClient;
-
-    public function __construct(
-        ContentBasedRecommender $contentRecommender,
-        TmdbApiClient $apiClient
-    ) {
+    public function __construct(ContentBasedRecommender $contentRecommender,
+     TmdbApiClient $apiClient) {
         $this->contentRecommender = $contentRecommender;
         $this->apiClient = $apiClient;
     }
@@ -136,83 +133,10 @@ class MovieController extends Controller
         if($movie) {
             return redirect()->back()->with('error', 'Movie already exists');
         }
-        $genres = Genre::all()->keyBy('name');
-        $movie_info = $this->apiClient->getMovieWithExtras($request->movie_id);
-        
-        Movie::updateOrCreate(
-                ['tmdb_id' => $movie_info['id']],
-                [
-                    'tmdb_id' => $movie_info['id'],
-                    'name' => $movie_info['title'],
-                    'year' => !empty($movie_info['release_date']) ? substr($movie_info['release_date'],0,4) : null,
-                    'description' => $movie_info['overview'],
-                    'language' => $movie_info['original_language'],
-                    'tmdb_rating' => $movie_info['vote_average'],
-                    'poster_url' => $movie_info['poster_path'],
-                ]
-                );
-            $actor_info = array_slice($movie_info['credits']['cast'], 0, 5);
-
-            $crew = $movie_info['credits']['crew'];
-            $director = array_filter($crew, function($person) {
-                return $person['job'] === 'Director';
-            });
-            
-            $director = reset($director);
-
-            $nameParts = explode(" ", $director['name']);
-            $director_data = $this->apiClient->personData($director['id']);
-            $director = Person::updateOrCreate(
-                [
-                    'id' => $director['id'],
-                ],
-                [
-                    'first_name' => array_shift($nameParts),
-                    'last_name' => implode(' ', $nameParts),
-                    'type' => 'director',
-                    'profile_path' => $director_data['profile_path'],
-                    'biography' => $director_data['biography'],
-                ]
-            );
-            $movie = Movie::find($movie_info['id']);
-            $movie->director_id = $director->id;
-            $movie->duration = $movie_info['runtime'];
-            $movie->trailer_url = $this->apiClient->trailerKey($movie->id);
-            $movie->save();
-
-            $movieGenres = $movie_info['genres'] ?? [];
-            foreach ($actor_info as $actor) {
-                $nameParts = explode(" ", $actor['name']);
-                $actor_data = $this->apiClient->personData($actor['id']);
-                Person::updateOrCreate(
-                    ['id' => $actor['id']],
-                    [
-                        'first_name' => array_shift($nameParts),
-                        'last_name' => implode(' ', $nameParts),
-                        'type' => 'actor',
-                        'profile_path' => $actor_data['profile_path'],
-                        'biography' => $actor_data['biography'],
-                    ]
-                );
-
-            }
-
-            $actorIds = collect($actor_info)->pluck('id');
-            $movie->actors()->syncWithoutDetaching($actorIds);
-            
-            $genreIds = collect($movieGenres)->map(function($genreData) use (&$genres) {  // Note the & reference
-                $genre = $genres->firstWhere('name', $genreData['name']);
-                
-                // create genre if not found
-                if (!$genre) {
-                    $genre = Genre::create(['name' => $genreData['name']]);
-                    $genres->push($genre);  
-                }
-                
-                return $genre->id;
-            })->toArray();
-
-            $movie->genres()->syncWithoutDetaching($genreIds);
+        $movie = $this->apiClient->importMovie($request->movie_id);
+        if (!$movie) {
+            return redirect()->back()->with('error', 'Movie import failed');
+        }
 
         return redirect()->route('movies.show', $movie);
     }

@@ -15,9 +15,7 @@ class CommentController extends Controller
             return back()->with('warning', 'You must be logged in to write a comment.');
         }
 
-        $request->validate([
-            'comment' => 'required|string|max:300'
-        ]);
+        $request->validate([ 'comment' => 'required|string|min:5|max:300']);
 
         Comment::create([
             'user_id' => $userId,

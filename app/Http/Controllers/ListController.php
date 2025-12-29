@@ -11,10 +11,18 @@ class ListController extends Controller
         $data = $request->all();
         $userId = \Auth::id();
 
-        $request->validate([
-            'name' => 'required|string|max:30',
-            'description' => 'required|string|max:500'
-        ]);
+        $request->validate(
+            [
+                'name' => 'required|string|max:30',
+                'description' => 'required|string|max:300'
+            ],
+            [
+                'name.required' => 'Please enter a list name.',
+                'name.max' => 'List names may be at most 30 characters.',
+                'description.required' => 'Please enter a description.',
+                'description.max' => 'Descriptions may be at most 300 characters.',
+            ]
+        );
 
         MovieList::create([
             'user_id' => $userId,
@@ -70,7 +78,19 @@ class ListController extends Controller
     }
 
     public function update(Request $request, MovieList $list) {
-        // $request->validate(['comment' => 'required|string|max:1000']);
+        $request->validate(
+            [
+                'name' => 'required|string|max:30',
+                'description' => 'required|string|max:300'
+            ],
+            [
+                'name.required' => 'Please enter a list name.',
+                'name.max' => 'List names may be at most 30 characters.',
+                'description.required' => 'Please enter a description.',
+                'description.max' => 'Descriptions may be at most 300 characters.',
+            ]
+        );
+        
         $list->update([
             'name' => $request->name,
             'description' => $request->description,

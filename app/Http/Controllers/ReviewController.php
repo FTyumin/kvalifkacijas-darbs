@@ -34,7 +34,7 @@ class ReviewController extends Controller
 
         $validated = $request->validate([
             'movie_id' => 'required|integer|exists:movies,id',
-            'title' => 'required|string|max:30',
+            'title' => 'required|string|min:5|max:30',
             'rating' => 'required|numeric|min:1|max:5',
             'comment' => 'required|string|max:1000',
         ]);

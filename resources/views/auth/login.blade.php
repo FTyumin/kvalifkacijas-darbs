@@ -120,15 +120,11 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
                                     </svg>
                                 </div>
-                                <input 
-                                    type="email" 
-                                    id="email" 
-                                    name="email" 
-                                    value="{{ old('email') }}"
+                                <input type="email"  id="email"  name="email" value="{{ old('email') }}"
                                     required 
                                     autocomplete="email" 
                                     autofocus
-                                    class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all @error('email') border-red-500 focus:ring-red-500 @enderror"
+                                    class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     placeholder="Enter your email"
                                 >
                             </div>
@@ -154,7 +150,7 @@
                                     name="password" 
                                     required 
                                     autocomplete="current-password"
-                                    class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all @error('password') border-red-500 focus:ring-red-500 @enderror"
+                                    class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     placeholder="Enter your password"
                                 >
                             </div>

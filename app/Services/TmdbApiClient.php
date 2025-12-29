@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Movie;
+use App\Models\Genre;
+use App\Models\Person;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Arr;
@@ -86,21 +89,19 @@ class TmdbApiClient {
             'include_adult' => true,
             'without_genres' => '10402, 10749, 99, 16'
         ];
+
+        $endpoints = [
+            'discover' => 'discover/movie',
+            'popular' => 'movie/popular',
+            'top-rated' => 'movie/top_rated',
+            'now-playing' => 'movie/now_playing',
+        ];
+
+        $endpoint = $endpoints[$method] ?? $endpoints['discover'];
         
         while(count($collected) < $limit && $page <=$maxPages) {
             $query = ['page' => $page];
             
-            // if($method === 'popular') {
-            //     $endpoint = 'movie/popular';
-            // } else if($method === 'top-rated') {
-            //     $endpoint = 'movie/top_rated';
-            // } else if($method === 'now-playing') {
-            //     $endpoint = 'movie/now_playing';
-            // }
-            //  else {
-            //     $endpoint = 'discover/movie';
-            // }
-            $endpoint = $method;
 
             $query = array_merge($query, array_filter($discoverDefaults, fn($v) => $v !== null));
             
@@ -136,6 +137,96 @@ class TmdbApiClient {
             $page++;
         }
         return array_slice($collected, 0, $limit);
+    }
+
+
+    public function importMovie(int $tmdbId): ?Movie
+    {
+        $genres = Genre::all()->keyBy('name');
+        $movie_info = $this->getMovieWithExtras($tmdbId);
+        if (!$movie_info) {
+            return null;
+        }
+
+        $movie = Movie::updateOrCreate(
+            ['tmdb_id' => $movie_info['id']],
+            [
+                'tmdb_id' => $movie_info['id'],
+                'name' => $movie_info['title'],
+                'year' => !empty($movie_info['release_date']) ? substr($movie_info['release_date'], 0, 4) : null,
+                'description' => $movie_info['overview'],
+                'language' => $movie_info['original_language'],
+                'tmdb_rating' => $movie_info['vote_average'],
+                'poster_url' => $movie_info['poster_path'],
+            ]
+        );
+
+        $actor_info = array_slice($movie_info['credits']['cast'] ?? [], 0, 5);
+
+        $crew = $movie_info['credits']['crew'] ?? [];
+        $director = array_filter($crew, function ($person) {
+            return ($person['job'] ?? null) === 'Director';
+        });
+
+        $director = reset($director) ?: null;
+
+        if ($director) {
+            $nameParts = explode(" ", $director['name']);
+            $director_data = $this->personData($director['id']);
+            $director = Person::updateOrCreate(
+                ['tmdb_id' => $director['id']],
+                [
+                    'first_name' => array_shift($nameParts),
+                    'last_name' => implode(' ', $nameParts),
+                    'profile_path' => $director_data['profile_path'],
+                    'biography' => $director_data['biography'],
+                ]
+            );
+            $directorIdsWithRole[$director->id] = ['role' => 'director'];
+        }
+
+        foreach ($directorIdsWithRole as $personId => $pivot) {
+            $movie->people()->attach($personId, $pivot);
+        }
+
+        $movie->duration = $movie_info['runtime'] ?? null;
+        $movie->trailer_url = $this->trailerKey($movie->tmdb_id);
+        $movie->save();
+
+        $movieGenres = $movie_info['genres'] ?? [];
+        foreach ($actor_info as $actor) {
+            $nameParts = explode(" ", $actor['name']);
+            $actor_data = $this->personData($actor['id']);
+            $person = Person::updateOrCreate(
+                ['tmdb_id' => $actor['id']],
+                [
+                    'first_name' => array_shift($nameParts),
+                    'last_name' => implode(' ', $nameParts),
+                    'type' => 'actor',
+                    'profile_path' => $actor_data['profile_path'] ?? null,
+                    'biography' => $actor_data['biography'] ?? null,
+                ]
+            );
+            $actorIdsWithRole[$person->id] = ['role' => 'actor'];
+        }
+
+        foreach ($actorIdsWithRole as $personId => $pivot) {
+                $movie->people()->attach($personId, $pivot);
+        }
+        $genreIds = collect($movieGenres)->map(function ($genreData) use (&$genres) {
+            $genre = $genres->firstWhere('name', $genreData['name']);
+
+            if (!$genre) {
+                $genre = Genre::create(['name' => $genreData['name']]);
+                $genres->push($genre);
+            }
+
+            return $genre->id;
+        })->toArray();
+
+        $movie->genres()->syncWithoutDetaching($genreIds);
+
+        return $movie;
     }
 
     protected function buildOptions(array $query = []): array
