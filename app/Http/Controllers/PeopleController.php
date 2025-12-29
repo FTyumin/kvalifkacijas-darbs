@@ -34,7 +34,4 @@ class PeopleController extends Controller
 
         return response()->json($people);
     }
-
-    //TODO:
-    // favorite actor/director button
 }

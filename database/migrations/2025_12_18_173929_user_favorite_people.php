@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('user_favorite_people', function (Blueprint $table) {
             $table->id();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained();
-            $table->enum('type', ['actor', 'director']);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            // $table->enum('type', ['actor', 'director']);
             $table->timestamps();
         });
     }

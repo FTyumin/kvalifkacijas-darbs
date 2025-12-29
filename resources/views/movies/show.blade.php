@@ -4,8 +4,7 @@
 
 @section('content')
 
-<a
-    href="{{ url()->previous() }}"
+<a href="{{ url()->previous() }}"
     class=" left-4 top-4 inline-flex items-center gap-2 text-gray-300 text-white hover:text-white
         transition text-sm">
     ← Back

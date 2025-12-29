@@ -15,7 +15,6 @@ class Person extends Model
         'tmdb_id',
         'first_name',
         'last_name',
-        'type',
         'nationality',
         'birth_year',
         'birth_date',
