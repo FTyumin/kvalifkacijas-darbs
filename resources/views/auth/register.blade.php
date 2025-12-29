@@ -98,7 +98,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('register') }}" class="space-y-6">
+                    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="space-y-6">
                         @csrf
                         
                         <!-- Name Field -->
@@ -152,6 +152,23 @@
                                 >
                             </div>
                             @error('email')
+                                <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Profile Image Field -->
+                        <div>
+                            <label for="image" class="block text-sm font-medium text-gray-300 mb-2">
+                                Profile Image
+                            </label>
+                            <input
+                                type="file"
+                                id="image"
+                                name="image"
+                                accept="image/*"
+                                class="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-700 file:text-gray-200 hover:file:bg-gray-600 file:transition-colors @error('image') border border-red-500 rounded-lg @enderror"
+                            >
+                            @error('image')
                                 <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
                             @enderror
                         </div>

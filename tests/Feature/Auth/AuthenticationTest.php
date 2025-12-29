@@ -17,20 +17,36 @@ test('users can authenticate using the login screen', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('quiz', absolute: false));
+    $response->assertRedirect(route('dashboard', absolute: false));
 });
 
+
+
+// T-6
+test('users can not authenticate with unknown email', function () {
+    $response = $this->post('/login', [
+        'email' => 'moviegoer@gmail.com',
+        'password' => 'pass$(ok1@',
+    ]);
+
+    $this->assertGuest();
+    $response->assertSessionHasErrors(['email']);
+});
+
+// T-7
 test('users can not authenticate with invalid password', function () {
     $user = User::factory()->create();
 
-    $this->post('/login', [
+    $response = $this->post('/login', [
         'email' => $user->email,
         'password' => 'wrong-password',
     ]);
 
     $this->assertGuest();
+    $response->assertSessionHasErrors(['email']);
 });
 
+// T-8
 test('users can logout', function () {
     $user = User::factory()->create();
 

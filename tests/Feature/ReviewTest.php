@@ -4,8 +4,6 @@ use App\Models\Comment;
 use App\Models\Movie;
 use App\Models\Review;
 use App\Models\User;
-use App\Livewire\CreateReview;
-use Livewire\Livewire;
 
 function createMovieForReviewTests(): Movie
 {
@@ -31,7 +29,7 @@ function createReviewForReviewTests(User $user, Movie $movie): Review
 }
 
 
-
+// T-29
 test('reviews index displays reviews', function () {
     $user = User::factory()->create();
     $movie = createMovieForReviewTests();
@@ -46,6 +44,7 @@ test('reviews index displays reviews', function () {
         });
 });
 
+// T-26
 test('review show loads comments', function () {
     $user = User::factory()->create();
     $movie = createMovieForReviewTests();
@@ -77,6 +76,8 @@ test('guests are redirected when liking a review', function () {
     $response->assertRedirect(route('login', absolute: false));
 });
 
+// T-27
+// T-28
 test('users can like and unlike reviews', function () {
     $author = User::factory()->create();
     $liker = User::factory()->create();
@@ -100,77 +101,192 @@ test('users can like and unlike reviews', function () {
     $this->assertFalse($review->likedBy()->where('user_id', $liker->id)->exists());
 });
 
+// T-20
 test('review title cannot be empty', function () {
     $user = User::factory()->create();
     $movie = createMovieForReviewTests();
 
-    Livewire::actingAs($user)
-        ->test(CreateReview::class, ['movie' => $movie])
-        ->set('rating', 4)
-        ->set('comment', 'Great performances and pacing.')
-        ->set('title', '')
-        ->call('save')
-        ->assertHasErrors(['title' => 'required']);
+    $response = $this
+        ->actingAs($user)
+        ->from('/previous')
+        ->post('/reviews', [
+            'movie_id' => $movie->id,
+            'title' => '',
+            'rating' => 5,
+            'comment' => 'Great performances and pacing.',
+            'spoilers' => '0',
+        ]);
 
-    expect(Review::count())->toBe(0);
+    $response
+        ->assertSessionHasErrors(['title'])
+        ->assertRedirect('/previous');
+    $this->assertDatabaseCount('reviews', 0);
 });
 
+// T-22
 test('review rating cannot be empty', function () {
     $user = User::factory()->create();
     $movie = createMovieForReviewTests();
 
-    Livewire::actingAs($user)
-        ->test(CreateReview::class, ['movie' => $movie])
-        ->set('comment', 'Great performances and pacing.')
-        ->set('title', 'Good watch')
-        ->call('save')
-        ->assertHasErrors(['rating' => 'required']);
+    $response = $this
+        ->actingAs($user)
+        ->from('/previous')
+        ->post('/reviews', [
+            'movie_id' => $movie->id,
+            'title' => 'Good watch',
+            'rating' => '',
+            'comment' => 'Great performances and pacing.',
+            'spoilers' => '0',
+        ]);
 
-    expect(Review::count())->toBe(0);
+    $response
+        ->assertSessionHasErrors(['rating'])
+        ->assertRedirect('/previous');
+    $this->assertDatabaseCount('reviews', 0);
 });
 
-test('review comment cannot be empty', function () {
+// T-20
+test('review text cannot be empty', function () {
     $user = User::factory()->create();
     $movie = createMovieForReviewTests();
 
-    Livewire::actingAs($user)
-        ->test(CreateReview::class, ['movie' => $movie])
-        ->set('rating', 4)
-        ->set('title', 'Good watch')
-        ->call('save')
-        ->assertHasErrors(['comment' => 'required']);
+    $response = $this
+        ->actingAs($user)
+        ->from('/previous')
+        ->post('/reviews', [
+            'movie_id' => $movie->id,
+            'title' => 'Good watch',
+            'rating' => 4,
+            'comment' => '',
+            'spoilers' => '0',
+        ]);
 
-    expect(Review::count())->toBe(0);
+    $response
+        ->assertSessionHasErrors(['comment'])
+        ->assertRedirect('/previous');
+    $this->assertDatabaseCount('reviews', 0);
 });
 
-test('review text cannot be more than 300 symbols', function () {
+// T-21
+test('review text cannot be more than 1000 symbols', function () {
     $user = User::factory()->create();
     $movie = createMovieForReviewTests();
 
-    Livewire::actingAs($user)
-        ->test(CreateReview::class, ['movie' => $movie])
-        ->set('rating', 4)
-        ->set('comment', str_repeat('a', 1001))
-        ->set('title', 'Name')
-        ->call('save')
-        ->assertHasErrors(['comment' => 'max']);
+    $response = $this
+        ->actingAs($user)
+        ->from('/previous')
+        ->post('/reviews', [
+            'movie_id' => $movie->id,
+            'title' => 'Name',
+            'rating' => 4,
+            'comment' => str_repeat('a', 1001),
+            'spoilers' => '0',
+        ]);
 
-    expect(Review::count())->toBe(0);
+    $response
+        ->assertSessionHasErrors(['comment'])
+        ->assertRedirect('/previous');
+    $this->assertDatabaseCount('reviews', 0);
 });
 
 test('review title cannot be more than 30 symbols', function () {
     $user = User::factory()->create();
     $movie = createMovieForReviewTests();
 
-    Livewire::actingAs($user)
-        ->test(CreateReview::class, ['movie' => $movie])
-        ->set('rating', 4)
-        ->set('comment', 'Lorem ipsum')
-        ->set('title', str_repeat('a', 31))
-        ->call('save')
-        ->assertHasErrors(['title' => 'max']);
+    $response = $this
+        ->actingAs($user)
+        ->from('/previous')
+        ->post('/reviews', [
+            'movie_id' => $movie->id,
+            'title' => str_repeat('a', 31),
+            'rating' => 4,
+            'comment' => 'Lorem ipsum',
+            'spoilers' => '0',
+        ]);
 
-    expect(Review::count())->toBe(0);
+    $response
+        ->assertSessionHasErrors(['title'])
+        ->assertRedirect('/previous');
+    $this->assertDatabaseCount('reviews', 0);
 });
 
+// T-23
+test('users can create a review without spoilers', function () {
+    $user = User::factory()->create();
+    $movie = createMovieForReviewTests();
 
+    $response = $this
+        ->actingAs($user)
+        ->from('/previous')
+        ->post('/reviews', [
+            'movie_id' => $movie->id,
+            'title' => 'My favorite movie',
+            'rating' => 5,
+            'comment' => 'Love this movie',
+            'spoilers' => '0',
+        ]);
+
+    $response
+        ->assertSessionHasNoErrors()
+        ->assertSessionHas('success', 'Review successfully posted.')
+        ->assertRedirect('/previous');
+
+    $this->assertDatabaseHas('reviews', [
+        'user_id' => $user->id,
+        'movie_id' => $movie->id,
+        'title' => 'My favorite movie',
+        'rating' => 5,
+        'description' => 'Love this movie',
+        'spoilers' => 0,
+    ]);
+});
+
+// T-24
+test('users can create a review marked as spoilers', function () {
+    $user = User::factory()->create();
+    $movie = createMovieForReviewTests();
+
+    $response = $this
+        ->actingAs($user)
+        ->from('/previous')
+        ->post('/reviews', [
+            'movie_id' => $movie->id,
+            'title' => 'My favorite movie',
+            'rating' => 5,
+            'comment' => 'Love this movie',
+            'spoilers' => '1',
+        ]);
+
+    $response
+        ->assertSessionHasNoErrors()
+        ->assertSessionHas('success', 'Review successfully posted.')
+        ->assertRedirect('/previous');
+
+    $this->assertDatabaseHas('reviews', [
+        'user_id' => $user->id,
+        'movie_id' => $movie->id,
+        'title' => 'My favorite movie',
+        'rating' => 5,
+        'description' => 'Love this movie',
+        'spoilers' => 1,
+    ]);
+});
+
+test('users can delete their review', function () {
+    $user = User::factory()->create();
+    $movie = createMovieForReviewTests();
+    $review = createReviewForReviewTests($user, $movie);
+
+    $response = $this
+        ->actingAs($user)
+        ->from('/previous')
+        ->delete("/reviews/{$review->id}");
+
+    $response
+        ->assertSessionHas('status', 'Review successfully deleted.')
+        ->assertRedirect('/previous');
+
+    $this->assertDatabaseMissing('reviews', [
+        'id' => $review->id,
+    ]);
+});

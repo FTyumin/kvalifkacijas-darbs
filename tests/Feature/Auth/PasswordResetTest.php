@@ -36,6 +36,7 @@ test('reset password screen can be rendered', function () {
     });
 });
 
+// T-10
 test('password can be reset with valid token', function () {
     Notification::fake();
 
@@ -57,4 +58,15 @@ test('password can be reset with valid token', function () {
 
         return true;
     });
+});
+
+// T-9
+test('reset password requires a known email', function () {
+    $response = $this->post('/forgot-password', [
+        'email' => 'janiscd@gmail.com',
+    ]);
+
+    $response->assertSessionHasErrors([
+        'email' => trans('passwords.user'),
+    ]);
 });
