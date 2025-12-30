@@ -126,20 +126,20 @@
                             <time class="text-sm text-gray-400">{{ $comment->created_at->diffForHumans() }}</time>
                         </div>
                         <p class="text-gray-300 leading-relaxed">{{ $comment->description }}</p>
-                          @if(auth()->id() === $comment->user_id)
-                        <div class="mt-2 flex gap-3 text-sm">
-                        <button type="button"
-                                class="text-blue-400 hover:text-blue-300"
-                                onclick="document.getElementById('edit-comment-{{ $comment->id }}').classList.toggle('hidden')">
-                            Edit
-                        </button>
+                          @if(auth()->id() === $comment->user_id or auth()->id()->is_admin)
+                            <div class="mt-2 flex gap-3 text-sm">
+                                <button type="button"
+                                        class="text-blue-400 hover:text-blue-300"
+                                        onclick="document.getElementById('edit-comment-{{ $comment->id }}').classList.toggle('hidden')">
+                                    Edit
+                                </button>
 
-                        <form action="{{ route('comments.destroy', $comment) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="text-red-400 hover:text-red-300">Delete</button>
-                        </form>
-                        </div>
+                                <form action="{{ route('comments.destroy', $comment) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="text-red-400 hover:text-red-300">Delete</button>
+                                </form>
+                            </div>
 
                         <form id="edit-comment-{{ $comment->id }}" action="{{ route('comments.update', $comment) }}"
                             method="POST"

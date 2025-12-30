@@ -87,7 +87,7 @@ class TmdbApiClient {
             'vote_count.gte' => 1000,
             'language' => 'en-US',
             'include_adult' => true,
-            'without_genres' => '10402, 10749, 99, 16'
+            'without_genres' => '10402,10749,99,16'
         ];
 
         $endpoints = [
@@ -96,14 +96,18 @@ class TmdbApiClient {
             'top-rated' => 'movie/top_rated',
             'now-playing' => 'movie/now_playing',
         ];
-
         $endpoint = $endpoints[$method] ?? $endpoints['discover'];
         
+        
+        $blocked = [10402, 10749, 99, 16];
         while(count($collected) < $limit && $page <=$maxPages) {
             $query = ['page' => $page];
             
+            if ($endpoint === 'discover/movie') {
+                $query = array_merge($query, $discoverDefaults);
+            }
 
-            $query = array_merge($query, array_filter($discoverDefaults, fn($v) => $v !== null));
+            // $query = array_merge($query, array_filter($discoverDefaults, fn($v) => $v !== null));
             
             foreach ($opts as $k => $v) {
                 if (!in_array($k, ['method', 'page_size'])) {
@@ -123,12 +127,19 @@ class TmdbApiClient {
 
             $results = $data['results'] ?? [];
 
+            $ids = collect($results)->pluck('id')->all();
+            $existingIds = Movie::whereIn('tmdb_id', $ids)->pluck('tmdb_id')->all();
+            $existing = array_flip($existingIds);
+
+
             if (empty($results)) break;
             
             foreach ($results as $r) {
-                if($r['release_date'] > '1970-01-01') {
-                    $collected[] = $r;
-                } else {
+
+                $genres = $r['genre_ids'] ?? [];
+                if (!array_intersect($blocked, $genres) && $r['release_date'] >= '1970-01-01'
+                    && !isset($existing[$r['id']])
+                ) {
                     continue;
                 }
 

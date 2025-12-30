@@ -2,9 +2,9 @@
 
 @section('content')
 {{-- Background Elements --}}
-<div class="relative z-10 min-h-screen">
+<div class="min-h-screen max-w-6xl mx-auto px-4 py-8">
     {{-- Header Section --}}
-    <div class="py-12 px-6 lg:px-28">
+    <div class="p-6">
         <div class="mb-12">
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div>

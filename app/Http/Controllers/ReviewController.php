@@ -87,7 +87,7 @@ class ReviewController extends Controller
     public function destroy(Request $request, Review $review)
     {
         $user = $request->user();
-        if (!$user || $review->user_id !== $user->id) {
+        if (!$user || (!$user->is_admin && $review->user_id !== $user->id)) {
             return back()->with('error', 'You can only delete your own reviews.');
         }
 

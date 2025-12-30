@@ -19,6 +19,8 @@ class ContentBasedRecommender
         $targetGenres = $target->genres->pluck('id')->all();
         $targetPeople = $target->people->pluck('id')->all();
 
+        $targetActors = $target->people->where('pivot.role', 'actor')->pluck('id')->all();
+        $targetDirectors = $target->people->where('pivot.role', 'director')->pluck('id')->all();
         $similarities = [];
 
         $candidateIds = Movie::query()
@@ -43,24 +45,22 @@ class ContentBasedRecommender
             ->pluck('id')
             ->all();
 
+
         if (empty($candidateIds)) return [];
 
         Movie::whereIn('id', $candidateIds)
             ->with(['genres:id,name', 'people:id'])
             ->chunkById(500, function ($movies) use (
-                $targetGenres, $targetPeople, $limit, &$similarities
+                $targetGenres, $targetPeople, $targetActors, $targetDirectors, $limit, &$similarities
             ) {
                 foreach ($movies as $movie) {
                     $genres2 = $movie->genres->pluck('id')->all();
                     $actors2 = $movie->people->where('pivot.role', 'actor')->pluck('id')->all();
                     $directors2 = $movie->people->where('pivot.role', 'director')->pluck('id')->all();
 
-                    $actorTargets = $movie->people->where('pivot.role', 'actor')->pluck('id')->all();
-                    $directorTargets = $movie->people->where('pivot.role', 'director')->pluck('id')->all();
-
                     $genreJ = $this->jaccardIndex($targetGenres, $genres2);
-                    $actorJ = $this->jaccardIndex($actorTargets, $actors2);
-                    $directorJ = $this->jaccardIndex($directorTargets, $directors2);
+                    $actorJ = $this->jaccardIndex($targetActors, $actors2);
+                    $directorJ = $this->jaccardIndex($targetDirectors, $directors2);
 
                     $sim = (0.3 * $genreJ) + (0.4 * $directorJ) + (0.3 * $actorJ);
 

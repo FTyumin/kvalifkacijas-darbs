@@ -81,13 +81,13 @@
         @if ($userReview)
             <x-confirm-modal title="Delete review?"
                  message="Are you sure you want to delete this review? This action cannot be undone."
-                                :action="route('reviews.destroy', $userReview)"
-                                method="DELETE">
-                                <x-slot name="trigger" class="w-max">
-                                    <button  class="rounded-lg border border-red-500/40 bg-red-500/10 px-6 py-2 text-red-400 hover:bg-red-500/20 transition">
-                                        <span class="text-md font-medium">Delete Review</span>     
-                                    </button>     
-                                </x-slot>
+                    :action="route('reviews.destroy', $userReview)"
+                    method="DELETE">
+                    <x-slot name="trigger" class="w-max">
+                        <button  class="rounded-lg border border-red-500/40 bg-red-500/10 px-6 py-2 text-red-400 hover:bg-red-500/20 transition">
+                            <span class="text-md font-medium">Delete Review</span>     
+                        </button>     
+                    </x-slot>
             </x-confirm-modal>
         @endif
     @endauth
@@ -154,6 +154,18 @@
                             </p>
                         @endif
 
+                        @if(auth()->check() && auth()->user()->is_admin)
+                            <x-confirm-modal title="Delete review?"
+                                message="Delete this review and all its comments?"
+                                    :action="route('reviews.destroy', $review)"
+                                    method="DELETE">
+                                    <x-slot name="trigger" class="w-max">
+                                        <button class="text-xs text-red-400 hover:text-red-300">
+                                            Delete review
+                                        </button>
+                                    </x-slot>
+                            </x-confirm-modal>
+                        @endif
                         @auth
                             <form action="{{ route('reviews.like', $review) }}" method="POST">
                                 @csrf
@@ -181,6 +193,7 @@
 
                         <span class="text-xs text-gray-400">{{ $review->comments->count() }} {{ Str::plural('comment', $review->comments->count()) }}</span>
                     </div>
+                   
                 </article>
             @empty
                 <div class="bg-gray-800 rounded-xl p-12 text-center">
