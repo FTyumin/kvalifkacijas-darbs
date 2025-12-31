@@ -56,7 +56,7 @@
                         <option value="top-rated">Top rated</option>
                         <option value="popular">Popular</option>
                         <option value="discover">Discover(standard)</option>
-                        <option value="now-playing"></option>
+                        <option value="now-playing">Now Playing</option>
 
                     </select>
                 </div>

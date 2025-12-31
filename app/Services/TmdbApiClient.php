@@ -85,8 +85,7 @@ class TmdbApiClient {
         $discoverDefaults = [
             'sort_by' =>  'vote_average.desc',
             'vote_count.gte' => 1000,
-            'language' => 'en-US',
-            'include_adult' => true,
+            'with_original_language' => 'en',
             'without_genres' => '10402,10749,99,16'
         ];
 
@@ -131,20 +130,25 @@ class TmdbApiClient {
             $existingIds = Movie::whereIn('tmdb_id', $ids)->pluck('tmdb_id')->all();
             $existing = array_flip($existingIds);
 
-
             if (empty($results)) break;
             
             foreach ($results as $r) {
+                $releaseDate = $r['release_date'] ?? null;
 
-                $genres = $r['genre_ids'] ?? [];
-                if (!array_intersect($blocked, $genres) && $r['release_date'] >= '1970-01-01'
-                    && !isset($existing[$r['id']])
-                ) {
+                $isTooOld = empty($releaseDate) || $releaseDate < '1970-01-01';
+                $isExisting = isset($existing[$r['id']]);
+
+                if ($isTooOld || $isExisting) {
                     continue;
                 }
 
-                if (count($collected) >= $limit) break 2;
+                $collected[] = $r;
+
+                if (count($collected) >= $limit) {
+                    break 2;
+                }
             }
+
             $page++;
         }
         return array_slice($collected, 0, $limit);

@@ -121,14 +121,17 @@ class ContentBasedRecommender
     private function collectSimilarMovies(array $ids, float $weight): array
     {
         $result = [];
-
+        // $correctResult[] = [
+        //         'movie' => $movie,
+        //         'similarity' => 0.2,
+        //     ];
         foreach ($ids as $id) {
             foreach ($this->findSimilarMovies($id, 5) as $movie) {
                 $movie['similarity'] *= $weight;
                 $result[] = $movie;
             }
         }
-
+        // dd($result);
         return $result;
     }
 
@@ -202,23 +205,27 @@ class ContentBasedRecommender
 
         $userHasData = false;
 
+        // limit recommendation parameter
+        $max = 5;
         if (count($favoriteIds) > 0) {
             $userHasData = true;
-            $favoriteSimilar = $this->collectSimilarMovies($favoriteIds, 1.4);
+            $favoriteSimilar = $this->collectSimilarMovies(array_slice($favoriteIds, 0, $max), 1.4);
+            // dd($favoriteSimilar);
         } 
 
         if ($reviews && $reviews->count() > 0) {
             $userHasData = true;
 
             $movieIds = $reviews->pluck('movie_id')->toArray();
-            $reviewSimilar = $this->collectSimilarMovies($movieIds, 1.3);
+            $reviewSimilar = $this->collectSimilarMovies(array_slice($movieIds, 0, $max), 1.3);
         } 
 
         if (count($watchedIds) > 0) {   
             $userHasData = true;
 
-            $seenList = $this->collectSimilarMovies($watchedIds, 1.05);
+            $seenList = $this->collectSimilarMovies(array_slice($watchedIds, 0, $max), 1.05);
         }
+
         if ($favoriteGenres->count() > 0) {
             $userHasData = true;
             
@@ -234,6 +241,8 @@ class ContentBasedRecommender
             }
         } 
         if(!$userHasData) {
+            // dd("add missing");
+
             return $this->getRecommendationsForNewUser($user, $limit);
         }
 
@@ -262,6 +271,7 @@ class ContentBasedRecommender
 
         $result = array_slice($result, 0, $limit);
         if (count($result) < $limit) {
+            // dd("add missing");
             $missing = $limit - count($result);
 
             $existingIds = array_map(fn ($rec) => $rec['movie']->id, $result);
@@ -287,8 +297,16 @@ class ContentBasedRecommender
             $result = array_slice($result, 0, $limit);
         }
 
-        $result = $this->checkUserFavorites($result, $user);
+        // make sure maximum similarity is 1
+        foreach ($result as &$rec) {
+            if($rec['similarity'] > 1) {
+                $rec['similarity'] = 1;
+            }
+        }
 
+        $result = $this->checkUserFavorites($result, $user);
+        $result = array_slice($result, 0, $limit);
+        // dd($result);
         return $result;
     }
 
@@ -333,7 +351,7 @@ class ContentBasedRecommender
     }
 
     function getPopularMovies($limit, $excludeIds = []) {
-        $popularMovies = Movie::where('tmdb_rating', '>', 4)->whereNotIn('id', $excludeIds)->limit($limit)->get();
+        $popularMovies = Movie::where('tmdb_rating', '>', 8)->whereNotIn('id', $excludeIds)->limit($limit)->get();
         //exclude seen, favorites
       
         $popularMovies = $popularMovies->map(fn($movie) => [
