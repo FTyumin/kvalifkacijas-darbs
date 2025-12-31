@@ -25,4 +25,10 @@ class FeedController extends Controller
         
         return view('feed.index', compact('activities'));
     }
+
+    public function adminFeed(Request $request) {
+        $activities = Activity::with('user')->latest()->paginate();
+
+        return view('feed.index', compact('activities'));
+    }
 }

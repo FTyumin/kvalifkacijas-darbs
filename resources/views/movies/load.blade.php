@@ -14,24 +14,6 @@
                 Specify how many movies should be loaded.
             </p>
 
-            {{-- Success message --}}
-            @if (session('success'))
-                <div class="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/40 text-green-400">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            {{-- Validation errors --}}
-            @if ($errors->any())
-                <div class="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/40">
-                    <ul class="list-disc list-inside text-red-400 text-sm">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
             <form method="POST" action="{{ route('movies.load.store') }}" class="space-y-6">
                 @csrf
 

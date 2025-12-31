@@ -52,7 +52,7 @@
         
         @if($person->moviesAsDirector && $person->moviesAsDirector->count())
             <h2 class="text-2xl text-white font-semibold mb-4">Directed Movies</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach($person->moviesAsDirector as $movie)
                     <a href="{{ route('movies.show', $movie->slug) }}"
                     class="group rounded-xl shadow hover:shadow-md transition overflow-hidden">
@@ -76,7 +76,7 @@
     <section class="mt-12">
         @if($person->moviesAsActor && $person->moviesAsActor->count())
             <h2 class="text-2xl text-white font-semibold mb-4">Movies</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach($person->moviesAsActor as $movie)
                     <a href="{{ route('movies.show', $movie->slug) }}"
                         class="group rounded-xl shadow hover:shadow-md transition overflow-hidden">

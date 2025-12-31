@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.7",
         "maize-tech/laravel-markable": "^2.3",
+        "secondnetwork/blade-tabler-icons": "^3.36",
         "spatie/laravel-sluggable": "^3.7"
     },
     "require-dev": {

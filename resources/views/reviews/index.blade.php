@@ -12,7 +12,7 @@
     <div class="space-y-4">
 
         @forelse($reviews as $review)
-            <livewire:reviewComponent :review="$review" />
+            <Review  :review="$post->activityable" />
 
         @empty
             {{-- Empty State --}}

@@ -8,8 +8,7 @@
             @forelse($activities as $post)
                 @if($post->activityable_type == 'App\Models\Review' && $post->activityable)
 
-                    <livewire:reviewComponent :review="$post->activityable" />
-
+                    <Review  :review="$post->activityable" />
 
                   @elseif($post->activityable_type == 'App\Models\MovieList')
                     <article class="bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
