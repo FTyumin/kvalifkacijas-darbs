@@ -2,11 +2,9 @@
 @section('content')
 <section class="relative min-h-[60vh] md:min-h-[55vh] lg:min-h-[50vh] overflow-hidden isolate">
 
-
     <!-- Dark cinematic overlay -->
     <div class="absolute inset-0 opacity-10">
-        <img src="{{ asset('images/bg-hero.jpg') }}" 
-             alt="Cinema background" 
+        <img src="{{ asset('images/bg-hero.jpg') }}" alt="Cinema background" 
              class="w-full h-full object-cover rounded-md">
     </div>
     
@@ -40,10 +38,7 @@
             </a>
         </div>
     </div>
-
-
 </section>
-
 
 <!-- Trending Movies -->
 <div class="my-20 mt-[10rem] mx-6 sm:mx-8 lg:mx-28 p-8">
@@ -70,24 +65,19 @@
                 src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"
                 alt="{{ $movie->name }}"
                 class="aspect-[2/3] w-full object-cover
-                      transition-transform duration-500 group-hover:scale-105"
-            />
+                      transition-transform duration-500 group-hover:scale-105"/>
 
             {{-- Gradient overlay --}}
             <div class="absolute inset-0 bg-gradient-to-t
                         from-black/90 via-black/20 to-transparent"></div>
 
             {{-- Rating --}}
-            @if($movie->rating)
-                <div class="absolute top-3 left-3 flex items-center gap-1
-                            rounded-md bg-black/70 backdrop-blur px-2 py-1
+            <div class="absolute top-3 left-3 flex items-center gap-1 rounded-md bg-black/70 backdrop-blur px-2 py-1
                             text-sm text-white">
-                    <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                    {{ $movie->rating }}
-                </div>
-            @endif
+                    @svg('heroicon-s-star', 'w-4 h-4 text-yellow-400')
+                    {{ $movie->tmdb_rating }}
+            </div>
+
 
             {{-- Genres --}}
             <div class="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1">
@@ -114,7 +104,6 @@
             </div>
         </div>
     </div>
-
     @endforeach
   </div>
 
@@ -122,9 +111,7 @@
   <div class="mt-12 text-center">
     <a href="/movies" class="inline-flex items-center px-6 py-3 text-base font-medium text-yellow-300  rounded-lg 0 focus:outline-none focus:ring-4 focus:ring-blue-300 bg-black transition-colors">
       View All Movies
-      <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-      </svg>
+      @svg('heroicon-o-arrow-right', 'w-4 h-4 ml-2')
     </a>
   </div>
     @auth
@@ -156,9 +143,7 @@
             <div class="absolute top-3 left-3 flex items-center gap-1
                         rounded-md bg-black/70 backdrop-blur px-2 py-1
                         text-sm text-white">
-                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                </svg>
+                @svg('heroicon-s-star', 'w-4 h-4 text-yellow-400')
                 {{ $movie['movie']->tmdb_rating }}
             </div>
             @endif
@@ -193,8 +178,6 @@
   </div>
 </div>
 
-
-
 <!-- Genres -->
 <div class="my-16 mx-10 sm:px-8 lg:px-28">
     <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-white md:text-5xl lg:text-6xl">Genres</h1>
@@ -215,9 +198,7 @@
                       hover:from-yellow-400 hover:to-yellow-500
                       shadow-lg shadow-yellow-500/20 ">
                         View Movies
-                        <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                        </svg>
+                        @svg('heroicon-o-arrow-right', 'rtl:rotate-180 w-3.5 h-3.5 ms-2')
                     </a>
                 </div>
             </div>   
@@ -237,14 +218,10 @@
           {{-- List Header --}}
           <div class="flex items-start justify-between mb-4">
               <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                  </svg>
+                  @svg('heroicon-o-list-bullet', 'w-6 h-6 text-white')
               </div>
               <div class="flex items-center gap-2 text-xs text-gray-400 bg-gray-700/50 px-3 py-1 rounded-full">
-                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
-                  </svg>
+                  @svg('heroicon-o-film', 'w-3 h-3')
                   {{ $list->movies->count() ?? 0 }} movies
               </div>
           </div>
@@ -295,21 +272,13 @@
                       <p class="text-xs text-gray-500">{{ $list->created_at->diffForHumans() }}</p>
                   </div>
               </div>
-              <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-              </svg>
+              @svg('heroicon-o-arrow-right', 'w-5 h-5 text-gray-400 group-hover:text-blue-400 group-hover:translate-x-1 transition-all')
           </div>
       </div>
   </a>
   @endforeach
-      </div>
+  </div>
   </div>
 
 @endif
-
-<!-- Reviews -->
- <div class="my-16 mx-10 sm:px-8 lg:px-28">
-   
-</div>
-
 @endsection

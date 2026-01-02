@@ -12,7 +12,7 @@
     <div class="space-y-4">
 
         @forelse($reviews as $review)
-            <x-review :review="$review" />
+            <x-review :review="$review" class="h-32" />
 
         @empty
             {{-- Empty State --}}
