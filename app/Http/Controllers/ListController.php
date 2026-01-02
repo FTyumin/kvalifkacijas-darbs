@@ -68,7 +68,6 @@ class ListController extends Controller
     }
 
     public function remove(MovieList $list, $movieId) {
-
         $list->removeMovie($movieId);
         return back()->with('message','Movie removed!');
     }

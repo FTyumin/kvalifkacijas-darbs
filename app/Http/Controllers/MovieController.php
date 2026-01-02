@@ -53,6 +53,7 @@ class MovieController extends Controller
         // remove empty filter parameters
         $clean = array_filter($request->query(), fn($v) => $v !== null && $v !== '' && $v !== []);
 
+        // filter logic
         if ($request->filled('genres')) {
             $query->whereHas('genres', function ($q) use ($request) {
                 $q->whereIn('genres.id', $request->genres);
@@ -109,6 +110,7 @@ class MovieController extends Controller
         return view('movies.show', compact('movie', 'similarMovies', 'reviews', 'userReview'));
     }
 
+    // search bar on homepage
     public function search(Request $request) {
         $search = $request->input('search');
 
@@ -125,7 +127,7 @@ class MovieController extends Controller
     }
 
     public function create() {
-        return view('movies.add',);
+        return view('movies.add');
     }
 
     public function store(Request $request) {

@@ -26,6 +26,7 @@ class FeedController extends Controller
         return view('feed.index', compact('activities'));
     }
 
+    // get all user activities for admin
     public function adminFeed(Request $request) {
         $activities = Activity::with('user')->latest()->paginate();
 

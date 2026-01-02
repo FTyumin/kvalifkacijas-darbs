@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 
 class MarkController extends Controller
 {
+    // favorite, watchlist, seen toggles
+
     public function favoriteToggle($movieId)
     {
         $movie = Movie::find($movieId);

@@ -10,7 +10,6 @@ use App\Models\User;
 use App\Notifications\SuggestionAccepted;
 use App\Jobs\ImportMoviesJob;
 use App\Notifications\SuggestionRejected;
-use Illuminate\Support\Facades\Artisan;
 
 class AdminController extends Controller
 {
@@ -69,6 +68,7 @@ class AdminController extends Controller
         $count = $request->count;
         $method = $request->method;
 
+        // call import from api
         ImportMoviesJob::dispatch($count, $method);
 
         return back()->with('success', 'Started loading movies');

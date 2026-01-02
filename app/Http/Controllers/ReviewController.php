@@ -108,6 +108,7 @@ class ReviewController extends Controller
             // Like
             $review->likedBy()->attach($user->id);
         }
+        // user remains on same page
         return back();
     }
 }

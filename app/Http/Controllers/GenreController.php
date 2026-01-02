@@ -10,7 +10,6 @@ class GenreController extends Controller
 {
     public function show($genreID) {
         $genre = Genre::findOrFail($genreID);
-        // $query = $genre->movies()->paginate(12);
 
         $query = Movie::query()->with(['genres', 'actors']);
 

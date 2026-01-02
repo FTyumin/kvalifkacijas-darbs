@@ -16,7 +16,7 @@ class UserRelationshipController extends Controller
         return response()->json($followers);
     }
 
-    // retrieve followees of a given user
+    // retrieve followees(following) of a given user
     public function followees($userId)
     {
         $user = User::findOrFail($userId);
