@@ -61,8 +61,6 @@
                             <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
                                 src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"  
                                 alt="Movie poster" />
-                            
-                            
                         </div>
                         </div>
                     </a>

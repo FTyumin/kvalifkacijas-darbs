@@ -3,12 +3,6 @@
 @section('title', 'dashboard')
 
 @section('content')
-{{-- Background Elements --}}
-<div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-    <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
-    <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
-    <div class="absolute top-1/3 right-1/3 w-60 h-60 bg-gradient-to-br from-pink-600/10 to-blue-600/10 rounded-full blur-2xl animate-pulse" style="animation-delay: 4s;"></div>
-</div>
 
 <div class="relative z-10 min-h-screen flex items-center justify-center py-12 px-6">
     <div class="w-full max-w-2xl">
@@ -16,7 +10,7 @@
         {{-- Header Section --}}
         <div class="text-center mb-8">
             <div class="flex items-center justify-center gap-3 mb-4">
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                     </svg>
@@ -62,7 +56,7 @@
         @endif
 
         {{-- Form Card --}}
-        <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 hover:bg-gray-800/60 transition-colors">
+        <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8">
             <form action="{{ route('profile.update') }}" enctype="multipart/form-data" method="post" class="space-y-6">
                 @csrf
                 @method('PATCH')
@@ -71,7 +65,7 @@
                 <div class="flex flex-col items-center mb-8 pb-8 border-b border-gray-700">
                     <div class="relative group">
                         {{-- Current Profile Image --}}
-                        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-700 bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center">
+                        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-700 bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                             @if($user->image)
                             <img src="{{ asset('storage/' . $user->image) }}" alt="Profile" class="w-full h-full object-cover" id="imagePreview">
                             @else
@@ -101,7 +95,7 @@
                     <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
                     @enderror
                     
-                    <p class="mt-2 text-xs text-gray-400">JPG, PNG or GIF. Max size 2MB</p>
+                    <p class="mt-2 text-xs text-gray-400">JPG, PNG. Max size 2MB</p>
                 </div>
 
                 {{-- Name Field --}}
@@ -115,13 +109,9 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
                         </div>
-                        <input 
-                            type="text" 
-                            id="name" 
-                            name="name" 
-                            value="{{ old('name', $user->name) }}"
+                        <input  type="text" id="name" name="name" value="{{ old('name', $user->name) }}"
                             required 
-                            class="w-full pl-12 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all @error('name') border-red-500 focus:ring-red-500 @enderror"
+                            class="w-full pl-12 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all @error('name') border-red-500 focus:ring-red-500 @enderror"
                             placeholder="Enter your full name"
                         >
                     </div>
@@ -141,13 +131,10 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
                             </svg>
                         </div>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            name="email" 
+                        <input type="email" id="email"  name="email" 
                             value="{{ old('email', $user->email) }}"
                             required 
-                            class="w-full pl-12 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all @error('email') border-red-500 focus:ring-red-500 @enderror"
+                            class="w-full pl-12 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all @error('email') border-red-500 focus:ring-red-500 @enderror"
                             placeholder="Enter your email address"
                         >
                     </div>
@@ -160,7 +147,7 @@
                 <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-700">
                     <button 
                         type="submit" 
-                        class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transform inline-flex items-center justify-center gap-2"
+                        class="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-gray-800 transform inline-flex items-center justify-center gap-2"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -179,17 +166,6 @@
                     </a>
                 </div>
             </form>
-        </div>
-
-        {{-- Additional Options --}}
-        <div class="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm">
-            <a href="" class="text-gray-400 hover:text-white transition-colors inline-flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                </svg>
-                Change Password
-            </a>
-            
         </div>
     </div>
 </div>

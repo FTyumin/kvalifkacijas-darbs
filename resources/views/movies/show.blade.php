@@ -10,8 +10,6 @@
     ← Back
 </a>
 <div class="max-w-6xl mx-auto mt-8 px-4 py-8 ">
-
-
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         
         {{-- Poster --}}
@@ -201,8 +199,7 @@
             <!-- admin options for edit, delete -->
             @if(Auth::check() && Auth::user()->is_admin)
                 <div class="flex gap-3 mt-6">
-                    <a
-                        href="{{ route('movies.edit', $movie) }}"
+                    <a href="{{ route('movies.edit', $movie) }}"
                         class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600/20 text-blue-300 hover:bg-blue-600/30 transition">
                         Edit
                     </a>
@@ -258,7 +255,6 @@
     <div class="mt-12 pt-8">
         <x-create-review :movie="$movie" :reviews="$reviews" :user-review="$userReview" />
     </div>
-    
 
 </div>
 @endsection

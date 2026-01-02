@@ -21,11 +21,7 @@
                     <label for="name" class="block text-sm font-medium text-gray-300 mb-2">
                         List name
                     </label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value="{{ $list->name }}"
+                    <input type="text" id="name" name="name" value="{{ $list->name }}"
                         required
                         class="w-full px-4 py-3 rounded-lg bg-gray-800/60 border border-gray-600
                                text-white placeholder-gray-400
@@ -42,10 +38,7 @@
                     <label for="description" class="block text-sm font-medium text-gray-300 mb-2">
                         Description
                     </label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        rows="4"
+                    <textarea id="description" name="description" rows="4"
                         class="w-full px-4 py-3 rounded-lg bg-gray-800/60 border border-gray-600
                                text-white placeholder-gray-400
                                focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
@@ -67,11 +60,7 @@
                     </div>
 
                     <input type="hidden" name="is_private" value="0">
-                    <input
-                        type="checkbox"
-                        id="is_private"
-                        name="is_private"
-                        value="1"
+                    <input type="checkbox" id="is_private" name="is_private" value="1"
                         class="w-5 h-5 rounded border-gray-600 bg-gray-700
                                text-yellow-400 focus:ring-yellow-400"
                     >
@@ -89,7 +78,6 @@
                         Edit List
                     </button>
                 </div>
-
             </form>
         </div>
     </div>

@@ -86,7 +86,6 @@
         </div>
     </div>
 
-
         {{-- Movies Grid --}}
         @if($list->movies->count() > 0)
         <div class="mb-6">

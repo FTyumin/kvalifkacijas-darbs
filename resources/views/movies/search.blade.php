@@ -65,8 +65,16 @@
         @endforeach
     </div>
     
-  @else
-    <!-- <h1 class="text-3xl text-white">No Results were found for <span class="text-green-500">"{{ $search }}"</span></h1> -->
+@else
+    <div class="mt-12 rounded-2xl border border-gray-800 bg-gradient-to-b from-gray-900/60 to-gray-900/30 p-10 text-center shadow-lg">
+        <h1 class="text-2xl font-semibold text-white">No results for <span class="text-green-400">"{{ $search }}"</span></h1>
+        <p class="mt-2 text-gray-400">Try a different title or actor,director.</p>
+        <div class="mt-6 flex justify-center gap-3">
+            <a class="inline-flex items-center rounded-lg bg-gray-800 px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 transition-colors" href="/movies">
+                Browse all movies
+            </a>
+        </div>
+    </div>
   @endif
   @if($people && $people->count() > 0)
     <div class="mb-12">
