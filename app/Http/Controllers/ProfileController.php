@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
+use Illuminate\Validation\Rule;
+
 class ProfileController extends Controller
 {
 
@@ -25,7 +27,13 @@ class ProfileController extends Controller
 
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+
+        $data = $request->validate([
+            'name' => ['required', 'string', 'min:5', 'max:255', Rule::unique('users', 'name')->ignore($user->id)],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'image' => ['nullable', 'image', 'max:2048'],
+        ]);
 
         // Uploading file
         if ($request->hasFile('image')) {
@@ -34,12 +42,13 @@ class ProfileController extends Controller
             $data['image'] = $path;
         }
 
+        $user->fill($data);
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
 
         return Redirect::route('profile.show', $request->user()->id)->with('status', 'profile-updated');
     }

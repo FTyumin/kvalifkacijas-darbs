@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'dashboard')
+@section('title', 'Edit Profile')
 
 @section('content')
 
@@ -65,7 +65,7 @@
                 <div class="flex flex-col items-center mb-8 pb-8 border-b border-gray-700">
                     <div class="relative group">
                         {{-- Current Profile Image --}}
-                        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-700 bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-700  flex items-center justify-center">
                             @if($user->image)
                             <img src="{{ asset('storage/' . $user->image) }}" alt="Profile" class="w-full h-full object-cover" id="imagePreview">
                             @else
@@ -91,10 +91,6 @@
                         Upload New Photo
                     </label>
                     
-                    @error('image')
-                    <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-                    @enderror
-                    
                     <p class="mt-2 text-xs text-gray-400">JPG, PNG. Max size 2MB</p>
                 </div>
 
@@ -111,13 +107,11 @@
                         </div>
                         <input  type="text" id="name" name="name" value="{{ old('name', $user->name) }}"
                             required 
-                            class="w-full pl-12 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all @error('name') border-red-500 focus:ring-red-500 @enderror"
+                            class="w-full pl-12 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400  transition-all"
                             placeholder="Enter your full name"
                         >
                     </div>
-                    @error('name')
-                    <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-                    @enderror
+
                 </div>
 
                 {{-- Email Field --}}
@@ -134,20 +128,17 @@
                         <input type="email" id="email"  name="email" 
                             value="{{ old('email', $user->email) }}"
                             required 
-                            class="w-full pl-12 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all @error('email') border-red-500 focus:ring-red-500 @enderror"
+                            class="w-full pl-12 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400"
                             placeholder="Enter your email address"
                         >
                     </div>
-                    @error('email')
-                    <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-                    @enderror
+
                 </div>
 
                 {{-- Action Buttons --}}
                 <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-700">
-                    <button 
-                        type="submit" 
-                        class="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-gray-800 transform inline-flex items-center justify-center gap-2"
+                    <button type="submit" 
+                        class="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500  transform inline-flex items-center justify-center gap-2"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
