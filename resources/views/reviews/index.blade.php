@@ -12,7 +12,7 @@
     <div class="space-y-4">
 
         @forelse($reviews as $review)
-            <Review  :review="$post->activityable" />
+            <x-review :review="$review" />
 
         @empty
             {{-- Empty State --}}

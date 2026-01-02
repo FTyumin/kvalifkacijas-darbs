@@ -30,7 +30,7 @@ class ProfileController extends Controller
         $user = $request->user();
 
         $data = $request->validate([
-            'name' => ['required', 'string', 'min:5', 'max:255', Rule::unique('users', 'name')->ignore($user->id)],
+            'name' => ['required', 'string', 'min:5', 'max:30', Rule::unique('users', 'name')->ignore($user->id)],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'image' => ['nullable', 'image', 'max:2048'],
         ]);
@@ -78,12 +78,18 @@ class ProfileController extends Controller
         }
         
         // query user data for profile page
-        $movies = $user->movies;
+        // $movies = $user->movies;
         $reviews = $user->reviews;
         $review_count = Review::where('user_id', $user->id)->count();
         $average_review = round(Review::where('user_id', $user->id)->avg('rating'), 2) ?? 0;
+
+        $watchList = $user->wantToWatch;
+        $seen = $user->seenMovies;
+        $favorites = $user->favorites->take(8);
+
+        $lists = $user->lists()->withCount('movies')->latest()->limit(5)->get();
         
-        return view('profile.show', compact('user', 'movies', 'reviews', 'review_count', 'average_review'));
+        return view('profile.show', compact('reviews', 'user', 'watchList', 'average_review', 'seen', 'favorites', 'lists'));
     }
 
     public function dashboard(Request $request) {

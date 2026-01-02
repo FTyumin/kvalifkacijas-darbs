@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 class ReviewController extends Controller
 {
     public function index(Request $request) {
-        $reviews = Review::with('user')->latest()->paginate(10)->withQueryString();
+        $reviews = Review::latest()->paginate(10);
         return view('reviews.index', compact('reviews'));
     }
 
