@@ -133,7 +133,7 @@
                             <time class="text-sm text-gray-400">{{ $comment->created_at->diffForHumans() }}</time>
                         </div>
                         <p class="text-gray-300 leading-relaxed">{{ $comment->description }}</p>
-                          @if(auth()->id() === $comment->user_id or auth()->id()->is_admin)
+                          @if(auth()->id() === $comment->user_id or auth()->user()->is_admin)
                             <div class="mt-2 flex gap-3 text-sm">
                                 <button type="button"
                                         class="text-yellow-400 hover:text-yellow-300"
@@ -164,9 +164,9 @@
                                 </button>
                             </div>
                         </form>
+                        @endif
                     </div>
                         
-                    @endif
                 </div>
 
             </div>

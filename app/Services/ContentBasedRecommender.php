@@ -6,8 +6,6 @@ use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\Person;
 use App\Models\User;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class ContentBasedRecommender
 {
@@ -121,17 +119,12 @@ class ContentBasedRecommender
     private function collectSimilarMovies(array $ids, float $weight): array
     {
         $result = [];
-        // $correctResult[] = [
-        //         'movie' => $movie,
-        //         'similarity' => 0.2,
-        //     ];
         foreach ($ids as $id) {
             foreach ($this->findSimilarMovies($id, 5) as $movie) {
                 $movie['similarity'] *= $weight;
                 $result[] = $movie;
             }
         }
-        // dd($result);
         return $result;
     }
 
@@ -210,7 +203,6 @@ class ContentBasedRecommender
         if (count($favoriteIds) > 0) {
             $userHasData = true;
             $favoriteSimilar = $this->collectSimilarMovies(array_slice($favoriteIds, 0, $max), 1.4);
-            // dd($favoriteSimilar);
         } 
 
         if ($reviews && $reviews->count() > 0) {
@@ -241,8 +233,6 @@ class ContentBasedRecommender
             }
         } 
         if(!$userHasData) {
-            // dd("add missing");
-
             return $this->getRecommendationsForNewUser($user, $limit);
         }
 
@@ -271,7 +261,6 @@ class ContentBasedRecommender
 
         $result = array_slice($result, 0, $limit);
         if (count($result) < $limit) {
-            // dd("add missing");
             $missing = $limit - count($result);
 
             $existingIds = array_map(fn ($rec) => $rec['movie']->id, $result);
@@ -306,7 +295,6 @@ class ContentBasedRecommender
 
         $result = $this->checkUserFavorites($result, $user);
         $result = array_slice($result, 0, $limit);
-        // dd($result);
         return $result;
     }
 
