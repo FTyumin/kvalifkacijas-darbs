@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Activity;
+use App\Models\UserRelationship;
 
 class FeedController extends Controller
 {
@@ -11,18 +12,33 @@ class FeedController extends Controller
     {
         $user = auth()->user();
         
-        // Get IDs of users that the current user follows
-        $followingIds = $user->followees()
-            ->pluck('followee_id')
-            ->toArray();
-
         // Get activities of users, that current user follows
-        $activities = Activity::whereIn('user_id', $followingIds)
-            ->with('user')
-            ->latest()
-            ->paginate(20)
-            ->withQueryString();
-        
+        $activities = Activity::query()
+            ->with('user', 'activityable')
+            ->where(function ($query) use ($user) {
+                    // Get IDs of user's following
+                    $followingIds = $user->followees()
+                        ->pluck('followee_id')
+                        ->toArray();
+            // Activities from following 
+            $query->where(function ($q) use ($followingIds) {
+                $q->whereIn('user_id', $followingIds)
+                ->where('activityable_type', '!=', \App\Models\UserRelationship::class);
+            })
+            // Follow events where other user follows current user
+            ->orWhere(function ($q) use ($user) {
+                $q->where('activityable_type', \App\Models\UserRelationship::class)
+                ->whereHasMorph(
+                    'activityable',
+                    [\App\Models\UserRelationship::class],
+                    fn ($rel) => $rel->where('followee_id', $user->id)
+                );
+            });
+        })
+        ->latest()
+        ->paginate(20)
+        ->withQueryString();
+
         return view('feed.index', compact('activities'));
     }
 

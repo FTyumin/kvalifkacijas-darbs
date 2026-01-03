@@ -11,7 +11,6 @@
 </a>
 <div class="max-w-6xl mx-auto mt-8 px-4 py-8 ">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        
         {{-- Poster --}}
         <div class="md:col-span-1 space-y-4">
             <img src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}" 

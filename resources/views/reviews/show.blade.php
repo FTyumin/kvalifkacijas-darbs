@@ -17,7 +17,7 @@
                     @endif
                 </a>
                 <div class="flex-1">
-                    <a href="{{ route('movies.show', $review->movie) }}" class="text-2xl font-bold text-white hover:text-yellow-400 transition-colors">
+                    <a href="{{ route('movies.show', $review->movie->slug) }}" class="text-2xl font-bold text-white hover:text-yellow-400 transition-colors">
                         {{ $review->movie->name }}
                     </a>
                     <div class="flex items-center gap-3 mt-2">

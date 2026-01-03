@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Comment;
 use App\Models\Movie;
 use App\Models\Review;
+use App\Models\UserRelationship;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -82,5 +83,23 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        // if ($users->count() > 1) {
+        //     foreach ($users as $user) {
+        //         $followCount = min(3, $users->count() - 1);
+
+        //         $followees = $users
+        //             ->where('id', '!=', $user->id)
+        //             ->shuffle()
+        //             ->take($followCount);
+
+        //         foreach ($followees as $followee) {
+        //             UserRelationship::firstOrCreate([
+        //                 'follower_id' => $user->id,
+        //                 'followee_id' => $followee->id,
+        //             ]);
+        //         }
+        //     }
+        // }
     }
 }

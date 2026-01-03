@@ -103,7 +103,7 @@
                         </div>
                     </article>
 
-                @elseif($post->activityable_type == 'App\Models\userRelationship')
+                @elseif($post->activityable_type == 'App\Models\UserRelationship')
                     <article class="bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                         <div class="block">
                             <div class="flex gap-4 p-6">
