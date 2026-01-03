@@ -97,8 +97,6 @@ class TmdbApiClient {
         ];
         $endpoint = $endpoints[$method] ?? $endpoints['discover'];
         
-        
-        $blocked = [10402, 10749, 99, 16];
         while(count($collected) < $limit && $page <=$maxPages) {
             $query = ['page' => $page];
             
@@ -106,8 +104,6 @@ class TmdbApiClient {
                 $query = array_merge($query, $discoverDefaults);
             }
 
-            // $query = array_merge($query, array_filter($discoverDefaults, fn($v) => $v !== null));
-            
             foreach ($opts as $k => $v) {
                 if (!in_array($k, ['method', 'page_size'])) {
                     $query[$k] = $v;
@@ -148,12 +144,10 @@ class TmdbApiClient {
                     break 2;
                 }
             }
-
             $page++;
         }
         return array_slice($collected, 0, $limit);
     }
-
 
     public function importMovie(int $tmdbId): ?Movie
     {

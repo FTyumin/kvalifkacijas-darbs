@@ -14,11 +14,14 @@ class ContentBasedRecommender
         $target = Movie::with(['genres:id,name', 'people:id'])->find($movieId);
         if (!$target) return [];
 
+        // get movie's genres and actors/directors
         $targetGenres = $target->genres->pluck('id')->all();
         $targetPeople = $target->people->pluck('id')->all();
 
+        // separate actors and directors
         $targetActors = $target->people->where('pivot.role', 'actor')->pluck('id')->all();
         $targetDirectors = $target->people->where('pivot.role', 'director')->pluck('id')->all();
+
         $similarities = [];
 
         $candidateIds = Movie::query()
@@ -31,7 +34,6 @@ class ContentBasedRecommender
                             ->whereIn('genre_id', $targetGenres);
                     });
                 }
-
                 if (!empty($targetPeople)) {
                     $q->orWhereIn('id', function ($sub) use ($targetPeople) {
                         $sub->select('movie_id')
@@ -43,13 +45,13 @@ class ContentBasedRecommender
             ->pluck('id')
             ->all();
 
-
+        
         if (empty($candidateIds)) return [];
 
         Movie::whereIn('id', $candidateIds)
             ->with(['genres:id,name', 'people:id'])
             ->chunkById(500, function ($movies) use (
-                $targetGenres, $targetPeople, $targetActors, $targetDirectors, $limit, &$similarities
+                $targetGenres, $targetActors, $targetDirectors, &$similarities
             ) {
                 foreach ($movies as $movie) {
                     $genres2 = $movie->genres->pluck('id')->all();
@@ -68,6 +70,7 @@ class ContentBasedRecommender
                 }
             });
 
+        // sort by similarity, desc order
         usort($similarities, fn ($a, $b) => $b['similarity'] <=> $a['similarity']);
 
         return array_slice($similarities, 0, $limit);
@@ -78,15 +81,13 @@ class ContentBasedRecommender
             return;
         }
         
-        // Get genre IDs as arrays
+        // Get parameter IDs as arrays
         $genres1 = $movie1->genres->pluck('id')->all();
         $genres2 = $movie2->genres->pluck('id')->all();
         
-        // Get actor IDs as arrays
         $actors1 = $movie1->actors->pluck('id')->all();
         $actors2 = $movie2->actors->pluck('id')->all();
         
-        // Get director IDs as arrays
         $director1 = $movie1->director->pluck('id')->all();
         $director2 = $movie2->director->pluck('id')->all();
 
@@ -177,7 +178,6 @@ class ContentBasedRecommender
         if(!$user) {
             return;
         }
-        
         // retrieve user's favorite genres
         $favoriteGenres = $user->favoriteGenres;
 

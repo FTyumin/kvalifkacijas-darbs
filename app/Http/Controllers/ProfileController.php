@@ -78,8 +78,7 @@ class ProfileController extends Controller
         }
         
         // query user data for profile page
-        // $movies = $user->movies;
-        $reviews = $user->reviews;
+        $reviews = $user->reviews->take(5);
         $review_count = Review::where('user_id', $user->id)->count();
         $average_review = round(Review::where('user_id', $user->id)->avg('rating'), 2) ?? 0;
 
@@ -102,7 +101,7 @@ class ProfileController extends Controller
         $seen = $user->seenMovies;
         $favorites = $user->favorites->take(8);
 
-        $reviews = Review::where('user_id', $user->id)->get();
+        $reviews = Review::where('user_id', $user->id)->limit(3)->get();
         $review_count = Review::where('user_id', $user->id)->count();
         $average_review = round(Review::where('user_id', $user->id)->avg('rating'), 2) ?? 0;
 

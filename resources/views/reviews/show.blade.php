@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto px-4 py-8">
+    <a href="{{ url()->previous() }}" class="inline-flex items-center gap-2 text-sm text-gray-300 hover:text-white transition-colors mb-4">
+        ← Back
+    </a>
     {{-- Review Card --}}
     <article class="bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-8">
         {{-- Review Header --}}

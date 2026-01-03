@@ -205,9 +205,6 @@
                                 @svg('heroicon-o-pencil-square', 'w-6 h-6 text-purple-400')
                                 Recent Reviews
                             </h2>
-                            <a href="{{ route('profile.reviews', $user) }}" class="text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors">
-                                View All →
-                            </a>
                         </div>
 
                         <div class="space-y-4 flex flex-col gap-4">
@@ -238,7 +235,7 @@
                                             <p class="text-sm text-gray-300 line-clamp-2">
                                             </p>
                                             
-                                            <p class="text-xs text-gray-500 mt-2"> days ago</p>
+                                            <time class="text-sm text-gray-400">{{ $review->created_at->diffForHumans() }}</time>
                                         </div>
                                     </div>
                                 </div>
@@ -275,6 +272,14 @@
                                 </div>
                                 <span class="text-sm font-medium">Select favorite genres</span>
                             </a>
+                            @if(auth()->user()->is_admin)
+                                <a href="/admin" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
+                                    <div class="w-8 h-8 rounded-lg bg-yellow-500/10 flex items-center justify-center">
+                                        @svg('heroicon-o-shield-check', 'w-5 h-5 text-yellow-400')
+                                    </div>
+                                    <span class="text-sm font-medium">Go to admin dashboard</span>
+                                </a>
+                            @endif
                             
                             <!-- Logout -->
                             <form method="POST" action="{{ route('logout') }}" class="w-full"> 
@@ -321,42 +326,6 @@
                             
                         </div>
                     </div>
-                    @endif
-
-                    <!-- Admin actions -->
-                    @if(auth()->user()->is_admin)
-                        <div class="bg-gray-800/50 glass border border-gray-700 rounded-2xl p-6 mt-4">
-                        <h3 class="text-lg font-bold text-white mb-4">Admin Actions</h3>
-                            <div class="space-y-3">
-                                <a href="/admin" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
-                                    <div class="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                                        <x-heroicon-o-shield-check class="w-4 h-4 text-purple-400" />
-                                    </div>
-                                    <span class="text-sm font-medium">Admin dashboard</span>
-                                </a>
-
-                                <a href="{{ route('movies.create') }}" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
-                                    <div class="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                                        <x-heroicon-o-pencil-square class="w-4 h-4 text-purple-400" />
-                                    </div>
-                                    <span class="text-sm font-medium">Add movie</span>
-                                </a>
-
-                                <a href="{{ route('movies.load') }}" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
-                                    <div class="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                                        @svg('tabler-movie', 'w-4 h-4 text-purple-400')
-                                    </div>
-                                    <span class="text-sm font-medium">Load movies from TMDB API</span>
-                                </a>
-
-                                <a href="{{ route('admin.feed') }}" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
-                                    <div class="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                                        @svg('tabler-movie', 'w-4 h-4 text-purple-400')
-                                    </div>
-                                    <span class="text-sm font-medium">Load movies from TMDB API</span>
-                                </a>
-                            </div>
-                        </div>
                     @endif
 
                 </div>

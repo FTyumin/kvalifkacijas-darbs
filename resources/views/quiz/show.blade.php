@@ -6,6 +6,9 @@
 
 <div class="relative z-10 min-h-screen flex items-center justify-center py-12 px-6 bg-black">
     <div class="w-full max-w-4xl">
+        <a href="{{ url()->previous() }}" class="inline-flex items-center gap-2 text-sm text-gray-300 hover:text-white transition-colors mb-6">
+            ← Back
+        </a>
         
         {{-- Header Section --}}
         <div class="text-center mb-12">
