@@ -265,13 +265,14 @@
                                 <span class="text-sm font-medium">Send movie suggestion</span>
                             </a>
 
-                            <!-- Change favorite genres -->
+                            <!-- Change favorite genres
                             <a href="/quiz" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
                                 <div class="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
                                     @svg('heroicon-o-heart', 'w-4 h-4 text-blue-400')
                                 </div>
                                 <span class="text-sm font-medium">Select favorite genres</span>
-                            </a>
+                            </a> -->
+
                             @if(auth()->user()->is_admin)
                                 <a href="/admin" class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors">
                                     <div class="w-8 h-8 rounded-lg bg-yellow-500/10 flex items-center justify-center">
