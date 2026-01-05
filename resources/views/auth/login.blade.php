@@ -85,23 +85,6 @@
                 <div class="bg-gray-800/50 border border-gray-700 rounded-2xl p-8 shadow-2xl">
                     <h3 class="text-2xl font-bold text-white mb-6 text-center hidden lg:block">Sign In</h3>
                     
-                    <!-- Display Validation Errors -->
-                    @if ($errors->any())
-                        <div class="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
-                            <div class="flex items-center gap-2 mb-2">
-                                <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="text-red-400 font-medium">Please fix the following errors:</span>
-                            </div>
-                            <ul class="list-disc list-inside text-red-300 text-sm space-y-1">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
                     <form method="POST" action="{{ route('login') }}" class="space-y-6">
                         @csrf
                         
@@ -117,9 +100,7 @@
                                     </svg>
                                 </div>
                                 <input type="email"  id="email"  name="email" value="{{ old('email') }}"
-                                    required 
-                                    autocomplete="email" 
-                                    autofocus
+                                    required autocomplete="email" autofocus
                                     class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     placeholder="Enter your email"
                                 >
@@ -171,7 +152,7 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <button type="submit" class="w-full  text-white font-semibold py-3 px-6 rounded-lg bg-yellow-500 hover:bg-yellow-400">
+                        <button type="submit" class="w-full text-white font-semibold py-3 px-6 rounded-lg bg-yellow-500 hover:bg-yellow-400">
                             Sign In
                         </button>
 

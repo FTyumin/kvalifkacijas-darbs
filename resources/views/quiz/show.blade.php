@@ -68,8 +68,7 @@
                         <div class="h-full p-4 rounded-xl border border-gray-700
                             transition-all duration-300
                             peer-checked:border-yellow-500
-                            peer-checked:ring-2 peer-checked:ring-yellow-500/40
-                        ">
+                            peer-checked:ring-2 peer-checked:ring-yellow-500/40">
                             
                             {{-- Genre Icon --}}
                             <div class="flex flex-col items-center text-center">
@@ -81,7 +80,7 @@
                             {{-- Checkmark --}}
                             <div class="absolute top-2 right-2 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center opacity-0 peer-checked:opacity-100 transition-opacity duration-150 pointer-events-none" aria-hidden="true">
                                 <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                 </svg>
                             </div>
                         </div>
@@ -112,9 +111,8 @@
 
                 {{-- Action Buttons --}}
                 <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-700">
-                    <button  type="submit" :disabled="selected.length < 3" :class="selected.length < 3 
-                            ? 'opacity-50 cursor-not-allowed' 
-                            : 'hover:scale-105'"
+                    <button type="submit" :disabled="selected.length < 3" :class="selected.length < 3 
+                            ? 'opacity-50 cursor-not-allowed' : ''"
                         class="flex-1 bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 text-gray-900 font-semibold py-4 px-8 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-800 transform inline-flex items-center justify-center gap-3 text-lg"
                     >
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

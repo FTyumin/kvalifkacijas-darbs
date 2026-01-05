@@ -11,7 +11,7 @@
                 class="absolute inset-0 w-full h-full object-cover z-0" 
                 alt="Movie theater">
 
-            <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-purple-900/50 z-0"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/70 to-black/50"></div>
             
             <div class="relative z-20 text-center">
                 <!-- Logo -->
@@ -81,23 +81,6 @@
                 <div class="bg-gray-800/50 glass border border-gray-700 rounded-2xl p-8 shadow-2xl">
                     <h3 class="text-2xl font-bold text-white mb-6 text-center hidden lg:block">Create Account</h3>
                     
-                    <!-- Display Validation Errors -->
-                    @if ($errors->any())
-                        <div class="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
-                            <div class="flex items-center gap-2 mb-2">
-                                <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="text-red-400 font-medium">Please fix the following errors:</span>
-                            </div>
-                            <ul class="list-disc list-inside text-red-300 text-sm space-y-1">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
                     <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="space-y-6">
                         @csrf
                         
@@ -136,7 +119,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
                                     </svg>
                                 </div>
-                                <input  type="email" id="email" name="email" value="{{ old('email') }}"
+                                <input type="email" id="email" name="email" value="{{ old('email') }}"
                                     required 
                                     autocomplete="email"
                                     class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -214,30 +197,9 @@
                             </div>
                         </div>
 
-                        <!-- Terms and Privacy -->
-                        <div class="flex items-start">
-                            <div class="flex items-center h-5">
-                                <input 
-                                    type="checkbox" 
-                                    id="terms" 
-                                    name="terms"
-                                    required
-                                    class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
-                                >
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="terms" class="text-gray-300">
-                                    I agree to the 
-                                    <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">Terms of Service</a> 
-                                    and 
-                                    <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">Privacy Policy</a>
-                                </label>
-                            </div>
-                        </div>
-
                         <!-- Submit Button -->
                         <button 
-                            type="submit" class="w-full ">
+                            type="submit" class="w-full text-white font-semibold py-3 px-6 rounded-lg bg-yellow-500 hover:bg-yellow-400">
                             Create Account
                         </button>
                     </form>

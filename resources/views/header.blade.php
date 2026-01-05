@@ -30,7 +30,7 @@
           <input type="search" id="search" name="search"
             class="block w-full pl-12 pr-24 py-3 text-sm text-white placeholder-gray-400 bg-gray-800/50 border border-gray-700
              rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
-            placeholder="Search movies, TV shows, actors..." 
+            placeholder="Search movies, directord, actors..." 
             autocomplete="off"
           />
           
@@ -47,18 +47,17 @@
     <div class="flex items-center gap-3">
       
       <!-- Mobile Search Button -->
-      <button 
-        onclick="document.getElementById('mobile-search').classList.toggle('hidden')" 
+      <button onclick="document.getElementById('mobile-search').classList.toggle('hidden')" 
         class="md:hidden p-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
-        type="button" 
-        aria-label="Toggle search"
+        type="button" aria-label="Toggle search"
       >
         @svg('heroicon-o-magnifying-glass', 'w-5 h-5')
       </button>
 
       <!-- Sign In Button (Desktop) / User Profile -->
       @guest
-        <a href="{{ url('/login') }}" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <a href="{{ url('/login') }}" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white 
+          bg-yellow-500/90 hover:bg-yellow-400 rounded-lg">
           @svg('heroicon-o-arrow-right-on-rectangle', 'w-4 h-4')
           Sign In
         </a>
