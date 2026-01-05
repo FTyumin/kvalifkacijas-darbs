@@ -61,24 +61,20 @@
 
         {{-- Poster --}}
         <a href="{{ route('movies.show', $movie->slug) }}" class="block relative">
-            <img
-                src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"
+            <img src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_url }}"
                 alt="{{ $movie->name }}"
-                class="aspect-[2/3] w-full object-cover
-                      transition-transform duration-500 group-hover:scale-105"/>
+                class="aspect-[2/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"/>
 
             {{-- Gradient overlay --}}
-            <div class="absolute inset-0 bg-gradient-to-t
-                        from-black/90 via-black/20 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
 
             {{-- Rating --}}
             <div class="absolute top-3 left-3 flex items-center gap-1 rounded-md bg-black/70 backdrop-blur px-2 py-1
-                            text-sm text-white">
+                        text-sm text-white">
                     @svg('heroicon-s-star', 'w-4 h-4 text-yellow-400')
                     {{ $movie->tmdb_rating }}
             </div>
-
-
+            
             {{-- Genres --}}
             <div class="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1">
                 @foreach($movie->genres->take(2) as $genre)
@@ -89,7 +85,6 @@
                 @endforeach
             </div>
         </a>
-
         {{-- Content --}}
         <div class="p-4">
             <h3 class="text-sm font-semibold text-white leading-tight line-clamp-2

@@ -66,6 +66,7 @@ test('review show loads comments', function () {
         });
 });
 
+// T-27
 test('guests are redirected when liking a review', function () {
     $user = User::factory()->create();
     $movie = createMovieForReviewTests();
@@ -76,7 +77,7 @@ test('guests are redirected when liking a review', function () {
     $response->assertRedirect(route('login', absolute: false));
 });
 
-// T-27
+
 // T-28
 test('users can like and unlike reviews', function () {
     $author = User::factory()->create();

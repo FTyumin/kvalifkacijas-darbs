@@ -136,10 +136,9 @@
                             <time class="text-sm text-gray-400">{{ $comment->created_at->diffForHumans() }}</time>
                         </div>
                         <p class="text-gray-300 leading-relaxed">{{ $comment->description }}</p>
-                          @if(auth()->id() === $comment->user_id or auth()->user()->is_admin)
+                          @if(auth()->check() && (auth()->id() === $comment->user_id || auth()->user()->is_admin))
                             <div class="mt-2 flex gap-3 text-sm">
-                                <button type="button"
-                                        class="text-yellow-400 hover:text-yellow-300"
+                                <button type="button" class="text-yellow-400 hover:text-yellow-300"
                                         onclick="document.getElementById('edit-comment-{{ $comment->id }}').classList.toggle('hidden')">
                                     Edit
                                 </button>
@@ -152,8 +151,7 @@
                             </div>
 
                         <form id="edit-comment-{{ $comment->id }}" action="{{ route('comments.update', $comment) }}"
-                            method="POST"
-                            class="mt-3 hidden">
+                            method="POST" class="mt-3 hidden">
                             @csrf
                             @method('PATCH')
                             <textarea name="comment" rows="3"
@@ -207,10 +205,7 @@
                     <label for="comment" class="block text-sm font-medium text-gray-300 mb-2">
                         Add your comment
                     </label>
-                    <textarea
-                        id="comment"
-                        name="comment"
-                        rows="4"
+                    <textarea id="comment" name="comment" rows="4"
                         class="block w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400
                                focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition
                                disabled:opacity-50 disabled:pointer-events-none"

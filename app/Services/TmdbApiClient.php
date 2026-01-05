@@ -70,7 +70,6 @@ class TmdbApiClient {
     }
 
     public function personData(int $id) {
-
         $res = $this->http->get("person/{$id}", $this->buildOptions());
         $data = json_decode((string) $res->getBody(), true);
         return $data;
@@ -95,6 +94,7 @@ class TmdbApiClient {
             'top-rated' => 'movie/top_rated',
             'now-playing' => 'movie/now_playing',
         ];
+        
         $endpoint = $endpoints[$method] ?? $endpoints['discover'];
         
         while(count($collected) < $limit && $page <=$maxPages) {
@@ -104,6 +104,7 @@ class TmdbApiClient {
                 $query = array_merge($query, $discoverDefaults);
             }
 
+            // add extra options
             foreach ($opts as $k => $v) {
                 if (!in_array($k, ['method', 'page_size'])) {
                     $query[$k] = $v;
@@ -123,6 +124,8 @@ class TmdbApiClient {
             $results = $data['results'] ?? [];
 
             $ids = collect($results)->pluck('id')->all();
+
+            // skip existing movies
             $existingIds = Movie::whereIn('tmdb_id', $ids)->pluck('tmdb_id')->all();
             $existing = array_flip($existingIds);
 
@@ -130,7 +133,7 @@ class TmdbApiClient {
             
             foreach ($results as $r) {
                 $releaseDate = $r['release_date'] ?? null;
-
+                
                 $isTooOld = empty($releaseDate) || $releaseDate < '1970-01-01';
                 $isExisting = isset($existing[$r['id']]);
 

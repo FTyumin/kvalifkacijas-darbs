@@ -17,20 +17,17 @@ class FeedController extends Controller
             ->with('user', 'activityable')
             ->where(function ($query) use ($user) {
                     // Get IDs of user's following
-                    $followingIds = $user->followees()
-                        ->pluck('followee_id')
-                        ->toArray();
+                    $followingIds = $user->followees()->pluck('followee_id')->toArray();
+                    
             // Activities from following 
             $query->where(function ($q) use ($followingIds) {
                 $q->whereIn('user_id', $followingIds)
-                ->where('activityable_type', '!=', \App\Models\UserRelationship::class);
+                ->where('activityable_type', '!=', UserRelationship::class);
             })
             // Follow events where other user follows current user
             ->orWhere(function ($q) use ($user) {
-                $q->where('activityable_type', \App\Models\UserRelationship::class)
-                ->whereHasMorph(
-                    'activityable',
-                    [\App\Models\UserRelationship::class],
+                $q->where('activityable_type', UserRelationship::class)
+                ->whereHasMorph('activityable', UserRelationship::class,
                     fn ($rel) => $rel->where('followee_id', $user->id)
                 );
             });

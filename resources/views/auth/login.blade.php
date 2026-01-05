@@ -5,7 +5,6 @@
 @section('content')
 <div class="min-h-screen text-white overflow-x-hidden">
    
-    
     <div class="relative z-10 min-h-screen flex">
         <!-- Left Side - Branding -->
         <div class="hidden lg:flex lg:w-1/2 items-center justify-center p-12 relative overflow-hidden">
@@ -16,10 +15,7 @@
                 alt="Movie theater"
             />
 
-            <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/70 to-purple-900/50"></div>
-
-            <!-- Dark Overlay for readability -->
-        <!-- <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-purple-900/50 z-0"></div> -->
+            <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/70 to-black/50"></div>
             
             <div class="relative z-10 text-center">
                 <!-- Logo -->
@@ -144,11 +140,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                     </svg>
                                 </div>
-                                <input 
-                                    type="password" 
-                                    id="password" 
-                                    name="password" 
-                                    required 
+                                <input  type="password" id="password"  name="password" required 
                                     autocomplete="current-password"
                                     class="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     placeholder="Enter your password"
@@ -162,10 +154,7 @@
                         <!-- Remember Me & Forgot Password -->
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <input 
-                                    type="checkbox" 
-                                    id="remember" 
-                                    name="remember"
+                                <input type="checkbox" id="remember" name="remember"
                                     {{ old('remember') ? 'checked' : '' }}
                                     class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
                                 >
@@ -182,10 +171,7 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <button 
-                            type="submit" 
-                            class="w-full  text-white font-semibold py-3 px-6 rounded-lg bg-yellow-500 hover:bg-yellow-400"
-                        >
+                        <button type="submit" class="w-full  text-white font-semibold py-3 px-6 rounded-lg bg-yellow-500 hover:bg-yellow-400">
                             Sign In
                         </button>
 

@@ -82,9 +82,9 @@ class ProfileController extends Controller
         $review_count = Review::where('user_id', $user->id)->count();
         $average_review = round(Review::where('user_id', $user->id)->avg('rating'), 2) ?? 0;
 
-        $watchList = $user->wantToWatch;
-        $seen = $user->seenMovies;
-        $favorites = $user->favorites->take(8);
+        $watchList = $user->wantToWatch->take(4);
+        $seen = $user->seenMovies->take(4);
+        $favorites = $user->favorites->take(4);
 
         $lists = $user->lists()->withCount('movies')->latest()->limit(5)->get();
         
@@ -97,9 +97,9 @@ class ProfileController extends Controller
             abort(404);
         }
 
-        $watchList = $user->wantToWatch;
-        $seen = $user->seenMovies;
-        $favorites = $user->favorites->take(8);
+        $watchList = $user->wantToWatch->take(4);
+        $seen = $user->seenMovies->take(4);
+        $favorites = $user->favorites->take(4);
 
         $reviews = Review::where('user_id', $user->id)->limit(3)->get();
         $review_count = Review::where('user_id', $user->id)->count();
