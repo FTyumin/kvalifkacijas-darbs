@@ -2,19 +2,18 @@
 
 namespace App\View\Components;
 
-use App\Models\Review as ReviewModel;
 use Closure;
+use App\Models\Movie as MovieModel;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Review extends Component
+class movieCard extends Component
 {
-    public ReviewModel $review;
-
-
-    public function __construct(ReviewModel $review)
+    public MovieModel $movie;
+    
+    public function __construct(MovieModel $movie)
     {
-        $this->review = $review;
+        $this->movie = $movie;
     }
 
     /**
@@ -22,6 +21,6 @@ class Review extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.review');
+        return view('components.movie-card');
     }
 }

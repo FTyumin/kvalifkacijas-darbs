@@ -101,5 +101,35 @@ class DatabaseSeeder extends Seeder
         //         }
         //     }
         // }
+
+        // populate marks tables
+        if ($movies->isNotEmpty()) {
+
+            foreach ($users as $user) {
+            // favorites
+            $favorites = $movies->shuffle()->take(3);
+            foreach ($favorites as $movie) {
+                if (! $user->favorites()->where('markable_id', $movie->id)->exists()) {
+                    Favorite::add($movie, $user);
+                }
+            }
+
+            // watchlist
+            $watchlist = $movies->shuffle()->take(4);
+            foreach ($watchlist as $movie) {
+                if (! $user->wantToWatch()->where('markable_id', $movie->id)->exists()) {
+                    WantToWatch::add($movie, $user);
+                }
+            }
+
+            // seen
+            $seen = $movies->shuffle()->take(5);
+            foreach ($seen as $movie) {
+                if (! $user->seenMovies()->where('markable_id', $movie->id)->exists()) {
+                    Seen::add($movie, $user);
+                        }
+                    }
+                }
+        }
     }
 }

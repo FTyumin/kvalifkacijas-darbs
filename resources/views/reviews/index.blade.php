@@ -13,7 +13,6 @@
 
         @forelse($reviews as $review)
             <x-review :review="$review" class="h-32" />
-
         @empty
             {{-- Empty State --}}
             <div class="bg-gray-800 rounded-xl shadow-lg p-12 text-center">
